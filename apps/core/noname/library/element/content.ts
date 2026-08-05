@@ -3309,7 +3309,7 @@ export const Content: Record<string, ContentFuncByAll | ContentFuncsByAll> = {
 					player.classList.add("glow_phase");
 				}
 				player.phaseNumber = num;
-				if (popup && lib.config.show_phase_prompt) {
+				if (popup && lib.config.show_phase_prompt && (typeof decadeUI === "undefined" || decadeUI?.config?.newDecadeStyle !== "off")) {
 					player.popup("回合开始", null, false);
 				}
 			},
@@ -4707,7 +4707,7 @@ export const Content: Record<string, ContentFuncByAll | ContentFuncsByAll> = {
 					}
 					player.phaseNumber = num;
 					_status.currentPhase = player;
-					if (popup && lib.config.show_phase_prompt) {
+					if (popup && lib.config.show_phase_prompt && (typeof decadeUI === "undefined" || decadeUI?.config?.newDecadeStyle !== "off")) {
 						player.popup("回合开始", null, false);
 					}
 				},
@@ -5038,9 +5038,9 @@ export const Content: Record<string, ContentFuncByAll | ContentFuncsByAll> = {
 				return;
 			} else {
 				game.broadcastAll(player => {
-					if (lib.config.show_phase_prompt) {
-						player.popup("弃牌阶段", null, false);
-					}
+				if (lib.config.show_phase_prompt && (typeof decadeUI === "undefined" || decadeUI?.config?.newDecadeStyle !== "off")) {
+					player.popup("弃牌阶段", null, false);
+				}
 				}, player);
 			}
 			await event.trigger("phaseDiscard");

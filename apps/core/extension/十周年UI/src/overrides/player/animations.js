@@ -5,7 +5,7 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
-import { getDui } from "./base.js";
+import { getDui, getBasePlayerMethods } from "./base.js";
 
 /**
  * 伤害动画动作映射
@@ -16,6 +16,14 @@ const DAMAGE_ACTIONS = {
 	fire: ["play3", "play4"],
 	__default: ["play1", "play2"],
 };
+
+/**
+ * 移动版样式下是否屏蔽非技能文字提示
+ * @returns {boolean}
+ */
+function shouldHideCardPrompt() {
+	return decadeUI?.config?.newDecadeStyle === "off";
+}
 
 /**
  * 伤害弹出覆写
@@ -55,16 +63,17 @@ export function playerDamagepop(num, nature = "soil", font, nobroadcast) {
 		container.style.width = `${player.offsetWidth}px`;
 		container.style.zIndex = "9999";
 
-		const chars = num.split("");
-		const midIndex = Math.ceil(chars.length / 2);
+		// 双层结构(对应 shousha.css 的 .enable > * 与 .skillitem-child)：
+		// .skillitem-child 粗描边叠底(opacity 0.5)，.skill-text 金色渐变主层覆盖其上
+		const child = document.createElement("span");
+		child.className = "skillitem-child";
+		child.textContent = num;
+		container.appendChild(child);
 
-		chars.forEach((char, i) => {
-			const span = document.createElement("span");
-			span.textContent = char;
-			span.className = i < midIndex ? "char-left" : "char-right";
-			span.style.animationDelay = `${i * 0.05}s`;
-			container.appendChild(span);
-		});
+		const span = document.createElement("span");
+		span.className = "skill-text";
+		span.textContent = num;
+		container.appendChild(span);
 
 		setTimeout(() => container.delete(), 1500);
 		return;
@@ -94,6 +103,81 @@ export function playerDamagepop(num, nature = "soil", font, nobroadcast) {
 		animation.playSpine({ name: "effect_shoujidonghua", action }, { scale: 0.8, parent: player });
 	} else if (num > 0 && nature === "wood") {
 		animation.playSpine("effect_zhiliao", { scale: 0.7, parent: player });
+	}
+}
+
+/**
+ * 用牌文字覆写：判定结果
+ * @description 移动版样式下不显示武将头上的判定结果文字提示
+ * @param {boolean} bool - 判定是否生效
+ * @returns {void}
+ * @this {Object} 玩家对象
+ */
+export function playerTryJudgeAnimate(bool) {
+	if (shouldHideCardPrompt()) {
+		game.broadcast(player => {
+			player.tryJudgeAnimate(bool);
+		}, this);
+		return;
+	}
+
+	const base = getBasePlayerMethods()?.lib?.element?.player?.tryJudgeAnimate;
+	if (base) {
+		return base.apply(this, arguments);
+	}
+}
+
+/**
+ * 用牌文字覆写：使用卡牌
+ * @description 移动版样式下不显示武将头上的用牌文字提示，仅保留技能文字提示
+ * @param {Object} card - 使用的卡牌
+ * @param {string} name - 卡牌名称
+ * @param {string} [nature] - 属性
+ * @param {boolean} [popname] - 是否显示卡牌名
+ * @returns {void}
+ * @this {Object} 玩家对象
+ */
+export function playerTryCardAnimate(card, name, nature, popname) {
+	if (shouldHideCardPrompt()) {
+		game.broadcast((player, card, name, nature, popname) => {
+			player.tryCardAnimate(card, name, nature, popname);
+		}, this, card, name, nature, popname);
+
+		if (lib.animate.card[card.name]) {
+			lib.animate.card[card.name].apply(this, arguments);
+		}
+		return;
+	}
+
+	const base = getBasePlayerMethods()?.lib?.element?.player?.tryCardAnimate;
+	if (base) {
+		return base.apply(this, arguments);
+	}
+}
+
+/**
+ * 用牌文字覆写：文字弹出
+ * @description 移动版样式下不显示延时锦囊判定阶段的卡牌名文字提示
+ * @param {string} name - 卡牌或技能内部名
+ * @param {string} [className] - 属性样式
+ * @param {boolean} [nobroadcast] - 是否不广播
+ * @returns {void}
+ * @this {Object} 玩家对象
+ */
+export function playerPopup(name, className = "water", nobroadcast) {
+	if (shouldHideCardPrompt()) {
+		const info = lib.card[name];
+		if (info?.type === "delay") {
+			game.broadcast((player, name, className, nobroadcast) => {
+				player.popup(name, className, nobroadcast);
+			}, this, name, className, nobroadcast);
+			return;
+		}
+	}
+
+	const base = getBasePlayerMethods()?.lib?.element?.player?.popup;
+	if (base) {
+		return base.apply(this, arguments);
 	}
 }
 

@@ -378,11 +378,9 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: yuanli;
-	font-size: 30px;
+	font-family: "HYZLSJ";
+	font-size: 25px;
 	font-weight: bold;
-	color: #ffffff;
-	text-shadow: 0 0 4px #000;
 	opacity: 1;
 	z-index: 9999;
 	pointer-events: none;
@@ -394,54 +392,65 @@
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	font-family: yuanli;
-	font-size: 40px;
+	font-family: "HYZLSJ";
+	font-size: 25px;
 	font-weight: bold;
 	top: 80px;
-	color: #ffffff;
-	text-shadow: 0 0 4px #000;
 	opacity: 1;
 	z-index: 91;
 	pointer-events: none;
 }
 
-/* 字符样式 - 通用 */
-.damage.skill-popup > span {
+/* 描边层：粗描边叠底(对应 shousha .skillitem-child)，绝对定位填充容器并居中文字 */
+.damage.skill-popup > .skillitem-child {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	white-space: nowrap;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 0.1px #102030;
+	text-shadow: none;
+	opacity: 0.5;
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* 主文字层：手杀金色渐变，不压亮度，保持原渐变明亮度 */
+.damage.skill-popup > .skill-text {
 	display: inline-block;
 	opacity: 0;
+	color: transparent;
+	font-family: "HYZLSJ";
+	white-space: nowrap;
+	background-image: linear-gradient(180deg, #f0d775 30%, #ab8c31 57%, #b0a04d 67%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 0px #2a2209;;
+	text-shadow: none;
+	animation: skill-text-popin 0.4s ease-out forwards;
 }
 
-/* 左边字符：从左侧飞入 */
-.damage.skill-popup > .char-left {
-	animation: skill-char-from-left 0.4s ease-out forwards;
-}
-
-/* 右边字符：从右侧飞入 */
-.damage.skill-popup > .char-right {
-	animation: skill-char-from-right 0.4s ease-out forwards;
-}
-
-@keyframes skill-char-from-left {
+@keyframes skill-text-popin {
 	0% {
 		opacity: 0;
-		transform: translateX(-50px);
+		transform: scale(0.5) translateY(-30px);
+	}
+
+	60% {
+		opacity: 1;
+		transform: scale(1.1) translateY(5px);
 	}
 
 	100% {
 		opacity: 1;
-		transform: translateX(0);
-	}
-}
-
-@keyframes skill-char-from-right {
-	0% {
-		opacity: 0;
-		transform: translateX(50px);
-	}
-
-	100% {
-		opacity: 1;
-		transform: translateX(0);
+		transform: scale(1) translateY(0);
 	}
 }
 

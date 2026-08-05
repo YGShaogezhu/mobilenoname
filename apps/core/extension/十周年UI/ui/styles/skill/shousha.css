@@ -59,7 +59,8 @@
 /* 被动技描边 */
 .skill-control > .trigger > * .skillitem-child {
 	position: absolute;
-	-webkit-text-stroke: 4.3px #102030;
+	/* -webkit-text-stroke: 4.3px #102030; */
+	-webkit-text-stroke: 4.3px #00000075;
 	opacity: 0.5;
 	z-index: -1;
 }

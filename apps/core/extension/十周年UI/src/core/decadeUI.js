@@ -35,7 +35,7 @@ import { getObjtype, applyGetOverrides } from "../overrides/get.js";
 import { gameLogv, applyGameOverrides } from "../overrides/game.js";
 import { applyMoveAnimFix } from "../overrides/moveAnimFix.js";
 
-import { registerDecadeUIHooks, playerAwakenSkill, playerSetIdentity, playerGetState, playerMarkSkill, playerUnmarkSkill, playerReinitCharacter, playerSetSeatNum, playerUninit, playerReinit, playerUpdate, playerUseCard, playerRespond, playerLose, playerUseCardAnimateBefore, playerRespondAnimateBefore, playerChangeZhuanhuanji, playerSetModeState, playerHandleEquipChange, playerMark, playerMarkCharacter, playerUpdateMark, playerMarkSkillCharacter, playerPlayDynamic, playerStopDynamic, playerApplyDynamicSkin, playerSay, playerDieAfter, playerSkill, playerSyncExpand, playerSetSkillYinYang, player$SetSkillYinYang, playerSetSkillState, player$SetSkillState, playerDamagepop, playerCompare, playerCompareMultiple, playerCheckAndAddExperienceSuffix, playerQueueCssAnimation, playerDamage, playerUpdateShowCards, playerCheckBoundsCache, playerLine, playerPhaseJudge, playerGain2, playerDraw, playerGive, playerThrow, playerThrowordered2, playerAddVirtualJudge, playerDirectgain, playerDirectgains } from "../overrides/player.js";
+import { registerDecadeUIHooks, playerAwakenSkill, playerSetIdentity, playerGetState, playerMarkSkill, playerUnmarkSkill, playerReinitCharacter, playerSetSeatNum, playerUninit, playerReinit, playerUpdate, playerUseCard, playerRespond, playerLose, playerUseCardAnimateBefore, playerRespondAnimateBefore, playerChangeZhuanhuanji, playerSetModeState, playerHandleEquipChange, playerMark, playerMarkCharacter, playerUpdateMark, playerMarkSkillCharacter, playerPlayDynamic, playerStopDynamic, playerApplyDynamicSkin, playerSay, playerDieAfter, playerSkill, playerSyncExpand, playerSetSkillYinYang, player$SetSkillYinYang, playerSetSkillState, player$SetSkillState, playerTryCardAnimate, playerTryJudgeAnimate, playerPopup, playerDamagepop, playerCompare, playerCompareMultiple, playerCheckAndAddExperienceSuffix, playerQueueCssAnimation, playerDamage, playerUpdateShowCards, playerCheckBoundsCache, playerLine, playerPhaseJudge, playerGain2, playerDraw, playerGive, playerThrow, playerThrowordered2, playerAddVirtualJudge, playerDirectgain, playerDirectgains } from "../overrides/player.js";
 
 import { uiUpdatec, uiUpdatehl, uiUpdatej, uiUpdatem, uiUpdatez, uiUpdate, uiUpdatejm, uiUpdatexr, uiCreatePrebutton, uiCreateRarity, uiCreateButton, uiCreateControl, uiCreateDialog, uiCreateSelectlist, uiCreateIdentityCard, uiCreateSpinningIdentityCard, uiCreateArena, uiCreatePause, uiCreateCharacterDialog, uiClickCard, uiClickIntro } from "../overrides/ui.js";
 
@@ -118,9 +118,12 @@ export const createDecadeUIObject = () => ({
 						useCardAnimateBefore: lib.element.player.useCardAnimateBefore,
 						respondAnimateBefore: lib.element.player.respondAnimateBefore,
 						$changeZhuanhuanji: lib.element.player.$changeZhuanhuanji,
-						trySkillAnimate: lib.element.player.trySkillAnimate,
-					},
-					content: { lose: lib.element.content.lose, gain: lib.element.content.gain },
+					trySkillAnimate: lib.element.player.trySkillAnimate,
+					tryCardAnimate: lib.element.player.tryCardAnimate,
+					tryJudgeAnimate: lib.element.player.tryJudgeAnimate,
+					popup: lib.element.player.popup,
+				},
+				content: { lose: lib.element.content.lose, gain: lib.element.content.gain },
 				},
 			},
 		};
@@ -191,8 +194,11 @@ export const createDecadeUIObject = () => ({
 						setSkillYinYang: playerSetSkillYinYang,
 						$setSkillYinYang: player$SetSkillYinYang,
 						setSkillState: playerSetSkillState,
-						$setSkillState: player$SetSkillState,
-						$damagepop: playerDamagepop,
+					$setSkillState: player$SetSkillState,
+					tryCardAnimate: playerTryCardAnimate,
+					tryJudgeAnimate: playerTryJudgeAnimate,
+					popup: playerPopup,
+					$damagepop: playerDamagepop,
 						$compare: playerCompare,
 						$compareMultiple: playerCompareMultiple,
 						directgain: playerDirectgain,

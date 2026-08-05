@@ -25,8 +25,8 @@ export { playerChangeZhuanhuanji, playerSetSkillYinYang, player$SetSkillYinYang,
 // 动态皮肤覆写
 export { playerPlayDynamic, playerStopDynamic, playerApplyDynamicSkin } from "./dynamic-skin.js";
 
-// 动画效果覆写
-export { playerDamagepop, playerDamage, playerCompare, playerCompareMultiple, playerLine, playerDieAfter, playerSkill, playerQueueCssAnimation } from "./animations.js";
+// 动画效果覆写（含用牌文字覆写）
+export { playerDamagepop, playerDamage, playerCompare, playerCompareMultiple, playerLine, playerDieAfter, playerSkill, playerQueueCssAnimation, playerTryCardAnimate, playerTryJudgeAnimate, playerPopup } from "./animations.js";
 
 // 卡牌移动覆写
 export { setBasePlayerDraw, playerDraw, playerGain2, playerGive, playerThrow, playerThrowordered2, playerPhaseJudge, playerAddVirtualJudge, playerDirectgain, playerDirectgains } from "./card-movement.js";
