@@ -56,18 +56,21 @@
 	font-family: "HYZLSJ";
 }
 
-/* 被动技描边 */
+/* 被动技描边：紧贴字形的半透明描边，避免大范围黑晕 */
 .skill-control > .trigger > * .skillitem-child {
 	position: absolute;
 	/* -webkit-text-stroke: 4.3px #102030; */
 	-webkit-text-stroke: 4.3px #00000075;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
 	opacity: 0.5;
 	z-index: -1;
 }
 
+/* 主动技描边：紧贴字形的半透明描边，避免大范围黑晕 */
 .skill-control > .enable > * .skillitem-child {
 	position: absolute;
 	-webkit-text-stroke: 4.3px rgba(2, 3, 2);
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
 	opacity: 0.35;
 	z-index: -1;
 }

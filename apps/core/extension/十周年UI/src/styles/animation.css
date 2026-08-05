@@ -401,7 +401,7 @@
 	pointer-events: none;
 }
 
-/* 描边层：粗描边叠底(对应 shousha .skillitem-child)，绝对定位填充容器并居中文字 */
+/* 描边层：紧贴字形的半透明描边（对齐手杀按钮参考，避免大范围黑晕） */
 .damage.skill-popup > .skillitem-child {
 	position: absolute;
 	top: 0;
@@ -414,9 +414,12 @@
 	white-space: nowrap;
 	color: transparent;
 	-webkit-text-fill-color: transparent;
-	-webkit-text-stroke: 0.1px #102030;
-	text-shadow: none;
-	opacity: 0.5;
+	-webkit-text-stroke: 4.3px #00000075;
+	text-shadow:
+		0 0 6px rgba(0, 0, 0, 0.9),
+		0 0 14px rgba(0, 0, 0, 0.7),
+		0 0 24px rgba(0, 0, 0, 0.45);
+	opacity: 0.75;
 	z-index: -1;
 	pointer-events: none;
 }

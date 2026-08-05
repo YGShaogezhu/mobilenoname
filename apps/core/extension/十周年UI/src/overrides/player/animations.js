@@ -121,7 +121,7 @@ export function playerTryJudgeAnimate(bool) {
 		return;
 	}
 
-	const base = getBasePlayerMethods()?.lib?.element?.player?.tryJudgeAnimate;
+	const base = getBasePlayerMethods()?.tryJudgeAnimate;
 	if (base) {
 		return base.apply(this, arguments);
 	}
@@ -149,7 +149,7 @@ export function playerTryCardAnimate(card, name, nature, popname) {
 		return;
 	}
 
-	const base = getBasePlayerMethods()?.lib?.element?.player?.tryCardAnimate;
+	const base = getBasePlayerMethods()?.tryCardAnimate;
 	if (base) {
 		return base.apply(this, arguments);
 	}
@@ -175,7 +175,7 @@ export function playerPopup(name, className = "water", nobroadcast) {
 		}
 	}
 
-	const base = getBasePlayerMethods()?.lib?.element?.player?.popup;
+	const base = getBasePlayerMethods()?.popup;
 	if (base) {
 		return base.apply(this, arguments);
 	}
