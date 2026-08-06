@@ -248,11 +248,22 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 			 * 为技能节点添加次数显示
 			 * @param {HTMLElement} node - 技能节点
 			 * @param {number} num - 剩余次数
+			 * @param {boolean} [isEnable=false] - 是否为主动技（主动技使用右上角标记样式）
 			 */
-			addSkillNumber(node, num) {
-				const nums = ["", "①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳"];
+			addSkillNumber(node, num, isEnable = false) {
+				if (!(num > 0)) return;
+
 				const text = document.createElement("span");
 				text.classList.add("numText");
+
+				if (isEnable) {
+					text.classList.add("numText-mark");
+					text.innerText = String(num);
+					node.appendChild(text);
+					return;
+				}
+
+				const nums = ["", "①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩", "⑪", "⑫", "⑬", "⑭", "⑮", "⑯", "⑰", "⑱", "⑲", "⑳"];
 				const child = document.createElement("span");
 				child.classList.add("numText-child");
 				child.innerText = nums[num] || `(${num})`;
@@ -420,7 +431,7 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 
 						node = ui.create.div(cls, this.node.enable, name);
 						const remaining = this.getSkillRemainingCount(item.id, game.me);
-						if (remaining !== null) this.addSkillNumber(node, remaining);
+						if (remaining !== null) this.addSkillNumber(node, remaining, true);
 
 						this.addSkillLocksAndButtons(node, item.id);
 						ui.create.div(".skillitem-child", node, name);
@@ -446,7 +457,7 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 					this.addSkillLocksAndButtons(node, item.id);
 
 					const remaining = this.getSkillRemainingCount(item.id, game.me);
-					if (remaining !== null) this.addSkillNumber(node, remaining);
+					if (remaining !== null) this.addSkillNumber(node, remaining, false);
 
 					ui.create.div(".skillitem-child", node, skillName);
 					node.dataset.id = item.id;

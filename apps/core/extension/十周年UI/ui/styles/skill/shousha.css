@@ -421,25 +421,87 @@
 	z-index: -1;
 }
 
-/* 技能剩余次数 */
-.skill-control > .enable > .skillitem > .numText,
-.skill-control > .enable > .skillitem_smh_huoji > .numText,
-.skill-control > .enable > .skillitemxianding > .numText {
-	font-size: 16px;
-	right: 3px;
-	top: 5px;
-	font-family: "HYZLSJ";
-	text-align: center;
-	-webkit-text-stroke: 0px rgba(38, 37, 34, 0.5);
-	text-shadow: none;
-	background-image: linear-gradient(180deg, #f0d775 30%, #ab8c31 57%, #b0a04d 67%);
-	font-weight: bold;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	white-space: nowrap;
+/* 主动技剩余次数：右上角毛玻璃标记 + 白色数字 */
+.skill-control > .enable > .skillitem > .numText.numText-mark,
+.skill-control > .enable > .skillitem_smh_huoji > .numText.numText-mark,
+.skill-control > .enable > .skillitem_smh_lianhuan > .numText.numText-mark,
+.skill-control > .enable > .skillitem_smh_yeyan > .numText.numText-mark,
+.skill-control > .enable > .skillitemxianding > .numText.numText-mark {
 	position: absolute;
+	right: -2px;
+	top: -0.5px;
+	width: 13px;
+	height: 20px;
+	z-index: 5;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	/* 贴底部斜线；数值越大离尖角越远 */
+	padding: 0 0 0px;
+	box-sizing: border-box;
+	font-family: "FZLBJW", sans-serif;
+	font-weight: 200;
+	font-size: 18px;
+	line-height: 1;
+	letter-spacing: 0;
+	color: #fff;
+	-webkit-text-fill-color: #fff;
+	-webkit-text-stroke: 0;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+	background-image: none;
+	-webkit-background-clip: border-box;
+	background-clip: border-box;
+	white-space: nowrap;
+	pointer-events: none;
 }
 
+.skill-control > .enable > .skillitem > .numText.numText-mark::before,
+.skill-control > .enable > .skillitem_smh_huoji > .numText.numText-mark::before,
+.skill-control > .enable > .skillitem_smh_lianhuan > .numText.numText-mark::before,
+.skill-control > .enable > .skillitem_smh_yeyan > .numText.numText-mark::before,
+.skill-control > .enable > .skillitemxianding > .numText.numText-mark::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: rgb(133 139 98);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	/* CSS 绘制尖底标记外形，不再依赖 mark_chang.png */
+	clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%);
+	pointer-events: none;
+}
+
+/* 底图白色细边框 */
+.skill-control > .enable > .skillitem > .numText.numText-mark::after,
+.skill-control > .enable > .skillitem_smh_huoji > .numText.numText-mark::after,
+.skill-control > .enable > .skillitem_smh_lianhuan > .numText.numText-mark::after,
+.skill-control > .enable > .skillitem_smh_yeyan > .numText.numText-mark::after,
+.skill-control > .enable > .skillitemxianding > .numText.numText-mark::after {
+	content: "";
+	position: absolute;
+	inset: -1px;
+	z-index: -2;
+	background: #ffffff5c;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%);
+	pointer-events: none;
+}
+
+/* 主动技不可用/灰掉时隐藏次数标记 */
+.skill-control > .enable > .skillitem:not(.usable):not(.select) > .numText,
+.skill-control > .enable > .skillitem_smh_huoji:not(.usable):not(.select) > .numText,
+.skill-control > .enable > .skillitem_smh_lianhuan:not(.usable):not(.select) > .numText,
+.skill-control > .enable > .skillitem_smh_yeyan:not(.usable):not(.select) > .numText,
+.skill-control > .enable > .skillitemxianding:not(.usable):not(.select) > .numText,
+.skill-control > .enable > .skillitem.shixiao > .numText,
+.skill-control > .enable > .skillitem_smh_huoji.shixiao > .numText,
+.skill-control > .enable > .skillitem_smh_lianhuan.shixiao > .numText,
+.skill-control > .enable > .skillitem_smh_yeyan.shixiao > .numText,
+.skill-control > .enable > .skillitemxianding.shixiao > .numText {
+	display: none !important;
+}
+
+/* 被动技剩余次数：保留圈号样式 */
 .skill-control > .trigger > .skillitem > .numText,
 .skill-control > .trigger > .skillitemxianding > .numText {
 	font-size: 16px;
@@ -450,25 +512,6 @@
 	-webkit-text-stroke: 0px rgba(38, 37, 34, 0.5);
 	text-shadow: none;
 	background-image: linear-gradient(180deg, #f0d775 30%, #ab8c31 57%, #b0a04d 67%);
-	font-weight: bold;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	white-space: nowrap;
-	position: absolute;
-}
-
-.skill-control > .enable > .skillitem > .numText-child,
-.skill-control > .enable > .skillitem_smh_huoji > .numText-child,
-.skill-control > .enable > .skillitemxianding > .numText-child {
-	font-size: 16px;
-	right: 3px;
-	top: 5px;
-	font-family: "HYZLSJ";
-	text-align: center;
-	-webkit-text-stroke: 2.7px #102030;
-	opacity: 0.5;
-	z-index: -1;
-	text-shadow: none;
 	font-weight: bold;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -689,25 +732,83 @@
 	background-image: url("../../assets/skill/shousha/longfeng_no.png");
 }
 
-/* 左手布局技能次数 */
-.skill-controlzuoshou > .enable > .skillitem > .numText,
-.skill-controlzuoshou > .enable > .skillitem_smh_huoji > .numText,
-.skill-controlzuoshou > .enable > .skillitemxianding > .numText {
-	font-size: 16px;
-	right: 3px;
-	top: 5px;
-	font-family: "HYZLSJ";
-	text-align: center;
-	-webkit-text-stroke: 0px rgba(38, 37, 34, 0.5);
-	text-shadow: none;
-	background-image: linear-gradient(180deg, #f0d775 30%, #ab8c31 57%, #b0a04d 67%);
-	font-weight: bold;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	white-space: nowrap;
+/* 左手布局：主动技剩余次数标记 */
+.skill-controlzuoshou > .enable > .skillitem > .numText.numText-mark,
+.skill-controlzuoshou > .enable > .skillitem_smh_huoji > .numText.numText-mark,
+.skill-controlzuoshou > .enable > .skillitem_smh_lianhuan > .numText.numText-mark,
+.skill-controlzuoshou > .enable > .skillitem_smh_yeyan > .numText.numText-mark,
+.skill-controlzuoshou > .enable > .skillitemxianding > .numText.numText-mark {
 	position: absolute;
+	right: -2px;
+	top: -1px;
+	width: 15px;
+	height: 20px;
+	z-index: 5;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	padding: 0 0 3px;
+	box-sizing: border-box;
+	font-family: "HYZLSJ", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 1;
+	letter-spacing: 0;
+	color: #fff;
+	-webkit-text-fill-color: #fff;
+	-webkit-text-stroke: 0;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.85);
+	background-image: none;
+	-webkit-background-clip: border-box;
+	background-clip: border-box;
+	white-space: nowrap;
+	pointer-events: none;
 }
 
+.skill-controlzuoshou > .enable > .skillitem > .numText.numText-mark::before,
+.skill-controlzuoshou > .enable > .skillitem_smh_huoji > .numText.numText-mark::before,
+.skill-controlzuoshou > .enable > .skillitem_smh_lianhuan > .numText.numText-mark::before,
+.skill-controlzuoshou > .enable > .skillitem_smh_yeyan > .numText.numText-mark::before,
+.skill-controlzuoshou > .enable > .skillitemxianding > .numText.numText-mark::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: rgba(255, 255, 255, 0.48);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	clip-path: polygon(0% 0%, 100% 0%, 100% 78%, 50% 100%, 0% 78%);
+	pointer-events: none;
+}
+
+.skill-controlzuoshou > .enable > .skillitem > .numText.numText-mark::after,
+.skill-controlzuoshou > .enable > .skillitem_smh_huoji > .numText.numText-mark::after,
+.skill-controlzuoshou > .enable > .skillitem_smh_lianhuan > .numText.numText-mark::after,
+.skill-controlzuoshou > .enable > .skillitem_smh_yeyan > .numText.numText-mark::after,
+.skill-controlzuoshou > .enable > .skillitemxianding > .numText.numText-mark::after {
+	content: "";
+	position: absolute;
+	inset: -1px;
+	z-index: -2;
+	background: #fff;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 78%, 50% 100%, 0% 78%);
+	pointer-events: none;
+}
+
+.skill-controlzuoshou > .enable > .skillitem:not(.usable):not(.select) > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_huoji:not(.usable):not(.select) > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_lianhuan:not(.usable):not(.select) > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_yeyan:not(.usable):not(.select) > .numText,
+.skill-controlzuoshou > .enable > .skillitemxianding:not(.usable):not(.select) > .numText,
+.skill-controlzuoshou > .enable > .skillitem.shixiao > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_huoji.shixiao > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_lianhuan.shixiao > .numText,
+.skill-controlzuoshou > .enable > .skillitem_smh_yeyan.shixiao > .numText,
+.skill-controlzuoshou > .enable > .skillitemxianding.shixiao > .numText {
+	display: none !important;
+}
+
+/* 左手布局：被动技剩余次数 */
 .skill-controlzuoshou > .trigger > .skillitem > .numText,
 .skill-controlzuoshou > .trigger > .skillitemxianding > .numText {
 	font-size: 16px;
@@ -725,9 +826,6 @@
 	position: absolute;
 }
 
-.skill-controlzuoshou > .enable > .skillitem > .numText-child,
-.skill-controlzuoshou > .enable > .skillitem_smh_huoji > .numText-child,
-.skill-controlzuoshou > .enable > .skillitemxianding > .numText-child,
 .skill-controlzuoshou > .trigger > .skillitem > .numText-child,
 .skill-controlzuoshou > .trigger > .skillitemxianding > .numText-child {
 	font-size: 16px;
