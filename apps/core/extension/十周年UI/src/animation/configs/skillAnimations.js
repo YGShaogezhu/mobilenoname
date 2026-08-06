@@ -6,7 +6,7 @@
 
 /**
  * 技能动画配置
- * @type {Object.<string, {name: string, scale?: number, action?: string}>}
+ * @type {Object.<string, {name: string, scale?: number, action?: string, speed?: number}>}
  */
 export const skillDefines = {
 	// 重制版装备
@@ -24,7 +24,6 @@ export const skillDefines = {
 	gx_chongyingshenfu: { name: "SSHW_TX_chongyingshenfu", scale: 0.5 },
 	taipingyaoshu: { name: "taipingyaoshu", scale: 0.75 },
 	taipingyaoshu_lose: { name: "effect_taipingyaoshu_xiexia", scale: 0.55 },
-	qibaodao: { name: "qibaodao2", scale: 1 },
 	yitianjian: { name: "Ss_ZB_YiTianJian", scale: 0.5 },
 	yinfengyi: { name: "Ss_ZB_YinFengYi", scale: 0.5 },
 	zhanxiang: { name: "Ss_ZB_ZhanXiang", scale: 0.5 },
@@ -41,26 +40,30 @@ export const skillDefines = {
 	qixingbaodao: { name: "Ss_ZB_QiXingDao", scale: 0.5 },
 	yonglv: { name: "effect_numa", scale: 0.4 },
 
-	// 标准装备
-	bagua_skill: { name: "effect_baguazhen", scale: 0.6 },
-	baiyin_skill: { name: "effect_baiyinshizi", scale: 0.5 },
-	bazhen_bagua: { name: "effect_baguazhen", scale: 0.6 },
-	cixiong_skill: { name: "effect_cixiongshuanggujian", scale: 0.5 },
-	fangtian_skill: { name: "effect_fangtianhuaji", scale: 0.7 },
-	guanshi_skill: { name: "effect_guanshifu", scale: 0.7 },
-	guding_skill: { name: "effect_gudingdao", scale: 0.6 },
-	hanbing_skill: { name: "effect_hanbingjian", scale: 0.5 },
-	linglong_bagua: { name: "effect_baguazhen", scale: 0.5 },
-	qilin_skill: { name: "effect_qilingong", scale: 0.5 },
-	qinggang_skill: { name: "effect_qinggangjian", scale: 0.7 },
-	qinglong_skill: { name: "effect_qinglongyanyuedao", scale: 0.6 },
-	renwang_skill: { name: "effect_renwangdun", scale: 0.5 },
+	// 标准装备：手杀 SSequip（技能触发时播放对应 action）
+	bagua_skill: { name: "globaltexiao/equip/SSequip", action: "bagua", scale: 1, speed: 0.8 },
+	baiyin_skill: { name: "globaltexiao/equip/SSequip", action: "baiyin", scale: 1, speed: 0.8 },
+	bazhen_bagua: { name: "globaltexiao/equip/SSequip", action: "bagua", scale: 1, speed: 0.8 },
+	cixiong_skill: { name: "globaltexiao/equip/SSequip", action: "cixong", scale: 1, speed: 0.8 },
+	fangtian_skill: { name: "globaltexiao/equip/SSequip", action: "fangtian", scale: 1, speed: 0.8 },
+	guanshi_skill: { name: "globaltexiao/equip/SSequip", action: "guanshi", scale: 1, speed: 0.8 },
+	guding_skill: { name: "globaltexiao/equip/SSequip", action: "guding", scale: 1, speed: 0.8 },
+	hanbing_skill: { name: "globaltexiao/equip/SSequip", action: "hanbing", scale: 1, speed: 0.8 },
+	linglong_bagua: { name: "globaltexiao/equip/SSequip", action: "bagua", scale: 1, speed: 0.8 },
+	qibaodao: { name: "globaltexiao/equip/SSequip", action: "qibao", scale: 1, speed: 0.8 },
+	qilin_skill: { name: "globaltexiao/equip/SSequip", action: "qilin", scale: 1, speed: 0.8 },
+	qinggang_skill: { name: "globaltexiao/equip/SSequip", action: "qinggang", scale: 1, speed: 0.8 },
+	qinglong_skill: { name: "globaltexiao/equip/SSequip", action: "qinglong", scale: 1, speed: 0.8 },
+	renwang_skill: { name: "globaltexiao/equip/SSequip", action: "renwang", scale: 1, speed: 0.8 },
+	zhangba_skill: { name: "globaltexiao/equip/SSequip", action: "zhangba", scale: 1, speed: 0.8 },
+	// 朱雀/诸葛骨骼标签写反，需对调
+	zhuge_skill: { name: "globaltexiao/equip/SSequip", action: "zhuque", scale: 1, speed: 0.8 },
+	zhuque_skill: { name: "globaltexiao/equip/SSequip", action: "zhuge", scale: 1, speed: 0.8 },
+
+	// 藤甲等仍走独立特效（不在 SSequip 覆盖范围内）
 	tengjia1: { name: "effect_tengjiafangyu", scale: 0.6 },
 	tengjia2: { name: "effect_tengjiaranshao", scale: 0.6 },
 	tengjia3: { name: "effect_tengjiafangyu", scale: 0.6 },
-	zhangba_skill: { name: "effect_zhangbashemao", scale: 0.7 },
-	zhuge_skill: { name: "effect_zhugeliannu", scale: 0.5 },
-	zhuque_skill: { name: "effect_zhuqueyushan", scale: 0.6 },
 	jinhe_lose: { name: "effect_jinhe", scale: 0.4 },
 	numa: { name: "effect_numa", scale: 0.4 },
 	nvzhuang: { name: "effect_nvzhuang", scale: 0.5 },

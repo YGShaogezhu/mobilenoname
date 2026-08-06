@@ -25,22 +25,13 @@ export const assetList = [
 	{ name: "effect_youxikaishi" },
 	{ name: "effect_youxikaishi_shousha" },
 
-	// 装备特效
-	{ name: "effect_baguazhen" },
-	{ name: "effect_baiyinshizi" },
-	{ name: "effect_cixiongshuanggujian" },
-	{ name: "effect_fangtianhuaji" },
-	{ name: "effect_guanshifu" },
-	{ name: "effect_gudingdao" },
-	{ name: "effect_hanbingjian" },
-	{ name: "effect_qilingong" },
-	{ name: "effect_qinggangjian" },
-	{ name: "effect_qinglongyanyuedao" },
-	{ name: "effect_renwangdun" },
+	// 手杀装备特效参考无名美化
+	{ name: "globaltexiao/equip/SSequip" },
+
+	// 其他通用特效
 	{ name: "effect_shoujidonghua" },
 	{ name: "effect_tengjiafangyu" },
 	{ name: "effect_tengjiaranshao" },
-	{ name: "effect_zhangbashemao" },
 	{ name: "effect_zhiliao" },
 	{ name: "effect_loseHp" },
 
@@ -51,8 +42,6 @@ export const assetList = [
 	{ name: "globaltexiao/shanghaishuzi/SZN_shuzi" },
 
 	// 更多装备特效
-	{ name: "effect_zhugeliannu" },
-	{ name: "effect_zhuqueyushan" },
 	{ name: "effect_jinhe" },
 	{ name: "effect_numa" },
 	{ name: "effect_nvzhuang" },
@@ -83,7 +72,6 @@ export const assetList = [
 	{ name: "SSHW_TX_taijifuchen" },
 	{ name: "taipingyaoshu" },
 	{ name: "effect_taipingyaoshu_xiexia" },
-	{ name: "qibaodao2" },
 	{ name: "feilongduofeng" },
 	{ name: "Ss_mgk_fire" },
 	{ name: "Ss_mgk_tslh" },

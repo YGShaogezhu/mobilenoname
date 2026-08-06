@@ -91,19 +91,22 @@ export function initSkillAnimations(animation) {
 	// 注册卡牌动画
 	for (const [cardName, config] of Object.entries(cardDefines)) {
 		lib.animate.card[cardName] = card => {
-			animation.playSpine(config.name, { x: config.x, y: config.y, scale: config.scale });
+			animation.playSpine({ name: config.name, action: config.action, speed: config.speed }, { x: config.x, y: config.y, scale: config.scale });
 		};
 	}
 
-	// 注册技能动画
+	// 注册技能动画（装备技能等在 logSkill → trySkillAnimate 时播放）
 	for (const [skillName, config] of Object.entries(skillDefines)) {
 		lib.animate.skill[skillName] = function (name) {
-			animation.playSpine(config.name, {
-				x: config.x,
-				y: config.y,
-				scale: config.scale,
-				parent: this,
-			});
+			animation.playSpine(
+				{ name: config.name, action: config.action, speed: config.speed },
+				{
+					x: config.x,
+					y: config.y,
+					scale: config.scale,
+					parent: this,
+				}
+			);
 		};
 	}
 
