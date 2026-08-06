@@ -261,21 +261,20 @@ export function onCardkmhUpdate() {
  */
 export function onChupaizhishiUpdate() {
 	if (!window.decadeUI) return;
-	const config = lib.config.extension_十周年UI_chupaizhishi;
-	const options = ["shousha", "shoushaX", "jiangjun", "weijiangjun", "cheqijiangjun", "biaoqijiangjun", "dajiangjun", "dasima"];
-	decadeUI.config.chupaizhishi = config === "random" ? options.randomGet() : config;
+	const raw = lib.config.extension_十周年UI_chupaizhishi;
+	// 旧选项（将军/随机/手杀新版等）统一落到手杀经典
+	const config = raw === "off" ? "off" : "shoushaX";
+	decadeUI.config.chupaizhishi = config;
 	ui.arena.dataset.chupaizhishi = config;
 
 	if (!game.players || !decadeUI.animation) return;
 	game.players.forEach(player => {
-		// 停止现有动画
 		if (player.ChupaizhishiXid) {
 			decadeUI.animation.stopSpine(player.ChupaizhishiXid);
 			delete player.ChupaizhishiXid;
 		}
-		// 播放新动画
 		if (player.classList.contains("selectable") && config !== "off") {
-			const anim = chupaiAnimations[decadeUI.config.chupaizhishi];
+			const anim = chupaiAnimations.shoushaX;
 			if (anim) {
 				player.ChupaizhishiXid = decadeUI.animation.playSpine({ name: anim.name, loop: true }, { parent: player, scale: anim.scale });
 			}

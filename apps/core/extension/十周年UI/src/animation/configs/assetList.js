@@ -9,17 +9,8 @@
  * @type {Array<{name: string, follow?: boolean, fileType?: string}>}
  */
 export const assetList = [
-	// 出牌指示动画
+	// 出牌指示动画（手杀经典）
 	{ name: "aar_chupaizhishiX" },
-	{ name: "aar_chupaizhishi" },
-
-	// 选中特效
-	{ name: "SF_xuanzhong_eff_jiangjun" },
-	{ name: "SF_xuanzhong_eff_weijiangjun" },
-	{ name: "SF_xuanzhong_eff_cheqijiangjun" },
-	{ name: "SF_xuanzhong_eff_biaoqijiangjun" },
-	{ name: "SF_xuanzhong_eff_dajiangjun" },
-	{ name: "SF_xuanzhong_eff_dasima" },
 
 	// 游戏开始特效
 	{ name: "effect_youxikaishi" },

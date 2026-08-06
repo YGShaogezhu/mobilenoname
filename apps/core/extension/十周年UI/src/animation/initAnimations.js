@@ -52,8 +52,9 @@ export function initSkillAnimations(animation) {
 			if (element.ChupaizhishiXid || timer) return;
 			window.chupaiload = true;
 			timer = setTimeout(() => {
-				const config = decadeUI.config.chupaizhishi;
-				const animConfig = chupaiAnimations[config];
+				const raw = decadeUI.config.chupaizhishi;
+				const config = raw === "off" ? "off" : "shoushaX";
+				const animConfig = chupaiAnimations.shoushaX;
 				if (config !== "off" && animConfig) {
 					element.ChupaizhishiXid = animation.playSpine(
 						{ name: animConfig.name, loop: true },

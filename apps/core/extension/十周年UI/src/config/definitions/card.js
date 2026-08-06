@@ -134,17 +134,9 @@ export const cardkmh = {
 export const chupaizhishi = {
 	name: "出牌指示",
 	intro: "切换目标指示特效",
-	init: "off",
+	init: "shoushaX",
 	item: {
-		jiangjun: "将军",
-		weijiangjun: "卫将军",
-		cheqijiangjun: "车骑将军",
-		biaoqijiangjun: "骠骑将军",
-		dajiangjun: "大将军",
-		dasima: "大司马",
 		shoushaX: "手杀经典",
-		shousha: "手杀新版",
-		random: "随机",
 		off: "关闭",
 	},
 	update: onChupaizhishiUpdate,

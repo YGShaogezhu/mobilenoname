@@ -93,12 +93,5 @@ export const cardDefines = {
  * @type {Object.<string, {name: string, scale: number}>}
  */
 export const chupaiAnimations = {
-	jiangjun: { name: "SF_xuanzhong_eff_jiangjun", scale: 0.6 },
-	weijiangjun: { name: "SF_xuanzhong_eff_weijiangjun", scale: 0.6 },
-	cheqijiangjun: { name: "SF_xuanzhong_eff_cheqijiangjun", scale: 0.6 },
-	biaoqijiangjun: { name: "SF_xuanzhong_eff_biaoqijiangjun", scale: 0.5 },
-	dajiangjun: { name: "SF_xuanzhong_eff_dajiangjun", scale: 0.6 },
-	dasima: { name: "SF_xuanzhong_eff_dasima", scale: 0.6 },
 	shoushaX: { name: "aar_chupaizhishiX", scale: 0.55 },
-	shousha: { name: "aar_chupaizhishi", scale: 0.55 },
 };
