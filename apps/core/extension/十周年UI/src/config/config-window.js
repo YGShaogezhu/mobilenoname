@@ -325,7 +325,6 @@ function getConfigsByTab(tabId) {
 			{ key: "bettersound", name: "更多音效", type: "toggle" },
 			{ key: "skillDieAudio", name: "中二模式", type: "toggle" },
 			{ key: "showDistanceDisplay", name: "手杀距离显示", type: "toggle" },
-			{ key: "audioEasterEggs", name: "武将彩蛋", type: "toggle" },
 			{ key: "wujiangbeijing", name: "武将背景", type: "toggle" },
 			{ key: "shiliyouhua", name: "官方势力", type: "toggle" },
 			{ isTitle: true, name: "游戏功能" },

@@ -42,16 +42,6 @@ export const showDistanceDisplay = {
 };
 
 /**
- * 语音彩蛋配置
- * @type {Object}
- */
-export const audioEasterEggs = {
-	name: "武将彩蛋",
-	intro: "开启后，特定武将使用特定卡牌或触发特定事件时会播放彩蛋语音",
-	init: true,
-};
-
-/**
  * 武将背景配置
  * @type {Object}
  */
@@ -121,7 +111,6 @@ export const miscConfigs = {
 	bettersound,
 	skillDieAudio,
 	showDistanceDisplay,
-	audioEasterEggs,
 	wujiangbeijing,
 	shiliyouhua,
 	mx_decade_characterDialog,

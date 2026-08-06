@@ -26,7 +26,7 @@ import { setupWelcomeDialog } from "./features/welcomeDialog.js";
 import { setupConfigWindow } from "./features/configWindow.js";
 
 // 音频模块
-import { setupSkillDieAudio, setupAudioHooks, setupEnhancedAudio, setupCharacterAudio } from "./audio/index.js";
+import { setupSkillDieAudio, setupEnhancedAudio, setupCharacterAudio } from "./audio/index.js";
 
 // 皮肤模块
 import { setupDynamicSkin } from "./skins/dynamicSkin.js";
@@ -90,7 +90,6 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupSkillDisplay();
 	setupOutcropAvatar();
 	setupSkillDieAudio();
-	setupAudioHooks();
 	setupCharacterAudio();
 	setupDynamicSkin();
 	setupWelcomeDialog(lib.extensionPack.十周年UI);
