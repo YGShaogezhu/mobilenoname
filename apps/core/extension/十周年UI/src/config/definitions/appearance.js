@@ -5,7 +5,6 @@
  */
 import { createCollapseTitle, createCollapseEnd } from "../utils.js";
 import { onExtensionToggleClick, onExtensionToggleUpdate, onNewDecadeStyleClick, onNewDecadeStyleUpdate, onOutcropSkinClick, onOutcropSkinUpdate, onBorderLevelUpdate, onAloneEquipUpdate, onMeanPrettifyClick, onDynamicSkinClick, onDynamicSkinOutcropUpdate } from "../handlers/appearance-handlers.js";
-import { game, ui } from "noname";
 
 /**
  * 扩展开关配置
@@ -77,29 +76,6 @@ export const outcropSkin = {
 	item: { shizhounian: "十周年露头", shousha: "手杀露头", off: "关闭" },
 	update: onOutcropSkinUpdate,
 	onclick: onOutcropSkinClick,
-};
-
-/**
- * 边框风格配置
- * @type {Object}
- */
-export const borderStyle = {
-	name: "边框风格•仅一将",
-	intro: "切换阵营边框的图片风格",
-	init: "xinsha",
-	item: {
-		xinsha: "赤炎",
-		dragon2: "玄墨",
-		dragon3: "耀金",
-		dragon4: "龙旗",
-	},
-	onclick(item) {
-		game.saveConfig("extension_十周年UI_borderStyle", item);
-		if (window.decadeUI) {
-			ui.arena.dataset.borderStyle = item;
-			onBorderLevelUpdate();
-		}
-	},
 };
 
 /**
@@ -183,7 +159,6 @@ export const appearanceConfigs = {
 	outward_title,
 	newDecadeStyle,
 	outcropSkin,
-	borderStyle,
 	borderLevel,
 	aloneEquip,
 	meanPrettify,
