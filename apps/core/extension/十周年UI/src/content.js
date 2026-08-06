@@ -152,7 +152,7 @@ export async function content(config) {
 		dynamicSkin: lib.config.extension_十周年UI_dynamicSkin ?? false,
 		newDecadeStyle: lib.config.extension_十周年UI_newDecadeStyle ?? "on",
 		dynamicSkinOutcrop: lib.config.extension_十周年UI_dynamicSkinOutcrop ?? false,
-		rightLayout: lib.config.extension_十周年UI_rightLayout === "on",
+		rightLayout: true,
 	};
 
 	enhanceDecadeUIRuntime(decadeUI);

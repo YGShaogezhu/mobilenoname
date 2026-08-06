@@ -11,14 +11,6 @@
 	z-index: 0;
 }
 
-/* 左手布局 */
-#arena[data-right-layout="off"] > .skill-control {
-	max-width: 200px;
-	bottom: 0px;
-	left: 190px;
-	z-index: 0;
-}
-
 .skill-control div {
 	position: relative;
 }
@@ -58,27 +50,6 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: flex-end;
-	max-height: 140px;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-
-/* 左手布局 - 合并区域 */
-#arena[data-right-layout="off"] > .skill-control .combined {
-	height: auto;
-	width: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	margin-left: 5px;
-	flex-wrap: wrap-reverse;
-	max-height: 150px;
-}
-
-#arena[data-right-layout="off"] > .skill-control .combined.scroll-enabled {
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
 	max-height: 140px;
 	overflow-y: auto;
 	overflow-x: hidden;

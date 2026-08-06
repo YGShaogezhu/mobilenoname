@@ -52,26 +52,6 @@ export function onNewDecadeStyleUpdate() {
 }
 
 /**
- * 左右布局点击处理
- * @param {string} item - 布局选项
- */
-export function onRightLayoutClick(item) {
-	lib.config.extension_十周年UI_rightLayout = item ?? "off";
-	game.saveConfig("extension_十周年UI_rightLayout", item);
-	game.reload();
-}
-
-/**
- * 左右布局更新处理
- */
-export function onRightLayoutUpdate() {
-	const layout = lib.config.extension_十周年UI_rightLayout;
-	if (layout === "on" || layout === "off") {
-		ui.arena.dataset.rightLayout = layout;
-	}
-}
-
-/**
  * 露头样式点击处理
  * @param {string} item - 露头样式选项
  */

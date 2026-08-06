@@ -130,11 +130,10 @@ export function createBabyLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 创建整理手牌按钮
 		createSortButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 
 			const btn = ui.create.node("img");
 			btn.src = `${lib.assetURL}${assetPath}uibutton/hs_zhengli.png`;
-			btn.style.cssText = `display:block;position:absolute;background-color:transparent;width:85px;height:50px;bottom:18%;left:22px;z-index:4;right:auto;${isRight ? "right:calc(100% - 380px);z-index:3;" : "right:calc(100% - 1260px);z-index:3;"}`;
+			btn.style.cssText = `display:block;position:absolute;background-color:transparent;width:85px;height:50px;bottom:18%;left:22px;z-index:4;right:auto;right:calc(100% - 380px);z-index:3;`;
 
 			btn.onclick = () => self.sortHandCards();
 
@@ -144,7 +143,6 @@ export function createBabyLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 创建全选按钮
 		createSelectAllButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 
 			const btn = ui.create.node("img");
 
@@ -156,7 +154,7 @@ export function createBabyLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			};
 			updateImage();
 
-			btn.style.cssText = `display:none;position:absolute;background-color:transparent;width:85px;height:50px;bottom:26%;left:22px;z-index:4;right:auto;${isRight ? "right:calc(100% - 295px);z-index:3;" : "right:calc(100% - 1175px);z-index:3;"}`;
+			btn.style.cssText = `display:none;position:absolute;background-color:transparent;width:85px;height:50px;bottom:26%;left:22px;z-index:4;right:auto;right:calc(100% - 295px);z-index:3;`;
 
 			btn.onclick = () => {
 				game.playAudio("../extension/十周年UI/audio/card_click.mp3");
@@ -265,26 +263,18 @@ export function createBabyLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			},
 
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-
 				// 设置按钮
 				ui.create.div(".settingButton", ui.arena);
 
 				// 功能按钮
-				if (isRight) {
-					ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
-					ui.create.div(".meiguiButton_new", ui.arena);
-				} else {
-					ui.create.div(".jiluButton_new1", ui.arena, ui.click.pause);
-					ui.create.div(".meiguiButton_new1", ui.arena);
-				}
+				ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
+				ui.create.div(".meiguiButton_new", ui.arena);
 
 				// 托管按钮
 				ui.create.div(".tuoguanButton", ui.arena, ui.click.auto);
 
 				// 手牌数量
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 				node.node = {
 					cardPicture: ui.create.div(".cardPicture", node),
 					cardNumber: ui.create.div(".cardNumber", node),

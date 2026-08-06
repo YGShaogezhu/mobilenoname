@@ -143,14 +143,12 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		createSideButtons() {
 			if (!lib.config.phonelayout) return;
 
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-
 			// 记录按钮
-			const jiluBtn = ui.create.div(isRight ? ".jiluButton_new" : ".jiluButton_new1", document.body);
+			const jiluBtn = ui.create.div(".jiluButton_new", document.body);
 			jiluBtn.onclick = () => ui.click.pause();
 
 			// 换肤按钮
-			const huanfuBtn = ui.create.div(isRight ? ".huanfuButton_new" : ".huanfuButton_new1", document.body);
+			const huanfuBtn = ui.create.div(".huanfuButton_new", document.body);
 			huanfuBtn.onclick = () => {
 				game.playAudio(`../${assetPath}CD/huanfu.mp3`);
 				if (window.zyile_charactercard) {
@@ -161,7 +159,7 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			};
 
 			// 笑脸按钮（聊天）
-			const xiaolianBtn = ui.create.div(isRight ? ".xiaolianButton_new" : ".xiaolianButton_new1", document.body);
+			const xiaolianBtn = ui.create.div(".xiaolianButton_new", document.body);
 			xiaolianBtn.onclick = () => {
 				if (lib.config["extension_说话_enable"]) {
 					game.showChatWordBackground?.();
@@ -244,16 +242,11 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 创建整理手牌按钮
 		createSortButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 
 			const btn = ui.create.node("img");
 			btn.src = `${lib.assetURL}${assetPath}uibutton/new_zhengli.png`;
 
-			const style = isRight
-				? "display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 46px);left:calc(100% - 335px);background-color:transparent;z-index:3;"
-				: "display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 33px);right:calc(100% - 335px);background-color:transparent;z-index:3;";
-
-			btn.style.cssText = style;
+			btn.style.cssText = "display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 46px);left:calc(100% - 335px);background-color:transparent;z-index:3;";
 			btn.onclick = () => {
 				game.playAudio("../extension/十周年UI/audio/card_click.mp3");
 				self.sortHandCards();
@@ -270,7 +263,6 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 创建全选按钮
 		createSelectAllButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 
 			const btn = ui.create.node("img");
 
@@ -282,11 +274,7 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			};
 			updateImage();
 
-			const style = isRight
-				? "display:none;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 46px);left:calc(100% - 430px);background-color:transparent;z-index:3;"
-				: "display:none;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 33px);right:calc(100% - 430px);background-color:transparent;z-index:3;";
-
-			btn.style.cssText = style;
+			btn.style.cssText = "display:none;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 46px);left:calc(100% - 430px);background-color:transparent;z-index:3;";
 
 			btn.onclick = () => {
 				game.playAudio("../extension/十周年UI/audio/card_click.mp3");
@@ -329,8 +317,6 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			},
 
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-
 				// 设置按钮
 				ui.create.div(".settingButton", ui.arena);
 
@@ -338,8 +324,7 @@ export function createXinshaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 				ui.create.div(".tuoguanButton", ui.arena, ui.click.auto);
 
 				// 手牌数量
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 				node.node = {
 					cardPicture: ui.create.div(".cardPicture", node),
 					cardNumber: ui.create.div(".cardNumber", node),

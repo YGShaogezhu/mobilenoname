@@ -10,13 +10,6 @@
 	z-index: 8;
 }
 
-#arena[data-right-layout="off"] > .skill-control {
-	max-width: 220px;
-	bottom: 0px;
-	left: 180px;
-	z-index: 0;
-}
-
 .skill-control div {
 	position: relative;
 }
@@ -59,29 +52,6 @@
 	align-items: flex-start;
 	align-content: flex-start;
 	max-height: 144px;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-
-/* 左手布局 */
-#arena[data-right-layout="off"] > .skill-control .combined {
-	height: auto;
-	width: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	margin-left: 5px;
-	flex-wrap: wrap-reverse;
-	max-height: 150px;
-}
-
-#arena[data-right-layout="off"] > .skill-control .combined.scroll-enabled {
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	align-content: flex-start;
-	max-height: 135px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }

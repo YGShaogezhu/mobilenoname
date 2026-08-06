@@ -85,9 +85,7 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 				},
 				skillControl: clear => {
 					if (!ui.skillControl) {
-						const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-						const cls = isRight ? ".skill-control" : ".skill-controlzuoshou";
-						const node = ui.create.div(cls, ui.arena);
+						const node = ui.create.div(".skill-control", ui.arena);
 						node.node = {
 							enable: ui.create.div(".enable", node),
 							trigger: ui.create.div(".trigger", node),

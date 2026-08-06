@@ -49,9 +49,7 @@ export function createCodenameLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 初始化距离显示按钮
 		initDistanceButtons() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-			const btnClass = isRight ? ".meiguiButton_new" : ".meiguiButton_new1";
-			const btn = ui.arena.querySelector(btnClass);
+			const btn = ui.arena.querySelector(".meiguiButton_new");
 			if (btn) {
 				btn.onclick = () => self.toggleDistanceDisplay();
 			}
@@ -60,11 +58,10 @@ export function createCodenameLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		// 创建整理手牌按钮
 		createSortButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 
 			const btn = ui.create.node("img");
 			btn.src = `${lib.assetURL}${assetPath}uibutton/code_zhengli.png`;
-			btn.style.cssText = `display:block;position:absolute;background-color:transparent;width:55px;height:50px;bottom:1%;left:40px;z-index:4;right:auto;${isRight ? "right:calc(100% - 380px);z-index:3;" : "right:calc(100% - 1260px);z-index:3;"}`;
+			btn.style.cssText = `display:block;position:absolute;background-color:transparent;width:55px;height:50px;bottom:1%;left:40px;z-index:4;right:auto;right:calc(100% - 380px);z-index:3;`;
 
 			btn.onclick = () => self.sortHandCards();
 
@@ -160,7 +157,7 @@ export function createCodenameLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			});
 
 			self.distanceClickHandler = e => {
-				if (!e.target.closest(".player") && !e.target.closest(".meiguiButton_new") && !e.target.closest(".meiguiButton_new1")) {
+				if (!e.target.closest(".player") && !e.target.closest(".meiguiButton_new")) {
 					self.closeDistanceDisplay();
 				}
 			};
@@ -200,28 +197,19 @@ export function createCodenameLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			},
 
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-
 				// 设置按钮
 				ui.create.div(".settingButton", ui.arena);
 
 				// 功能按钮 - 注意：toggleDistanceDisplay需要通过plugin对象调用
-				if (isRight) {
-					ui.create.div(".huanfuButton_new", ui.arena, base.click.huanfu);
-					ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
-					ui.create.div(".meiguiButton_new", ui.arena);
-				} else {
-					ui.create.div(".huanfuButton_new1", ui.arena, base.click.huanfu);
-					ui.create.div(".jiluButton_new1", ui.arena, ui.click.pause);
-					ui.create.div(".meiguiButton_new1", ui.arena);
-				}
+				ui.create.div(".huanfuButton_new", ui.arena, base.click.huanfu);
+				ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
+				ui.create.div(".meiguiButton_new", ui.arena);
 
 				// 托管按钮
 				ui.create.div(".tuoguanButton", ui.arena, ui.click.auto);
 
 				// 手牌数量
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 				node.node = {
 					cardPicture: ui.create.div(".cardPicture", node),
 					cardNumber: ui.create.div(".cardNumber", node),

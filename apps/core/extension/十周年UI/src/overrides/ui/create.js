@@ -274,6 +274,7 @@ export function uiCreateArena() {
 	}
 
 	decadeUI.config.update();
+	ui.arena.dataset.rightLayout = "on";
 
 	return result;
 }

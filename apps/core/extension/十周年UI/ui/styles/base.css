@@ -166,8 +166,7 @@
 }
 
 /** 手牌数量显示 */
-.handcardNumber,
-.handcardNumber1 {
+.handcardNumber {
 	position: absolute;
 	z-index: 5;
 }

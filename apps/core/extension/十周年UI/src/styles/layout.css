@@ -170,14 +170,6 @@ body > .background {
 	left: 220px;
 }
 
-/* 非单独装备栏 - 左手布局 */
-#arena[data-alone-equip="off"][data-right-layout="off"] > .hand-wrap,
-#arena[data-alone-equip="off"][data-right-layout="off"] > .hand-back {
-	left: 300px;
-	right: 95px;
-	bottom: 1%;
-}
-
 /* 非单独装备栏 - 右手布局 */
 #arena[data-alone-equip="off"][data-right-layout="on"] > .hand-wrap,
 #arena[data-alone-equip="off"][data-right-layout="on"] > .hand-back {

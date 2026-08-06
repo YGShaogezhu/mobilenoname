@@ -59,9 +59,7 @@ export function createCodenameSkillPlugin(lib, game, ui, get, ai, _status, app) 
 		},
 
 		createSkillControl() {
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-			const cls = isRight ? ".skill-control" : ".skill-controlzuoshou";
-			const node = ui.create.div(cls, ui.arena);
+			const node = ui.create.div(".skill-control", ui.arena);
 			node.node = {
 				combined: ui.create.div(".combined", node),
 			};

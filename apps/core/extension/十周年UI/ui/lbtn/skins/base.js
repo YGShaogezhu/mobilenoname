@@ -582,9 +582,7 @@ export function createBaseLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			},
 
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 
 				node.node = {
 					cardPicture: ui.create.div(".cardPicture", node),

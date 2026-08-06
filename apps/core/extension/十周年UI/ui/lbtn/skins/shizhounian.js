@@ -94,19 +94,14 @@ export function createShizhounianLbtnPlugin(lib, game, ui, get, ai, _status, app
 		// 创建整理手牌按钮
 		createSortButton() {
 			const self = this;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 			const isTouch = lib.config.phonelayout;
 			const sortImg = isTouch ? "zhengli.png" : "zhenglix.png";
 
 			let style;
 			if (isTouch) {
-				style = isRight
-					? `display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 35px);left:calc(100% - 380px);background-color:transparent;z-index:7;`
-					: `display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 35px);left:calc(100% - 1260px);background-color:transparent;z-index:7;`;
+				style = `display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 35px);left:calc(100% - 380px);background-color:transparent;z-index:7;`;
 			} else {
-				style = isRight
-					? `display:block;--w:45px;--h:calc(var(--w)*110/170);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 45px);left:calc(100% - 305px);background-color:transparent;z-index:7;`
-					: `display:block;--w:88px;--h:calc(var(--w)*81/247);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 33px);right:calc(100% - 367.2px);background-color:transparent;z-index:4;`;
+				style = `display:block;--w:45px;--h:calc(var(--w)*110/170);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 45px);left:calc(100% - 305px);background-color:transparent;z-index:7;`;
 			}
 
 			const btn = ui.create.node("img");
@@ -218,7 +213,6 @@ export function createShizhounianLbtnPlugin(lib, game, ui, get, ai, _status, app
 			},
 
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
 				const isTouch = lib.config.phonelayout;
 
 				// 设置按钮
@@ -226,25 +220,17 @@ export function createShizhounianLbtnPlugin(lib, game, ui, get, ai, _status, app
 
 				// 功能按钮（仅触屏布局）
 				if (isTouch) {
-					if (isRight) {
-						ui.create.div(".huanfuButton_new", ui.arena, base.click.huanfu);
-						ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
-						ui.create.div(".meiguiButton_new", ui.arena, ui.click.pause);
-						ui.create.div(".xiaolianButton_new", ui.arena, ui.click.pause);
-					} else {
-						ui.create.div(".huanfuButton_new1", ui.arena, base.click.huanfu);
-						ui.create.div(".jiluButton_new1", ui.arena, ui.click.pause);
-						ui.create.div(".meiguiButton_new1", ui.arena, ui.click.pause);
-						ui.create.div(".xiaolianButton_new1", ui.arena, ui.click.pause);
-					}
+					ui.create.div(".huanfuButton_new", ui.arena, base.click.huanfu);
+					ui.create.div(".jiluButton_new", ui.arena, ui.click.pause);
+					ui.create.div(".meiguiButton_new", ui.arena, ui.click.pause);
+					ui.create.div(".xiaolianButton_new", ui.arena, ui.click.pause);
 				}
 
 				// 托管按钮
 				ui.create.div(".tuoguanButton", ui.arena, ui.click.auto);
 
 				// 手牌数量
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 				node.node = {
 					cardPicture: ui.create.div(".cardPicture", node),
 					cardNumber: ui.create.div(".cardNumber", node),

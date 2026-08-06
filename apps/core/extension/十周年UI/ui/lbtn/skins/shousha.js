@@ -484,8 +484,7 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		createChatButton() {
 			const btn = ui.create.node("img");
 			btn.src = `${lib.assetURL}${assetPath}uibutton/liaotian.png`;
-			const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-			btn.style.cssText = `display:block;--w:135px;--h:calc(var(--w)*1019/1400);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 97px);${isRight ? "right" : "left"}:calc(100% - 129px);background-color:transparent;z-index:3;${isRight ? "" : "transform:scaleX(-1);"}`;
+			btn.style.cssText = `display:block;--w:135px;--h:calc(var(--w)*1019/1400);width:var(--w);height:var(--h);position:absolute;top:calc(100% - 97px);right:calc(100% - 129px);background-color:transparent;z-index:3;`;
 
 			btn.onclick = () => {
 				if (lib.config["extension_说话_enable"]) {
@@ -880,15 +879,13 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			 * @returns {HTMLElement} 手牌数量元素
 			 */
 			handcardNumber() {
-				const isRight = lib.config["extension_十周年UI_rightLayout"] === "on";
-
 				ui.create.div(".settingButton", ui.arena);
 
 				const controls = ui.create.div(".lbtn-controls", ui.arena);
 				ui.create.div(".lbtn-control", controls, "   ");
 				ui.create.div(".lbtn-control", controls, "   ");
 
-				const paixuauto = ui.create.div(isRight ? ".lbtn-paixu" : ".lbtn-paixu1", ui.arena);
+				const paixuauto = ui.create.div(".lbtn-paixu", ui.arena);
 				paixuauto.onclick = () => {
 					if (window.paixuxx === undefined || window.paixuxx === false) {
 						startAutoPaixu();
@@ -901,14 +898,13 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 					}
 				};
 
-				ui.create.div(isRight ? ".latn-jilu" : ".latn-jilu1", ui.arena, ui.click.pause);
+				ui.create.div(".latn-jilu", ui.arena, ui.click.pause);
 				ui.create.div(".tuoguanButton", ui.arena, ui.click.auto);
 
-				const className = isRight ? ".handcardNumber" : ".handcardNumber1";
-				const node = ui.create.div(className, ui.arena).hide();
+				const node = ui.create.div(".handcardNumber", ui.arena).hide();
 				node.node = {
-					cardPicture: ui.create.div(isRight ? ".cardPicture" : ".cardPicture1", node),
-					cardNumber: ui.create.div(isRight ? ".cardNumber" : ".cardNumber1", node),
+					cardPicture: ui.create.div(".cardPicture", node),
+					cardNumber: ui.create.div(".cardNumber", node),
 				};
 
 				node.updateCardnumber = function () {

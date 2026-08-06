@@ -4,7 +4,6 @@
  * @module config/definitions/misc
  */
 import { createCollapseTitle, createCollapseEnd } from "../utils.js";
-import { onRightLayoutClick, onRightLayoutUpdate } from "../handlers/appearance-handlers.js";
 
 /**
  * 小小玩楞折叠标题
@@ -108,19 +107,6 @@ export const mx_decade_characterDialog = {
 };
 
 /**
- * 左右布局配置
- * @type {Object}
- */
-export const rightLayout = {
-	name: "左右布局（已停止维护）",
-	init: "on",
-	intro: "切换完以后自动重启游戏",
-	item: { off: "左手", on: "右手" },
-	update: onRightLayoutUpdate,
-	onclick: onRightLayoutClick,
-};
-
-/**
  * 小小玩楞折叠结束标记
  * @type {Object}
  */
@@ -141,6 +127,5 @@ export const miscConfigs = {
 	mx_decade_characterDialog,
 	enableRecastInteraction,
 	enableEquipCopy,
-	rightLayout,
 	stuff_title_end,
 };

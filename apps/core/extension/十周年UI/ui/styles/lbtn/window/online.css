@@ -610,8 +610,7 @@
 }
 
 /* 左侧按钮 */
-.leftbuttons,
-.rightbuttons {
+.leftbuttons {
 	width: 85px;
 	bottom: 5px;
 	max-height: 205px;
@@ -620,10 +619,6 @@
 
 .leftbuttons {
 	left: 40px;
-}
-
-.rightbuttons {
-	right: 80px;
 }
 
 .anniubutton {

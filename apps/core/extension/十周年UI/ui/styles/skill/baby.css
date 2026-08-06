@@ -12,37 +12,24 @@
 	z-index: 0;
 }
 
-/* 左手布局 */
-#arena[data-right-layout="off"] > .skill-control,
-#arena > .skill-controlzuoshou {
-	max-width: 200px;
-	bottom: 0px;
-	left: 190px;
-	z-index: 0;
-}
-
-.skill-control div,
-.skill-controlzuoshou div {
+.skill-control div {
 	position: relative;
 }
 
-.skill-control .skillitem,
-.skill-controlzuoshou .skillitem {
+.skill-control .skillitem {
 	float: right;
 	white-space: nowrap;
 	color: #f5d78e;
 	font-size: 18px;
 }
 
-.skill-control > div,
-.skill-controlzuoshou > div {
+.skill-control > div {
 	display: flex;
 	flex-wrap: wrap-reverse;
 	flex-direction: row-reverse;
 }
 
-.skill-control > div::after,
-.skill-controlzuoshou > div::after {
+.skill-control > div::after {
 	content: "";
 	display: block;
 	clear: both;
@@ -71,32 +58,8 @@
 	overflow-x: hidden;
 }
 
-/* 左手布局 */
-#arena[data-right-layout="off"] > .skill-control .combined,
-.skill-controlzuoshou .combined {
-	height: auto;
-	width: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	margin-left: 5px;
-	flex-wrap: wrap-reverse;
-	max-height: 150px;
-}
-
-#arena[data-right-layout="off"] > .skill-control .combined.scroll-enabled,
-.skill-controlzuoshou .combined.scroll-enabled {
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	max-height: 140px;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-
 /* 主动技样式 */
-.skill-control > .combined > .skillitem.enable-skill,
-.skill-controlzuoshou > .combined > .skillitem.enable-skill {
+.skill-control > .combined > .skillitem.enable-skill {
 	margin: 3px 4px;
 	width: 75px;
 	height: 30px;
@@ -114,20 +77,17 @@
 		0.3px 0px 1.8px #332c18;
 }
 
-.skill-control > .combined > .skillitem.enable-skill.select,
-.skill-controlzuoshou > .combined > .skillitem.enable-skill.select {
+.skill-control > .combined > .skillitem.enable-skill.select {
 	background-image: url("../../assets/skill/baby/btnnhs2.png");
 	filter: brightness(1.2);
 }
 
-.skill-control > .combined > .skillitem.enable-skill:not(.usable):not(.select),
-.skill-controlzuoshou > .combined > .skillitem.enable-skill:not(.usable):not(.select) {
+.skill-control > .combined > .skillitem.enable-skill:not(.usable):not(.select) {
 	filter: grayscale(100%);
 }
 
 /* 限定技样式 */
-.skill-control > .combined > .xiandingji.enable-skill,
-.skill-controlzuoshou > .combined > .xiandingji.enable-skill {
+.skill-control > .combined > .xiandingji.enable-skill {
 	margin: 3px 4px;
 	width: 75px;
 	height: 30px;
@@ -145,19 +105,16 @@
 		0.3px 0px 1.8px #332c18;
 }
 
-.skill-control > .combined > .xiandingji.enable-skill.select,
-.skill-controlzuoshou > .combined > .xiandingji.enable-skill.select {
+.skill-control > .combined > .xiandingji.enable-skill.select {
 	background-image: url("../../assets/skill/baby/btnnhs2.png");
 }
 
-.skill-control > .combined > .xiandingji.enable-skill:not(.usable):not(.select),
-.skill-controlzuoshou > .combined > .xiandingji.enable-skill:not(.usable):not(.select) {
+.skill-control > .combined > .xiandingji.enable-skill:not(.usable):not(.select) {
 	filter: grayscale(100%);
 }
 
 /* 被动技样式 */
-.skill-control > .combined > .skillitem.trigger-skill,
-.skill-controlzuoshou > .combined > .skillitem.trigger-skill {
+.skill-control > .combined > .skillitem.trigger-skill {
 	margin: 3px 4px;
 	width: 75px;
 	height: 30px;
