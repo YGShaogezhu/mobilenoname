@@ -5,7 +5,7 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
-import { skillDefines, cardDefines, chupaiAnimations } from "./configs/skillAnimations.js";
+import { skillDefines, cardDefines, chupaiAnimations, initCardEffects } from "./configs/skillAnimations.js";
 import { cardTriggers } from "./configs/cardTriggers.js";
 
 /**
@@ -89,7 +89,7 @@ export function initSkillAnimations(animation) {
 		player.ChupaizhishiXObserver = observer;
 	});
 
-	// 注册卡牌动画
+	// 注册卡牌动画（群体锦囊等已由 initCardEffects 在 useCardBegin 处理，此处不再重复）
 	for (const [cardName, config] of Object.entries(cardDefines)) {
 		lib.animate.card[cardName] = card => {
 			animation.playSpine({ name: config.name, action: config.action, speed: config.speed }, { x: config.x, y: config.y, scale: config.scale });
@@ -116,4 +116,7 @@ export function initSkillAnimations(animation) {
 		if (!lib.card[cardName]) continue;
 		Object.assign(lib.card[cardName], triggers);
 	}
+
+	// 手杀样式卡牌使用/结算特效
+	initCardEffects();
 }

@@ -12,7 +12,7 @@ export { APNode } from "./APNode.js";
 export { AnimationPlayer } from "./AnimationPlayer.js";
 export { AnimationPlayerPool } from "./AnimationPlayerPool.js";
 export { DynamicPlayer, BUILT_ID, DynamicWorkers } from "./DynamicPlayer.js";
-export { skillDefines, cardDefines, chupaiAnimations } from "./configs/skillAnimations.js";
+export { skillDefines, cardDefines, chupaiAnimations, initCardEffects } from "./configs/skillAnimations.js";
 export { assetList } from "./configs/assetList.js";
 export { cardTriggers } from "./configs/cardTriggers.js";
 export { initSkillAnimations } from "./initAnimations.js";

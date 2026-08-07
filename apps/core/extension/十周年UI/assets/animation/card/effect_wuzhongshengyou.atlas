@@ -1,0 +1,83 @@
+
+effect_wuzhongshengyou.png
+size: 1414,366
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ol2
+  rotate: true
+  xy: 2, 20
+  size: 344, 500
+  orig: 344, 500
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/0
+  rotate: false
+  xy: 686, 184
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/1
+  rotate: false
+  xy: 868, 184
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/2
+  rotate: false
+  xy: 1050, 184
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/3
+  rotate: false
+  xy: 1232, 184
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/4
+  rotate: false
+  xy: 504, 2
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/5
+  rotate: false
+  xy: 686, 2
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/6
+  rotate: false
+  xy: 868, 2
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/7
+  rotate: false
+  xy: 1050, 2
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/8
+  rotate: false
+  xy: 1232, 2
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+wuzhongshengyou/9
+  rotate: false
+  xy: 504, 184
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1

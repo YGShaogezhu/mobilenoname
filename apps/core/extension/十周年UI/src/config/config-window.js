@@ -290,6 +290,7 @@ function getConfigsByTab(tabId) {
 		card: [
 			{ isTitle: true, name: "卡牌效果" },
 			{ key: "cardGhostEffect", name: "幻影出牌", type: "toggle" },
+			{ key: "kapaitexiao", name: "卡牌特效", type: "toggle" },
 			{ key: "autoSelect", name: "自动选择", type: "toggle" },
 			{ key: "cardPrompt", name: "出牌信息提示", type: "toggle" },
 			{ key: "cardAlternateName", name: "牌名辅助", type: "toggle" },

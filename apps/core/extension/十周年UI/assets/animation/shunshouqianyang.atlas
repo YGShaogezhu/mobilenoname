@@ -1,0 +1,97 @@
+
+shunshouqianyang.png
+size: 729,729
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baiyan_00000
+  rotate: true
+  xy: 576, 204
+  size: 149, 151
+  orig: 200, 200
+  offset: 25, 23
+  index: -1
+baiyan_00001
+  rotate: true
+  xy: 223, 190
+  size: 163, 166
+  orig: 200, 200
+  offset: 17, 13
+  index: -1
+baiyan_00002
+  rotate: false
+  xy: 390, 8
+  size: 177, 175
+  orig: 200, 200
+  offset: 9, 10
+  index: -1
+baiyan_00003
+  rotate: false
+  xy: 198, 3
+  size: 190, 185
+  orig: 200, 200
+  offset: 3, 6
+  index: -1
+baiyan_00004
+  rotate: true
+  xy: 2, 3
+  size: 185, 194
+  orig: 200, 200
+  offset: 10, 3
+  index: -1
+baiyan_00005
+  rotate: true
+  xy: 417, 536
+  size: 191, 200
+  orig: 200, 200
+  offset: 7, 0
+  index: -1
+baiyan_00006
+  rotate: false
+  xy: 19, 325
+  size: 196, 200
+  orig: 200, 200
+  offset: 4, 0
+  index: -1
+baiyan_00007
+  rotate: false
+  xy: 19, 527
+  size: 197, 200
+  orig: 200, 200
+  offset: 3, 0
+  index: -1
+baiyan_00008
+  rotate: false
+  xy: 218, 530
+  size: 197, 197
+  orig: 200, 200
+  offset: 3, 0
+  index: -1
+baiyan_00009
+  rotate: false
+  xy: 417, 355
+  size: 192, 179
+  orig: 200, 200
+  offset: 3, 0
+  index: -1
+baiyan_00010
+  rotate: false
+  xy: 391, 185
+  size: 183, 168
+  orig: 200, 200
+  offset: 0, 14
+  index: -1
+xian_1
+  rotate: false
+  xy: 2, 215
+  size: 15, 512
+  orig: 80, 512
+  offset: 34, 0
+  index: -1
+yang
+  rotate: true
+  xy: 19, 190
+  size: 133, 202
+  orig: 140, 202
+  offset: 4, 0
+  index: -1

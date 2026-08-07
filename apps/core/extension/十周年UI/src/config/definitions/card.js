@@ -24,6 +24,16 @@ export const cardGhostEffect = {
 };
 
 /**
+ * 卡牌特效配置
+ * @type {Object}
+ */
+export const kapaitexiao = {
+	name: "卡牌特效",
+	intro: "开启后使用手杀样式卡牌特效，关闭可减少卡顿",
+	init: true,
+};
+
+/**
  * 自动选择配置
  * @type {Object}
  */
@@ -166,6 +176,7 @@ export const card_title_end = createCollapseEnd("card_title");
 export const cardConfigs = {
 	card_title,
 	cardGhostEffect,
+	kapaitexiao,
 	autoSelect,
 	cardPrompt,
 	handTipHeight,

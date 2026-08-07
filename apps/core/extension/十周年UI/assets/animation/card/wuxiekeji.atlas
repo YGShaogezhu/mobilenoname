@@ -1,0 +1,160 @@
+
+wuxiekeji.png
+size: 958,958
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+02_01
+  rotate: true
+  xy: 559, 2
+  size: 235, 172
+  orig: 300, 350
+  offset: 47, 146
+  index: -1
+02_03
+  rotate: false
+  xy: 571, 239
+  size: 262, 233
+  orig: 300, 350
+  offset: 33, 104
+  index: -1
+02_05
+  rotate: false
+  xy: 581, 474
+  size: 263, 216
+  orig: 300, 350
+  offset: 37, 123
+  index: -1
+02_07
+  rotate: false
+  xy: 2, 83
+  size: 267, 277
+  orig: 300, 350
+  offset: 33, 62
+  index: -1
+02_09
+  rotate: true
+  xy: 581, 692
+  size: 264, 280
+  orig: 300, 350
+  offset: 33, 55
+  index: -1
+02_11
+  rotate: true
+  xy: 290, 445
+  size: 239, 279
+  orig: 300, 350
+  offset: 28, 58
+  index: -1
+02_13
+  rotate: true
+  xy: 280, 196
+  size: 247, 277
+  orig: 300, 350
+  offset: 33, 60
+  index: -1
+02_15
+  rotate: false
+  xy: 2, 362
+  size: 276, 296
+  orig: 300, 350
+  offset: 14, 41
+  index: -1
+02_17
+  rotate: false
+  xy: 2, 660
+  size: 286, 296
+  orig: 300, 350
+  offset: 11, 41
+  index: -1
+02_19
+  rotate: false
+  xy: 290, 686
+  size: 289, 270
+  orig: 300, 350
+  offset: 11, 49
+  index: -1
+zhalan
+  rotate: true
+  xy: 86, 27
+  size: 54, 95
+  orig: 54, 95
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji1_00000
+  rotate: false
+  xy: 733, 3
+  size: 59, 50
+  orig: 82, 80
+  offset: 11, 15
+  index: -1
+zzq_wxkj_shouji1_00001
+  rotate: false
+  xy: 2, 2
+  size: 82, 79
+  orig: 82, 80
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji1_00002
+  rotate: false
+  xy: 846, 497
+  size: 82, 80
+  orig: 82, 80
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji1_00003
+  rotate: false
+  xy: 846, 415
+  size: 82, 80
+  orig: 82, 80
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji2_00000
+  rotate: true
+  xy: 863, 671
+  size: 87, 90
+  orig: 97, 90
+  offset: 5, 0
+  index: -1
+zzq_wxkj_shouji2_00001
+  rotate: true
+  xy: 863, 859
+  size: 97, 90
+  orig: 97, 90
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji2_00002
+  rotate: false
+  xy: 733, 147
+  size: 97, 90
+  orig: 97, 90
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji2_00003
+  rotate: true
+  xy: 863, 760
+  size: 97, 90
+  orig: 97, 90
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji2_00004
+  rotate: false
+  xy: 733, 55
+  size: 97, 90
+  orig: 97, 90
+  offset: 0, 0
+  index: -1
+zzq_wxkj_shouji2_00005
+  rotate: false
+  xy: 846, 579
+  size: 97, 90
+  orig: 97, 90
+  offset: 0, 0
+  index: -1
+zzq_wxkj_zhalan_guang
+  rotate: false
+  xy: 271, 76
+  size: 243, 118
+  orig: 260, 140
+  offset: 9, 0
+  index: -1

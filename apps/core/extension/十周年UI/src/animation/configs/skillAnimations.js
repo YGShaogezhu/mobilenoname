@@ -1,8 +1,11 @@
 "use strict";
 
 /**
- * @fileoverview 技能动画配置，定义技能、卡牌和出牌指示的动画参数
+ * @fileoverview 技能/卡牌动画配置，以及手杀样式卡牌特效注册
+ * @description 卡牌特效 content 会被 StepCompiler 编译，不可依赖外层闭包
  */
+
+import { lib, game } from "noname";
 
 /**
  * 技能动画配置
@@ -79,14 +82,10 @@ export const skillDefines = {
 };
 
 /**
- * 卡牌动画配置
+ * 卡牌动画配置（群体锦囊已改由 useCardBegin 手杀特效播放）
  * @type {Object.<string, {name: string, scale?: number, x?: number, y?: number}>}
  */
-export const cardDefines = {
-	nanman: { name: "effect_nanmanruqin", scale: 0.6 },
-	wanjian: { name: "effect_wanjianqifa_full", scale: 1.5 },
-	taoyuan: { name: "effect_taoyuanjieyi" },
-};
+export const cardDefines = {};
 
 /**
  * 出牌指示动画配置
@@ -95,3 +94,198 @@ export const cardDefines = {
 export const chupaiAnimations = {
 	shoushaX: { name: "aar_chupaizhishiX", scale: 0.55 },
 };
+
+/**
+ * 注册手杀样式卡牌使用/结算特效
+ */
+export function initCardEffects() {
+	if (lib.config.extension_十周年UI_kapaitexiao === false) return;
+
+	lib.skill._decadeUI_usecard = {
+		trigger: {
+			player: ["useCardBegin", "respondBegin"],
+		},
+		charlotte: true,
+		forced: true,
+		firstDo: true,
+		filter(event) {
+			return event.card && event.card.name;
+		},
+		content() {
+			var t = trigger.card.name;
+			game.broadcastAll(
+				function (game, player, t) {
+					if (!window.decadeUI) return;
+					var anim = window.decadeUI.animation;
+					var audio = function (file) {
+						game.playAudio("../extension/十周年UI/audio/" + file);
+					};
+					switch (t) {
+						case "sha":
+							anim.playSpine({ name: "card/sha", speed: 0.8 }, { scale: 1.5, parent: player });
+							break;
+						case "shan":
+							anim.playSpine({ name: "card/shan", speed: 0.8 }, { scale: 1.5, parent: player });
+							break;
+						case "jiu":
+							anim.playSpine({ name: "card/jiu", speed: 0.8 }, { scale: 0.85, x: [0, 0.55], y: [0, 0.45], parent: player });
+							break;
+						case "tao":
+							anim.playSpine({ name: "card/tao", speed: 0.8 }, { scale: 0.85, y: [0, 0.45], parent: player });
+							break;
+						case "nanman":
+							anim.playSpine({ name: "card/nanmanruqin" }, { scale: 0.7 });
+							audio("nanmanruqin.mp3");
+							break;
+						case "wanjian":
+							anim.playSpine({ name: "card/wanjianqifa" }, { scale: 0.95 });
+							audio("wanjianqifa.mp3");
+							break;
+						case "taoyuan":
+							anim.playSpine({ name: "card/taoyuanjieyi" }, { scale: 0.95 });
+							audio("taoyuanjieyi.mp3");
+							break;
+						case "wugu":
+							for (var i = 0; i < game.players.length; i++) {
+								anim.playSpine({ name: "card/wugufengdeng", speed: 0.7 }, { scale: 0.7, parent: game.players[i] });
+							}
+							break;
+						case "wuzhong":
+							anim.playSpine({ name: "card/effect_wuzhongshengyou", speed: 1.3 }, { scale: 0.45, parent: player });
+							break;
+						case "wuxie":
+							anim.playSpine({ name: "card/wuxiekeji" }, { scale: 0.7, parent: player });
+							audio("wuxiekeji.mp3");
+							break;
+						case "juedou":
+							anim.playSpine({ name: "card/juedou", speed: 1.5 }, { scale: 0.8 });
+							audio("juedou.mp3");
+							break;
+						case "huogong":
+							anim.playSpine({ name: "card/huogong", speed: 5 }, { scale: 0.75, angle: 180 });
+							audio("huogong.mp3");
+							break;
+						case "gz_wenheluanwu":
+							anim.playSpine({ name: "card/effect_wenheluanwu" }, { scale: 1 });
+							audio("effect_wenheluanwu.mp3");
+							break;
+						case "gz_guguoanbang":
+							anim.playSpine({ name: "card/effect_guguoanbang" }, { scale: 1 });
+							audio("effect_guguoanbang.mp3");
+							break;
+						case "gz_kefuzhongyuan":
+							anim.playSpine({ name: "card/effect_kefuzhongyuan" }, { scale: 1 });
+							audio("effect_kefuzhongyuan.mp3");
+							break;
+						case "gz_haolingtianxia":
+							anim.playSpine({ name: "card/effect_haolingtianxia" }, { scale: 1 });
+							audio("effect_haolingtianxia.mp3");
+							break;
+					}
+				},
+				game,
+				player,
+				t
+			);
+		},
+	};
+
+	lib.skill._decadeUI_usecardtoBegin = {
+		trigger: {
+			player: "useCardToBegin",
+		},
+		forced: true,
+		lastDo: true,
+		priority: -1,
+		charlotte: true,
+		filter(event) {
+			return event._triggered && event._triggered < 5;
+		},
+		content() {
+			if (trigger.card && get.name(trigger.card, player) == "guohe" && trigger.target && trigger.target != player) {
+				var t = trigger.target;
+				game.broadcastAll(function (t) {
+					if (!window.decadeUI) return;
+					window.decadeUI.animation.playSpine(
+						{ name: "guohechaiqiao", action: "zizouqi_guohechaiqiao_futou" },
+						{ scale: 0.8, parent: t }
+					);
+					window.decadeUI.animation.playSpine(
+						{ name: "guohechaiqiao", action: "zizouqi_guohechaiqiao_qiao" },
+						{ scale: 0.8, parent: t }
+					);
+					game.playAudio("../extension/十周年UI/audio/guohechaiqiao.mp3");
+				}, t);
+			}
+			if (trigger.card && trigger.card.name == "shunshou" && trigger.target) {
+				var target = trigger.target;
+				game.broadcastAll(
+					function (player, target) {
+						if (!window.decadeUI || !player || !target) return;
+						var anim = window.decadeUI.animation;
+						var APPEAR_MS = 250;
+						var MOVE_MS = 800;
+
+						// 1. 目标身上羊出现
+						anim.playSpine({ name: "shunshouqianyang", action: "yangchuxian", speed: 1.5 }, { scale: 0.65, parent: target });
+
+						var bodyHeight = decadeUI.get.bodySize().height;
+						var r1 = target.getBoundingClientRect();
+						var r2 = player.getBoundingClientRect();
+						var x1 = r1.left + r1.width / 2;
+						var y1 = bodyHeight - (r1.top + r1.height / 2);
+						var x2 = r2.left + r2.width / 2;
+						var y2 = bodyHeight - (r2.top + r2.height / 2);
+						var dx = x2 - x1;
+						var dy = y2 - y1;
+						var dist = Math.sqrt(dx * dx + dy * dy);
+						var dpr = anim.dpr || 1;
+						var sx = x1 * dpr;
+						var sy = y1 * dpr;
+						var ex = x2 * dpr;
+						var ey = y2 * dpr;
+						var rope = null;
+
+						// 2. 绳子循环播放，直到羊到达后再消失
+						if (dist > 1) {
+							var angle = (Math.atan2(dy, dx) * 180) / Math.PI - 90;
+							rope = anim.playSpine(
+								{ name: "shunshouqianyang", action: "xian", speed: 1, loop: true },
+								{
+									x: ((x1 + x2) / 2) * dpr,
+									y: ((y1 + y2) / 2) * dpr,
+									angle: angle,
+									scale: Math.max(0.25, dist / 512),
+								}
+							);
+						}
+
+						game.playAudio("../extension/十周年UI/audio/shunshouqianyang.mp3");
+
+						// 3. 羊从目标飞到使用者，到达后收绳并在本体播放落地
+						setTimeout(function () {
+							if (!window.decadeUI) return;
+							var flying = anim.playSpine(
+								{ name: "shunshouqianyang", action: "yang", speed: 1.2, loop: true },
+								{ x: sx, y: sy, scale: 0.65 }
+							);
+							if (flying && flying.moveTo) flying.moveTo(ex, ey, MOVE_MS);
+
+							setTimeout(function () {
+								if (!window.decadeUI) return;
+								if (rope) anim.stopSpine(rope);
+								if (flying) anim.stopSpine(flying);
+								anim.playSpine(
+									{ name: "shunshouqianyang", action: "yang", speed: 1.5 },
+									{ scale: 0.65, parent: player }
+								);
+							}, MOVE_MS);
+						}, APPEAR_MS);
+					},
+					player,
+					target
+				);
+			}
+		},
+	};
+}
