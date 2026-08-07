@@ -275,6 +275,8 @@ export function uiCreateArena() {
 
 	decadeUI.config.update();
 	ui.arena.dataset.rightLayout = "on";
+	// 单独装备栏功能已移除，固定为关闭以使用角色自带装备栏布局
+	ui.arena.dataset.aloneEquip = "off";
 
 	return result;
 }
@@ -447,20 +449,6 @@ export function uiCreateMe(hasme) {
 	ui.handcards2Container = ui.create.div("#handcards2");
 	ui.arena.classList.remove("nome");
 
-	const equipSolts = (ui.equipSolts = window.decadeUI.element.create("equips-wrap"));
-	equipSolts.back = window.decadeUI.element.create("equips-back", equipSolts);
-
-	for (let repetition = 0; repetition < 5; repetition++) {
-		const ediv = window.decadeUI.element.create(null, equipSolts.back);
-		ediv.dataset.type = repetition;
-	}
-
-	ui.arena.insertBefore(equipSolts, ui.me);
-
-	if (!lib.config.extension_十周年UI_aloneEquip) {
-		equipSolts.style.display = "none";
-	}
-
 	window.decadeUI.bodySensor.addListener(() => window.decadeUI.layout.resize());
 	window.decadeUI.layout.resize();
 
@@ -482,13 +470,5 @@ export function uiCreateMe(hasme) {
 		ui.handcards2 = game.me.node.handcards2;
 		ui.handcards1Container.appendChild(ui.handcards1);
 		ui.handcards2Container.appendChild(ui.handcards2);
-	}
-
-	if (lib.config.extension_十周年UI_aloneEquip) {
-		if (game.me) {
-			equipSolts.me = game.me;
-			equipSolts.equips = game.me.node.equips;
-			equipSolts.appendChild(game.me.node.equips);
-		}
 	}
 }

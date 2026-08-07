@@ -235,28 +235,6 @@ export function onCardPrettifyClick(item) {
 }
 
 /**
-
- * 卡牌边框点击处理
- * @param {string} item - 边框选项
- */
-export function onCardkmhClick(item) {
-	game.saveConfig("extension_十周年UI_cardkmh", item);
-	const bgMap = { kuang1: "kb4", kuang2: "kb3", kuang3: "kb2" };
-	game.saveConfig("extension_十周年UI_cardbj", bgMap[item] || null);
-	window.decadeUI?.updateCardStyles?.();
-}
-
-/**
- * 卡牌边框更新处理
- */
-export function onCardkmhUpdate() {
-	if (!game?.saveConfig) return;
-	const border = lib.config.extension_十周年UI_cardkmh || "off";
-	const bgMap = { kuang1: "kb4", kuang2: "kb3", kuang3: "kb2" };
-	game.saveConfig("extension_十周年UI_cardbj", bgMap[border] || null);
-}
-
-/**
  * 出牌指示更新处理
  */
 export function onChupaizhishiUpdate() {

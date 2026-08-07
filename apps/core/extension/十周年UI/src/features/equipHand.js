@@ -1,10 +1,9 @@
 /**
- * 装备牌处理模块入口 - 整合手牌化模式和独立装备模式
+ * 装备牌处理模块入口 - 手牌化装备（装备入手）
  */
 
 import { lib, game, ui, get } from "noname";
 import { setupEquipCopy } from "./equipCopy.js";
-import { setupEquipAlone } from "./equipAlone.js";
 import { wrapAround } from "../utils/safeOverride.js";
 
 /**
@@ -32,15 +31,6 @@ export function setupEquipHand() {
 			game.check();
 
 			const selectables = get.selectableCards();
-			if (lib.config["extension_十周年UI_aloneEquip"]) {
-				for (const card of player.getCards("e")) {
-					const isSelectable = card.classList.contains("selectable") && card.classList.contains("equip-card-selectable");
-					if (!selectables.includes(card) && isSelectable) {
-						selectables.push(card);
-					}
-				}
-			}
-
 			const cards = selecteds.length ? selectables.filter(c => !selecteds.includes(c)) : selectables;
 			const toSelect = cards.length <= range[1] ? cards : cards.randomGets(range[1]);
 			ui.selected.cards.push(...toSelect);
@@ -62,5 +52,4 @@ export function setupEquipHand() {
 	});
 
 	setupEquipCopy();
-	setupEquipAlone();
 }

@@ -14,8 +14,12 @@ export const bootstrapExtension = () => {
 
 	if (game.hasExtension?.("皮肤切换")) game.menuZoom = 1;
 
-	const aloneEquip = lib.config.extension_十周年UI_aloneEquip;
-	_status.nopopequip = aloneEquip !== undefined ? aloneEquip : true;
+	// 单独装备栏功能已移除：强制关闭，避免旧配置影响装备入手/技能栏等
+	lib.config.extension_十周年UI_aloneEquip = false;
+	_status.nopopequip = false;
+	if (game.saveConfig) {
+		game.saveConfig("extension_十周年UI_aloneEquip", false);
+	}
 
 	if (lib.config.layout !== RECOMMENDED_LAYOUT) {
 		if (confirm("十周年UI提醒您，请使用<新版>布局以获得良好体验。\n点击确定自动切换，点击取消保持当前布局。")) {

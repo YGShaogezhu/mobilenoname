@@ -30,16 +30,6 @@ export function applyGameOverrides() {
 		wrapAfter(game, "swapPlayer", function (result, player) {
 			const list = [game.me, player].filter(Boolean);
 
-			if (lib.config.extension_十周年UI_aloneEquip && game.me && ui.equipSolts && game.me !== ui.equipSolts.me) {
-				ui.equipSolts.me.appendChild(ui.equipSolts.equips);
-				ui.equipSolts.me = game.me;
-				ui.equipSolts.equips = game.me.node.equips;
-				ui.equipSolts.appendChild(game.me.node.equips);
-				if (typeof game.me.$syncExpand === "function") {
-					game.me.$syncExpand();
-				}
-			}
-
 			list.forEach(p => {
 				if (typeof p.decadeUI_updateShowCards === "function") {
 					p.decadeUI_updateShowCards();
@@ -62,23 +52,11 @@ export function applyGameOverrides() {
 	// 交换控制后同步装备栏和手牌显示
 	restoreFns.push(
 		wrapAfter(game, "swapControl", function (result, player) {
-			if (lib.config.extension_十周年UI_aloneEquip && game.me && ui.equipSolts && game.me !== ui.equipSolts.me) {
-				ui.equipSolts.me.appendChild(ui.equipSolts.equips);
-				ui.equipSolts.me = game.me;
-				ui.equipSolts.equips = game.me.node.equips;
-				ui.equipSolts.appendChild(game.me.node.equips);
-				if (typeof game.me.$syncExpand === "function") {
-					game.me.$syncExpand();
-				}
+			if (game.me && typeof game.me.$handleEquipChange === "function") {
+				game.me.$handleEquipChange();
 			}
-
-			if (ui.equipSolts) {
-				if (game.me && typeof game.me.$handleEquipChange === "function") {
-					game.me.$handleEquipChange();
-				}
-				if (player && typeof player.$handleEquipChange === "function") {
-					player.$handleEquipChange();
-				}
+			if (player && typeof player.$handleEquipChange === "function") {
+				player.$handleEquipChange();
 			}
 
 			if (player && typeof player.decadeUI_updateShowCards === "function") {

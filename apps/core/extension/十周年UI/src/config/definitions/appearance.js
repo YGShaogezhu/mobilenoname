@@ -4,7 +4,7 @@
  * @module config/definitions/appearance
  */
 import { createCollapseTitle, createCollapseEnd } from "../utils.js";
-import { onExtensionToggleClick, onExtensionToggleUpdate, onNewDecadeStyleClick, onNewDecadeStyleUpdate, onOutcropSkinClick, onOutcropSkinUpdate, onBorderLevelUpdate, onAloneEquipUpdate, onMeanPrettifyClick, onDynamicSkinClick, onDynamicSkinOutcropUpdate } from "../handlers/appearance-handlers.js";
+import { onExtensionToggleClick, onExtensionToggleUpdate, onNewDecadeStyleClick, onNewDecadeStyleUpdate, onOutcropSkinClick, onOutcropSkinUpdate, onBorderLevelUpdate, onMeanPrettifyClick, onDynamicSkinClick, onDynamicSkinOutcropUpdate } from "../handlers/appearance-handlers.js";
 
 /**
  * 扩展开关配置
@@ -90,17 +90,6 @@ export const borderLevel = {
 };
 
 /**
- * 单独装备栏配置
- * @type {Object}
- */
-export const aloneEquip = {
-	name: "单独装备栏",
-	intro: "切换玩家装备栏为单独装备栏或非单独装备栏",
-	init: true,
-	update: onAloneEquipUpdate,
-};
-
-/**
  * 菜单美化配置
  * @type {Object}
  */
@@ -178,7 +167,6 @@ export const appearanceConfigs = {
 	newDecadeStyle,
 	outcropSkin,
 	borderLevel,
-	aloneEquip,
 	meanPrettify,
 	dynamicSkin,
 	dynamicSkinOutcrop,

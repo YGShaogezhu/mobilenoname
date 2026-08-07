@@ -113,37 +113,6 @@ export function onBorderLevelUpdate() {
 }
 
 /**
- * 单独装备栏更新处理
- */
-export function onAloneEquipUpdate() {
-	const config = lib.config.extension_十周年UI_aloneEquip;
-	if (window.decadeUI) {
-		ui.arena.dataset.aloneEquip = config ? "on" : "off";
-	}
-	_status.nopopequip = config;
-
-	if (!_status.gameStarted || !ui?.equipSolts) return;
-
-	try {
-		ui.equipSolts.style.display = config ? "" : "none";
-	} catch (e) {}
-
-	if (config && game.me !== ui.equipSolts.me) {
-		ui.equipSolts.me?.appendChild(ui.equipSolts.equips);
-		ui.equipSolts.me = game.me;
-		ui.equipSolts.equips = game.me.node.equips;
-		ui.equipSolts.appendChild(game.me.node.equips);
-		game.me.$syncExpand();
-	}
-	if (!config && game.me === ui.equipSolts.me) {
-		ui.equipSolts.me.appendChild(ui.equipSolts.equips);
-		ui.equipSolts.me = undefined;
-	}
-	game.uncheck();
-	game.check();
-}
-
-/**
  * 菜单美化点击处理
  * @param {boolean} bool - 是否开启
  */

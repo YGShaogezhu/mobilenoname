@@ -135,25 +135,6 @@ export function playerSyncExpand(map) {
 
 	const goon = lib.skill.expandedSlots.intro.markcount(null, game.me) > 0;
 	this[goon ? "markSkill" : "unmarkSkill"]("expandedSlots");
-
-	let ele;
-	while ((ele = ui.equipSolts.back.firstChild)) {
-		ele.remove();
-	}
-
-	const storage = this.expandedSlots;
-	const equipSolts = ui.equipSolts;
-
-	for (let repetition = 0; repetition < 5; repetition++) {
-		if (storage && storage["equip" + (repetition + 1)]) {
-			for (let adde = 0; adde < storage["equip" + (repetition + 1)]; adde++) {
-				const addediv = decadeUI.element.create(null, equipSolts.back);
-				addediv.dataset.type = repetition;
-			}
-		}
-		const ediv = decadeUI.element.create(null, equipSolts.back);
-		ediv.dataset.type = repetition;
-	}
 }
 
 /**

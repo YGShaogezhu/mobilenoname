@@ -4,7 +4,6 @@
  * @module overrides/card/overrides
  */
 import { lib, game, ui, get, _status } from "noname";
-import { applyCardBorder } from "../../ui/cardStyles.js";
 import { applyCardSkin, handleSkinFallback } from "./skin-applier.js";
 import { getSkinCache, isSkinPreloaded, getFallbackKey, getFallbackSkinUrl, generateSkinFilename } from "./skin-loader.js";
 import { CARD_ANIMATION, LAYOUT } from "../../constants.js";
@@ -255,10 +254,6 @@ export function cardMoveTo(player) {
 	this.ty = y;
 	this.scaled = true;
 	this.style.transform = `translate(${x}px,${y}px) scale(${scale})`;
-
-	if (player !== game.me) {
-		applyCardBorder(this, player);
-	}
 
 	return this;
 }

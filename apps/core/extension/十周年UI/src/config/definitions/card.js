@@ -4,7 +4,7 @@
  * @module config/definitions/card
  */
 import { createCollapseTitle, createCollapseEnd, getAllCardSkinPresets } from "../utils.js";
-import { onCardGhostEffectClick, onAutoSelectClick, onAutoSelectUpdate, onHandTipHeightBlur, onHandTipHeightUpdate, onCardScaleBlur, onCardScaleUpdate, onDiscardScaleBlur, onDiscardScaleUpdate, onHandFoldMinBlur, onHandFoldMinUpdate, onCardPrettifyClick, onCardkmhClick, onCardkmhUpdate, onChupaizhishiUpdate, onCardAlternateNameClick } from "../handlers/card-handlers.js";
+import { onCardGhostEffectClick, onAutoSelectClick, onAutoSelectUpdate, onHandTipHeightBlur, onHandTipHeightUpdate, onCardScaleBlur, onCardScaleUpdate, onDiscardScaleBlur, onDiscardScaleUpdate, onHandFoldMinBlur, onHandFoldMinUpdate, onCardPrettifyClick, onChupaizhishiUpdate, onCardAlternateNameClick } from "../handlers/card-handlers.js";
 
 /**
  * 卡牌相关折叠标题
@@ -136,18 +136,6 @@ export const cardPrettify = {
 };
 
 /**
- * 卡牌边框配置
- * @type {Object}
- */
-export const cardkmh = {
-	name: "卡牌边框",
-	init: "off",
-	item: { off: "关闭", kuang1: "大司马", kuang2: "大将军", kuang3: "国都护" },
-	onclick: onCardkmhClick,
-	update: onCardkmhUpdate,
-};
-
-/**
  * 出牌指示配置
  * @type {Object}
  */
@@ -195,7 +183,6 @@ export const cardConfigs = {
 	discardScale,
 	handFoldMin,
 	cardPrettify,
-	cardkmh,
 	chupaizhishi,
 	cardAlternateName,
 	card_title_end,

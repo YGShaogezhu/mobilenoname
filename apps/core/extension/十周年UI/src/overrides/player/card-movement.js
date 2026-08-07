@@ -5,7 +5,6 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
-import { applyCardBorder } from "../../ui/cardStyles.js";
 
 /** @type {Function|null} 基础摸牌方法引用 */
 let basePlayerDraw = null;
@@ -237,9 +236,6 @@ export function playerDraw(num, init, config) {
 		}
 		card.fixed = true;
 
-		if (player !== game.me) {
-			applyCardBorder(card, player);
-		}
 		cards[i] = card;
 		fragment.appendChild(card);
 	}
@@ -288,10 +284,6 @@ export function playerGain2(cards, log) {
 		clone = cards[i].clone;
 		card = cards[i].copy("thrown", "gainingcard");
 		card.fixed = true;
-
-		if (player !== game.me) {
-			applyCardBorder(card, player);
-		}
 
 		if (clone && clone.parentNode == ui.arena) {
 			card.scaled = true;
@@ -561,8 +553,6 @@ export function playerThrowordered2(card, nosource) {
 	let tagNode = card.querySelector(".used-info");
 	if (tagNode == null) tagNode = card.appendChild(_dui.element.create("used-info"));
 	card.$usedtag = tagNode;
-
-	applyCardBorder(card, this, this === game.me);
 
 	ui.thrown.push(card);
 	ui.arena.appendChild(card);
