@@ -17,7 +17,7 @@ export const assetList = [
 	{ name: "shoushakaizhan" },
 
 	// 手杀装备特效参考无名美化
-	{ name: "globaltexiao/equip/SSequip" },
+	{ name: "equip/SSequip" },
 
 	// 其他通用特效
 	{ name: "effect_shoujidonghua" },
