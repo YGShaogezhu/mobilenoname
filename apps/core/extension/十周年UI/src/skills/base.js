@@ -34,22 +34,6 @@ export const baseSkill = {
 	},
 
 	/**
-	 * 回复数字显示
-	 * @description 在回复体力时显示数字动画
-	 */
-	_wjmh_huifushuzi_: {
-		priority: 10,
-		forced: true,
-		trigger: { player: "recoverBegin" },
-		filter(event) {
-			return event.num > 0 && event.num <= 9 && lib.config.extension_十周年UI_newDecadeStyle !== "off";
-		},
-		async content(event, trigger, player) {
-			decadeUI.animation?.playRecoverNumber?.(player, trigger.num);
-		},
-	},
-
-	/**
 	 * 虚拟伤害数字显示
 	 * @description 在受到虚拟伤害时显示数字动画
 	 */

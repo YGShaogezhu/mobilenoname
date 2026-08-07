@@ -286,11 +286,13 @@ function getConfigsByTab(tabId) {
 			{ key: "dynamicSkin", name: "动态皮肤", type: "toggle" },
 			{ key: "dynamicSkinOutcrop", name: "动皮露头", type: "toggle" },
 			{ key: "killEffect", name: "击杀特效", type: "toggle" },
+			{ key: "kaizhan", name: "开战动画", type: "select" },
 		],
 		card: [
 			{ isTitle: true, name: "卡牌效果" },
 			{ key: "cardGhostEffect", name: "幻影出牌", type: "toggle" },
 			{ key: "kapaitexiao", name: "卡牌特效", type: "toggle" },
+			{ key: "shoushatexiao", name: "手杀特效", type: "toggle" },
 			{ key: "autoSelect", name: "自动选择", type: "toggle" },
 			{ key: "cardPrompt", name: "出牌信息提示", type: "toggle" },
 			{ key: "cardAlternateName", name: "牌名辅助", type: "toggle" },

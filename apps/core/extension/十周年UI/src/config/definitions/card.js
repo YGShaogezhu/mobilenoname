@@ -34,6 +34,16 @@ export const kapaitexiao = {
 };
 
 /**
+ * 手杀特效配置
+ * @type {Object}
+ */
+export const shoushatexiao = {
+	name: "手杀特效",
+	intro: "开启后播放免伤、技能发动、救我、恢复体力等手杀局内特效",
+	init: true,
+};
+
+/**
  * 自动选择配置
  * @type {Object}
  */
@@ -177,6 +187,7 @@ export const cardConfigs = {
 	card_title,
 	cardGhostEffect,
 	kapaitexiao,
+	shoushatexiao,
 	autoSelect,
 	cardPrompt,
 	handTipHeight,

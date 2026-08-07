@@ -19,26 +19,20 @@ export function initSkillAnimations(animation) {
 		animation.playSpine("effect_loseHp", { scale: 0.6, speed: 0.8, parent: player });
 	};
 
-	animation.playRecoverNumber = (player, num) => {
-		if (!player || !num || num < 1 || num > 9 || lib.config.extension_十周年UI_newDecadeStyle === "off") return;
-		animation.playSpine({ name: "globaltexiao/huifushuzi/shuzi2", action: String(num) }, { speed: 0.6, scale: 0.5, parent: player, y: 20 });
-	};
-
 	animation.playVirtualDamageNumber = (player, num) => {
 		if (!player || num < 0 || num > 9) return;
 		animation.playSpine(
 			{ name: "globaltexiao/xunishuzi/SS_PaiJu_xunishanghai", action: "play" + num },
-			{ speed: 0.6, scale: 0.5, parent: player, y: 20 }
+			{ speed: 0.6, scale: 0.8, parent: player, y: 80 }
 		);
 	};
 
 	animation.playDamageNumber = (player, num) => {
 		if (!player || !num || num <= 1 || num > 9 || !lib.config.extension_十周年UI_newDecadeStyle) return;
-		const isNewStyle = lib.config.extension_十周年UI_newDecadeStyle !== "off";
-		const animName = isNewStyle ? "globaltexiao/shanghaishuzi/SZN_shuzi" : "globaltexiao/shanghaishuzi/shuzi";
-		const options = { speed: 0.6, scale: 0.4, parent: player };
-		if (isNewStyle) options.y = 20;
-		animation.playSpine({ name: animName, action: String(num) }, options);
+		animation.playSpine(
+			{ name: "globaltexiao/shanghaishuzi/shuzi", action: String(num) },
+			{ speed: 0.6, scale: 0.4, parent: player }
+		);
 	};
 
 	// 玩家初始化钩子 - 添加出牌指示观察器

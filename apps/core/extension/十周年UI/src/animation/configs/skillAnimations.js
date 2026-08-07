@@ -22,9 +22,6 @@ export const skillDefines = {
 	rw_tengjia3: { name: "TYBLJ", action: "TYBLJ_dang", scale: 1 },
 
 	// 神话装备
-	gx_lingbaoxianhu: { name: "SSHW_TX_lingbaoxianhu", scale: 0.5 },
-	gx_taijifuchen: { name: "SSHW_TX_taijifuchen", scale: 0.5 },
-	gx_chongyingshenfu: { name: "SSHW_TX_chongyingshenfu", scale: 0.5 },
 	taipingyaoshu: { name: "taipingyaoshu", scale: 0.75 },
 	taipingyaoshu_lose: { name: "effect_taipingyaoshu_xiexia", scale: 0.55 },
 	yitianjian: { name: "Ss_ZB_YiTianJian", scale: 0.5 },
@@ -36,12 +33,9 @@ export const skillDefines = {
 	sanjian_skill: { name: "Ss_Gz_SanJianLiangRenDao", scale: 0.4 },
 	feilongduofeng: { name: "feilongduofeng", scale: 0.5 },
 	ty_feilongduofeng_skill: { name: "feilongduofeng", scale: 0.5 },
-	xuwangzhimian: { name: "SSHW_TX_xuwangzhimian", scale: 0.5 },
-	chiyanzhenhunqin: { name: "SSHW_TX_chiyanzhenhun", scale: 0.5 },
 	duanjian: { name: "Ss_ZB_ZheJi", scale: 0.5 },
 	serafuku: { name: "Ss_ZB_NvZhuang", scale: 0.5 },
 	qixingbaodao: { name: "Ss_ZB_QiXingDao", scale: 0.5 },
-	yonglv: { name: "effect_numa", scale: 0.4 },
 
 	// 标准装备：手杀 SSequip（技能触发时播放对应 action）
 	bagua_skill: { name: "globaltexiao/equip/SSequip", action: "bagua", scale: 1, speed: 0.8 },
@@ -68,12 +62,9 @@ export const skillDefines = {
 	tengjia2: { name: "effect_tengjiaranshao", scale: 0.6 },
 	tengjia3: { name: "effect_tengjiafangyu", scale: 0.6 },
 	jinhe_lose: { name: "effect_jinhe", scale: 0.4 },
-	numa: { name: "effect_numa", scale: 0.4 },
-	nvzhuang: { name: "effect_nvzhuang", scale: 0.5 },
 	wufengjian_skill: { name: "effect_wufengjian", scale: 0.4 },
 	yajiaoqiang_skill: { name: "effect_yajiaoqiang", scale: 0.5 },
 	yinfengjia_skill: { name: "effect_yinfengjia", scale: 0.5 },
-	zheji: { name: "effect_zheji", scale: 0.35 },
 
 	// 延时锦囊
 	lebu: { name: "effect_lebusishu", scale: 0.7 },
@@ -255,7 +246,7 @@ export function initCardEffects() {
 									x: ((x1 + x2) / 2) * dpr,
 									y: ((y1 + y2) / 2) * dpr,
 									angle: angle,
-									scale: Math.max(0.25, dist / 512),
+									scale: Math.max(0.20, dist / 600),
 								}
 							);
 						}

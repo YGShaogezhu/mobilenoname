@@ -1,0 +1,104 @@
+
+ss_yishugaochao.png
+size: 1919,1198
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+heidi
+  rotate: false
+  xy: 1313, 442
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+luobo_00000
+  rotate: false
+  xy: 2, 36
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00001
+  rotate: false
+  xy: 256, 36
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00002
+  rotate: false
+  xy: 551, 226
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00003
+  rotate: false
+  xy: 805, 226
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00004
+  rotate: false
+  xy: 1059, 226
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00005
+  rotate: false
+  xy: 1313, 186
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00006
+  rotate: false
+  xy: 1567, 186
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00007
+  rotate: false
+  xy: 510, 2
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00008
+  rotate: false
+  xy: 764, 2
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+luobo_00009
+  rotate: false
+  xy: 1018, 2
+  size: 252, 222
+  orig: 252, 222
+  offset: 0, 0
+  index: -1
+yezi1
+  rotate: true
+  xy: 1338, 410
+  size: 786, 579
+  orig: 786, 579
+  offset: 0, 0
+  index: -1
+yezi2
+  rotate: false
+  xy: 2, 450
+  size: 1334, 746
+  orig: 1334, 746
+  offset: 0, 0
+  index: -1
+yishugaochao
+  rotate: false
+  xy: 2, 260
+  size: 547, 188
+  orig: 547, 188
+  offset: 0, 0
+  index: -1

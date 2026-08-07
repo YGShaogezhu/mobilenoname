@@ -20,13 +20,11 @@ const Priority = { CRITICAL: 0, HIGH: 1, NORMAL: 2, LOW: 3 };
  * @type {Object.<string, number>}
  */
 const priorityMap = {
-	effect_youxikaishi: Priority.CRITICAL,
 	effect_youxikaishi_shousha: Priority.CRITICAL,
+	shoushakaizhan: Priority.CRITICAL,
 	effect_loseHp: Priority.CRITICAL,
 	aar_chupaizhishiX: Priority.HIGH,
-	"globaltexiao/huifushuzi/shuzi2": Priority.HIGH,
 	"globaltexiao/shanghaishuzi/shuzi": Priority.HIGH,
-	"globaltexiao/shanghaishuzi/SZN_shuzi": Priority.HIGH,
 };
 
 /** @type {Map<string, string|Function[]>} 资源加载状态映射 */

@@ -143,6 +143,24 @@ export const killEffect = {
 };
 
 /**
+ * 开战动画配置
+ * @type {Object}
+ */
+export const kaizhan = {
+	name: "开战动画",
+	intro: "游戏开始时播放的开战特效，关闭可减少卡顿",
+	init: "shousha|play",
+	item: {
+		off: "关闭",
+		"shousha|play": "手杀|游戏开始",
+		"shousha|-1": "手杀|随机",
+		"shousha|play1": "手杀|双刀动画",
+		"shousha|play2": "手杀|双剑动画",
+		"shousha|play3": "手杀|双斧动画",
+	},
+};
+
+/**
  * 整体外观折叠结束标记
  * @type {Object}
  */
@@ -165,5 +183,6 @@ export const appearanceConfigs = {
 	dynamicSkin,
 	dynamicSkinOutcrop,
 	killEffect,
+	kaizhan,
 	outward_title_end,
 };

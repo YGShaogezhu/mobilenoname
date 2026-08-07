@@ -13,8 +13,8 @@ export const assetList = [
 	{ name: "aar_chupaizhishiX" },
 
 	// 游戏开始特效
-	{ name: "effect_youxikaishi" },
 	{ name: "effect_youxikaishi_shousha" },
+	{ name: "shoushakaizhan" },
 
 	// 手杀装备特效参考无名美化
 	{ name: "globaltexiao/equip/SSequip" },
@@ -27,20 +27,15 @@ export const assetList = [
 	{ name: "effect_loseHp" },
 
 	// 数字特效
-	{ name: "globaltexiao/huifushuzi/shuzi2" },
 	{ name: "globaltexiao/xunishuzi/SS_PaiJu_xunishanghai" },
 	{ name: "globaltexiao/shanghaishuzi/shuzi" },
-	{ name: "globaltexiao/shanghaishuzi/SZN_shuzi" },
 
 	// 更多装备特效
 	{ name: "effect_jinhe" },
-	{ name: "effect_numa" },
-	{ name: "effect_nvzhuang" },
 	{ name: "Ss_ZB_QiXingDao" },
 	{ name: "effect_wufengjian" },
 	{ name: "effect_yajiaoqiang" },
 	{ name: "effect_yinfengjia" },
-	{ name: "effect_zheji" },
 	{ name: "effect_jisha1" },
 	{ name: "effect_zhenwang" },
 
@@ -69,15 +64,24 @@ export const assetList = [
 	{ name: "guohechaiqiao" },
 	{ name: "shunshouqianyang" },
 
+	// 手杀局内特效（免伤 / 技能 / 救我 / 恢复体力）
+	{ name: "Ss_PaiJu_wushang" },
+	{ name: "SS_jiuwo" },
+	{ name: "zhuanhuanji" },
+	{ name: "jineng" },
+	{ name: "jinengXX" },
+	{ name: "baikuang" },
+	{ name: "ss_miaoshouhuichun" },
+	{ name: "ss_yishugaochao" },
+	{ name: "shenyimiaoshou" },
+	{ name: "qingnangjishi" },
+
 	// 特殊装备
 	{ name: "RWJGD_xiao" },
 	{ name: "XRJXN_xiao" },
 	{ name: "XTBGZ_xiao" },
 	{ name: "ZYSZK_xiao" },
 	{ name: "TYBLJ" },
-	{ name: "SSHW_TX_chongyingshenfu" },
-	{ name: "SSHW_TX_lingbaoxianhu" },
-	{ name: "SSHW_TX_taijifuchen" },
 	{ name: "taipingyaoshu" },
 	{ name: "effect_taipingyaoshu_xiexia" },
 	{ name: "feilongduofeng" },
@@ -88,8 +92,6 @@ export const assetList = [
 	{ name: "Ss_ZB_YiTianJian" },
 	{ name: "Ss_ZB_YinFengYi" },
 	{ name: "Ss_ZB_ZhanXiang" },
-	{ name: "SSHW_TX_chiyanzhenhun" },
-	{ name: "SSHW_TX_xuwangzhimian" },
 	{ name: "Ss_ZB_ZheJi" },
 	{ name: "Ss_ZB_NvZhuang" },
 	{ name: "effect_xianding", fileType: "json" },
