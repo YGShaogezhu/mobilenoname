@@ -204,3 +204,17 @@
 	font-family: "yuanli" !important;
 	bottom: var(--hand-tip-bottom, calc(20% + 10px)) !important;
 }
+
+/** 手杀武将角标 */
+
+.player > .ss-jiaobiao {
+	position: absolute;
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 16%;
+	height: 16%;
+	right: -1px;
+	bottom: -6px;
+	pointer-events: none;
+	z-index: 88;
+}

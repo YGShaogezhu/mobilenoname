@@ -42,6 +42,16 @@ export const showDistanceDisplay = {
 };
 
 /**
+ * 手杀角标配置
+ * @type {Object}
+ */
+export const ssjiaobiao = {
+	name: "手杀角标",
+	intro: "开启后，武将右下角将显示手杀风格系列角标",
+	init: true,
+};
+
+/**
  * 武将背景配置
  * @type {Object}
  */
@@ -111,6 +121,7 @@ export const miscConfigs = {
 	bettersound,
 	skillDieAudio,
 	showDistanceDisplay,
+	ssjiaobiao,
 	wujiangbeijing,
 	shiliyouhua,
 	mx_decade_characterDialog,
