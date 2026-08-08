@@ -25,6 +25,7 @@ import { setupDisableBrowserShortcuts } from "./features/disableBrowserShortcuts
 import { setupWelcomeDialog } from "./features/welcomeDialog.js";
 import { setupConfigWindow } from "./features/configWindow.js";
 import { setupSsJiaobiao } from "./features/ssJiaobiao.js";
+import { setupSsEquipments } from "./features/ssEquipments.js";
 
 // 音频模块
 import { setupSkillDieAudio, setupEnhancedAudio, setupCharacterAudio } from "./audio/index.js";
@@ -83,6 +84,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupDisableBrowserShortcuts();
 	setupConfigWindow();
 	setupSsJiaobiao();
+	setupSsEquipments();
 	setupEnhancedAudio();
 	setupCharacterBackground();
 	setupCharacterNamePrefix();

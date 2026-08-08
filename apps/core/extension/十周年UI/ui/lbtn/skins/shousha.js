@@ -474,6 +474,14 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 				if (["identity", "doudizhu", "versus", "guozhan"].includes(lib.config.mode)) {
 					self.createIdentityTip();
 				}
+
+				if (
+					lib.config.extension_十周年UI_ssequipments &&
+					!lib.config.extension_十周年UI_aloneEquip &&
+					lib.config.extension_十周年UI_newDecadeStyle == "off"
+				) {
+					window.zqEquipCss?.();
+				}
 			});
 		},
 

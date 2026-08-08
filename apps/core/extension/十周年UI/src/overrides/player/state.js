@@ -6,6 +6,7 @@
 
 import { lib, game, ui, get, ai, _status } from "noname";
 import { getBasePlayerMethods } from "./base.js";
+import { applySsEquipCss, isSsEquipmentsEnabled } from "../../features/ssEquipments.js";
 
 /**
  * 觉醒技能覆写
@@ -92,6 +93,7 @@ export function playerSetModeState(info) {
 	if (info?.seat && this.node.seat) {
 		this.node.seat.innerHTML = get.cnNumber(info.seat, true);
 	}
+	if (isSsEquipmentsEnabled()) applySsEquipCss();
 	const base = getBasePlayerMethods();
 	return base.setModeState.apply(this, arguments);
 }

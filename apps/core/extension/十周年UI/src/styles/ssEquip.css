@@ -1,0 +1,254 @@
+/**
+ * 十周年UI - 手杀装备栏美化
+ * 仅在 newDecadeStyle=off 且开启手杀装备时加载
+ */
+
+/* 其他玩家装备栏 */
+#arena[data-new-decade-style="off"] > .player > .equips,
+#arena[data-new-decade-style="off"] > .player:not(.minskin) > .equips {
+	position: absolute;
+	display: flex;
+	flex-direction: column-reverse;
+	flex-wrap: wrap-reverse;
+	width: auto;
+	height: 80px;
+	left: 16.5%;
+	right: 0%;
+	bottom: 0%;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.84), rgba(0, 0, 0, 0));
+	border-radius: 6px;
+	box-shadow: none;
+	transform: none;
+	transform-origin: center;
+	pointer-events: none;
+	z-index: 65;
+}
+
+/* 其他玩家装备牌 */
+#arena[data-new-decade-style="off"] > .player > .equips > .card,
+#arena[data-new-decade-style="off"] > .player.unseen > .equips > .card,
+#arena[data-new-decade-style="off"] > .player.unseen2 > .equips > .card {
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: flex-start;
+	width: 100%;
+	height: 16px;
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)) !important;
+	border: 1px solid rgba(0, 0, 0, 0);
+	border-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+	box-shadow: none;
+	border-radius: 1px;
+	box-sizing: border-box;
+	text-shadow: none;
+}
+
+#arena[data-new-decade-style="off"] > .player[data-position="0"] > .equips,
+#arena[data-new-decade-style="off"] > .player[data-position="0"]:not(.minskin) > .equips {
+	height: 80px;
+}
+
+/* 隐匿武将装备栏背景 */
+#arena.decadeUI:not(.long).mobile:not(.oldlayout) .player.unseen:not([data-position="0"]) .equips:not(*:empty) > .card,
+#arena.decadeUI:not(.long):not(.mobile):not(.oldlayout) .player.unseen .equips:not(*:empty) > .card:not(.selected),
+#arena.decadeUI.long.mobile:not(.oldlayout) .player.unseen2:not([data-position="0"]) .equips:not(*:empty) > .card,
+#arena.decadeUI.long:not(.mobile):not(.oldlayout) .player.unseen2 .equips:not(*:empty) > .card:not(.selected) {
+	background: none !important;
+}
+
+/* AI装备名 */
+#arena[data-new-decade-style="off"] > .player > .equips > .card > .name2 {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: flex-start;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	margin: 0;
+	line-height: 15px;
+	font-size: 13px;
+	font-family: shousha, xinwei, xinkai !important;
+	font-weight: bold;
+	color: #e9e8e3;
+	text-align: center;
+	text-shadow:
+		black 1px -1px 1px,
+		black 1px 1px 1px,
+		black -1px 1px 1px,
+		black -1px -1px 1px,
+		black 1px -1px 1px,
+		black 1px 1px 1px,
+		black -1px 1px 1px,
+		black -1px -1px 1px;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	pointer-events: none;
+}
+
+/* 未装备牌时清除阴影 */
+#arena[data-new-decade-style="off"] > .player > .equips:empty {
+	background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+}
+
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip1"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip2"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip5"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip6"] > .name2 {
+	opacity: 0.75 !important;
+}
+
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip3"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="empty_equip4"] > .name2 {
+	font-size: 10.5px;
+	opacity: 0.75 !important;
+}
+
+/* 废除装备 */
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip1"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip2"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip5"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip6"] > .name2 {
+	background-image: url("../../image/ui/ass/feichu.png");
+	background-repeat: no-repeat !important;
+	background-size: 70% 70% !important;
+	font-size: 0px;
+	color: #e9e8e3;
+	height: 24px;
+	width: 145px;
+	left: 4%;
+	top: -2px;
+}
+
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip3"] > .name2,
+#arena[data-new-decade-style="off"] > .player > .equips > .card[data-card-name="feichu_equip4"] > .name2 {
+	background-image: url("../../image/ui/ass/feichuma.png");
+	background-repeat: no-repeat !important;
+	background-size: 70% 70% !important;
+	font-size: 0px;
+	color: #e9e8e3;
+	height: 24px;
+	width: 72px;
+	left: 3%;
+	top: -2px;
+}
+
+/* 手杀装备美化卡牌定位兼容：非装备栏内节点重置 */
+:not(.equips) > div.ss-equip-card {
+	top: 0px !important;
+	left: 0px !important;
+	bottom: 0px !important;
+}
+
+/* 坐骑纯马头素材 ma.png：宽度 18px，与距离数字 margin-left 对齐，避免挡住 -1 马 */
+#arena[data-new-decade-style="off"] > .player > .equips > .card > .name2 > img.ss-mount-icon,
+#arena[data-new-decade-style="off"] > .player > .ss-distance-layer > .ss-distance-marker > .name2 > img.ss-mount-icon {
+	position: absolute;
+	margin-left: 0px;
+	margin-top: -1px;
+	width: 18px;
+	height: 110%;
+	object-fit: contain;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* 花色+点数合体素材 equip_txt_* */
+#arena[data-new-decade-style="off"] > .player > .equips > .card > .name2 > img.ss-equip-txt {
+	position: absolute;
+	height: 100%;
+	margin-left: 24px;
+	margin-top: -1px;
+	transform: scale(1.2,1.2);
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* 距离累加文字：紧挨马头右侧 */
+#arena[data-new-decade-style="off"] > .player > .equips > .card > .name2 > .ss-equip-distance,
+#arena[data-new-decade-style="off"] > .player > .ss-distance-layer > .ss-distance-marker > .name2 > .ss-equip-distance {
+	position: absolute;
+	display: inline-block;
+	margin-left: 16px;
+	margin-top: 0.5px;
+	font-size: 14px;
+	font-family: shousha, xinwei, xinkai !important;
+	font-weight: bold;
+	color: #e9e8e3;
+	line-height: 15px;
+	text-shadow:
+		-1.3px 0px 2.2px #000,
+		0px -1.3px 2.2px #000,
+		1.3px 0px 2.2px #000,
+		0px 1.3px 2.2px #000;
+	pointer-events: none;
+	z-index: 2;
+}
+
+/* 无马时的技能距离层：挂在 player 上，不进入 .equips，避免占用坐骑栏 */
+#arena[data-new-decade-style="off"] > .player > .ss-distance-layer {
+	position: absolute;
+	left: 16.5%;
+	right: 0%;
+	bottom: 0%;
+	height: 80px;
+	pointer-events: none;
+	z-index: 66;
+}
+
+#arena[data-new-decade-style="off"] > .player > .ss-distance-layer > .ss-distance-marker {
+	position: absolute;
+	width: 48px;
+	height: 16px;
+	pointer-events: none;
+}
+
+#arena[data-new-decade-style="off"] > .player > .ss-distance-layer > .ss-distance-marker > .name2 {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	margin: 0;
+	pointer-events: none;
+}
+
+/* 回合内装备区虚化效果（手杀栏保持不透明） */
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .background,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .image,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .name,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .name2,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .info,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .range,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .gaintag,
+#arena.selecting:not(.video) .player[data-position="0"] .card:not(.selectable) > .addinfo,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .background,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .image,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .name,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .name2,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .info,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .range,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .gaintag,
+#arena.selecting:not(.video) .player.current_action .card:not(.selectable) > .addinfo,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .background,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .image,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .name,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .name2,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .info,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .range,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .gaintag,
+#arena.selecting:not(.video) #me .card:not(.selectable) > .addinfo,
+#arena.selecting:not(.video) .dialog:not(.noselect) .button:not(.selectable):not(.noclick):not(.replaceButton),
+#arena.selecting:not(.video) .dialog:not(.noselect) .textbutton:not(.selectable):not(.noclick):not(.replaceButton),
+#arena.selecting:not(.video) .dialog:not(.noselect) .tdnodes:not(.selectable):not(.noclick):not(.replaceButton),
+.dead,
+.likedead {
+	opacity: 1;
+}

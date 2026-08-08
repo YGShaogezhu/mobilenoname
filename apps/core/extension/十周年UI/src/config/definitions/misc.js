@@ -52,6 +52,16 @@ export const ssjiaobiao = {
 };
 
 /**
+ * 手杀装备栏美化配置
+ * @type {Object}
+ */
+export const ssequipments = {
+	name: "手杀装备",
+	intro: "开启后，手杀样式下将使用手杀装备栏美化（需关闭单独装备栏）",
+	init: true,
+};
+
+/**
  * 武将背景配置
  * @type {Object}
  */
@@ -122,6 +132,7 @@ export const miscConfigs = {
 	skillDieAudio,
 	showDistanceDisplay,
 	ssjiaobiao,
+	ssequipments,
 	wujiangbeijing,
 	shiliyouhua,
 	mx_decade_characterDialog,
