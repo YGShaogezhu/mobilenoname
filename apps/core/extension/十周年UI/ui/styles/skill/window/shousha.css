@@ -27,6 +27,12 @@
 	justify-content: right;
 }
 
+/* 主动/被动技宽度由 JS 动态设置，此处仅做上限 */
+.skill-control > .enable,
+.skill-control > .trigger {
+	max-width: 750px;
+}
+
 .skill-control {
 	float: right;
 	white-space: nowrap;
@@ -55,8 +61,12 @@
 	clear: both;
 }
 
-.skill-control > .enable {
+.skill-control > .enable,
+.skill-control > .trigger {
 	margin: 0 0 0 auto;
+}
+
+.skill-control > .enable {
 	font-size: 20.5px;
 	font-weight: 500;
 	font-family: "HYZLSJ";

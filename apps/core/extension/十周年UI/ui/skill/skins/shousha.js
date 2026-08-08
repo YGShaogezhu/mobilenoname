@@ -483,18 +483,50 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 				});
 
 				const count = this.node.enable.childNodes.length;
-				const width = count > 2 ? "200px" : count > 0 ? "114px" : "0px";
-				this.node.enable.style.width = width;
-				this.node.enable.style.setProperty("transform", `translateX(-${count > 2 ? 20 : 0}px)`, "important");
-
-				const num = this.node.enable.childNodes.length;
+				const num = count;
 				const num2 = this.node.trigger.childNodes.length;
+
+				// 与 .skill-control 的 max-width 对齐，加宽时用 translateX 把右缘钉在同一侧
+				const CONTROL_BASE_WIDTH = 181;
+				const shiftForWidth = px => Math.max(0, px - CONTROL_BASE_WIDTH);
+
+				// 主动技：≤4 可两行；更多时单行向左扩展
+				const ENABLE_ITEM_WIDTH = 93;
+				let enableWidthPx = 0;
+				let enablePerRow = 1;
+				if (count > 4) {
+					enablePerRow = count;
+					enableWidthPx = count * ENABLE_ITEM_WIDTH;
+				} else if (count > 2) {
+					enablePerRow = 2;
+					enableWidthPx = 200;
+				} else if (count > 0) {
+					enablePerRow = 1;
+					enableWidthPx = 114;
+				}
+				this.node.enable.style.width = enableWidthPx ? `${enableWidthPx}px` : "0px";
+				this.node.enable.style.setProperty("transform", `translateX(-${shiftForWidth(enableWidthPx)}px)`, "important");
+
+				// 被动技：最多两行，再多向左加宽（右缘与主动技对齐）
+				const TRIGGER_MAX_ROWS = 2;
+				const TRIGGER_ITEM_WIDTH = 55;
+				const TRIGGER_MIN_PER_ROW = 2;
+				let triggerPerRow = TRIGGER_MIN_PER_ROW;
+				let triggerWidthPx = 0;
+				if (num2 > 0) {
+					triggerPerRow = Math.max(TRIGGER_MIN_PER_ROW, Math.ceil(num2 / TRIGGER_MAX_ROWS));
+					triggerWidthPx = triggerPerRow * TRIGGER_ITEM_WIDTH;
+				}
+				this.node.trigger.style.width = triggerWidthPx ? `${triggerWidthPx}px` : "0px";
+				this.node.trigger.style.setProperty("transform", `translateX(-${shiftForWidth(triggerWidthPx)}px)`, "important");
+
+				const enableRows = count > 0 ? Math.ceil(count / enablePerRow) : 0;
+				const triggerRows = num2 > 0 ? Math.ceil(num2 / triggerPerRow) : 0;
 
 				game.players.concat(game.dead).forEach(player => {
 					let offset = 75;
 					if (game.me === player) {
-						const adjustedNum = num === 2 ? 4 : num;
-						offset -= Math.ceil(adjustedNum / 2) * 44 + (Math.ceil(num2 / 3) - 1) * 28;
+						offset -= enableRows * 44 + Math.max(0, triggerRows - 1) * 28;
 					} else {
 						offset = -17;
 					}
@@ -503,8 +535,8 @@ export function createShoushaSkillPlugin(lib, game, ui, get, ai, _status, app) {
 					});
 				});
 
-				const level1 = Math.min(4, this.node.trigger.childNodes.length);
-				const level2 = count > 2 ? 4 : count > 0 ? 2 : 0;
+				const level1 = Math.min(4, triggerRows * 2);
+				const level2 = enableRows > 1 ? 4 : enableRows > 0 ? 2 : 0;
 				ui.arena.dataset.sclevel = Math.max(level1, level2);
 			},
 		},
