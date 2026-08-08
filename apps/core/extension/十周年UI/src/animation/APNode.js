@@ -24,6 +24,8 @@ export class APNode {
 	 * @param {number|number[]} [params.width] - 宽度，可以是数值或 [偏移量, 比例] 数组
 	 * @param {number|number[]} [params.height] - 高度，可以是数值或 [偏移量, 比例] 数组
 	 * @param {number} [params.scale] - 缩放比例（1 为原始大小）
+	 * @param {number} [params.scaleX] - X 轴额外缩放（用于非均匀拉伸，如绳子粗细）
+	 * @param {number} [params.scaleY] - Y 轴额外缩放（用于非均匀拉伸，如绳子长度）
 	 * @param {number} [params.angle] - 旋转角度（度数）
 	 * @param {number} [params.opacity] - 透明度（0-1 之间）
 	 * @param {boolean} [params.flipX] - 是否水平翻转
@@ -70,6 +72,12 @@ export class APNode {
 
 		/** @type {number} 缩放比例 */
 		this.scale = params.scale;
+
+		/** @type {number|undefined} X 轴额外缩放 */
+		this.scaleX = params.scaleX;
+
+		/** @type {number|undefined} Y 轴额外缩放 */
+		this.scaleY = params.scaleY;
 
 		/** @type {number} 透明度 */
 		this.opacity = params.opacity;
@@ -287,11 +295,14 @@ export class APNode {
 		else if (renderScaleX && renderScaleY) renderScale *= Math.min(renderScaleX, renderScaleY);
 		else renderScale *= dpr * zoom;
 
-		if (renderScale !== 1) this.mvp.scale(renderScale, renderScale, 0);
-
 		const tsAngle = this.timestepMap.angle;
 		this.renderAngle = tsAngle && !tsAngle.completed ? (tsAngle.update(e.delta), tsAngle.current) : this.angle;
+		// 先旋转再缩放：非均匀 scaleX/scaleY 才能沿本地轴拉伸（如绳子长度/粗细）
 		if (this.renderAngle) this.mvp.rotate(this.renderAngle, 0, 0, 1);
+
+		const finalScaleX = renderScale * (this.scaleX ?? 1);
+		const finalScaleY = renderScale * (this.scaleY ?? 1);
+		if (finalScaleX !== 1 || finalScaleY !== 1) this.mvp.scale(finalScaleX, finalScaleY, 0);
 
 		const tsOpacity = this.timestepMap.opacity;
 		this.renderOpacity = tsOpacity && !tsOpacity.completed ? (tsOpacity.update(e.delta), tsOpacity.current) : this.opacity;

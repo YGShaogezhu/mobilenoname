@@ -239,15 +239,19 @@ export function initCardEffects() {
 						var rope = null;
 
 						// 2. 绳子循环播放，直到羊到达后再消失
+						// 绳子默认沿 Y 轴：长度随距离拉伸，粗细固定，避免远距离（如左侧）变粗
 						if (dist > 1) {
 							var angle = (Math.atan2(dy, dx) * 180) / Math.PI - 90;
+							var lengthScale = Math.max(0.2, dist / 600);
+							var thicknessScale = 0.5;
 							rope = anim.playSpine(
 								{ name: "shunshouqianyang", action: "xian", speed: 1, loop: true },
 								{
 									x: ((x1 + x2) / 2) * dpr,
 									y: ((y1 + y2) / 2) * dpr,
 									angle: angle,
-									scale: Math.max(0.20, dist / 600),
+									scaleX: thicknessScale,
+									scaleY: lengthScale,
 								}
 							);
 						}

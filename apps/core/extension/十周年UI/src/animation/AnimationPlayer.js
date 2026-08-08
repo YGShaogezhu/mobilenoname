@@ -328,6 +328,8 @@ export class AnimationPlayer {
 	 * @param {number|number[]} [position.width] - 宽度
 	 * @param {number|number[]} [position.height] - 高度
 	 * @param {number} [position.scale] - 缩放比例
+	 * @param {number} [position.scaleX] - X 轴额外缩放
+	 * @param {number} [position.scaleY] - Y 轴额外缩放
 	 * @param {number} [position.angle] - 旋转角度
 	 * @param {HTMLElement} [position.parent] - 参考父节点
 	 * @param {boolean} [position.follow] - 是否跟随父节点
@@ -373,6 +375,8 @@ export class AnimationPlayer {
 				height: position.height,
 				width: position.width,
 				scale: position.scale,
+				scaleX: position.scaleX,
+				scaleY: position.scaleY,
 				angle: position.angle,
 				referNode: position.parent,
 				referFollow: position.follow,
