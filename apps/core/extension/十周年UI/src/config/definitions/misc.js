@@ -102,6 +102,16 @@ export const enableEquipCopy = {
 };
 
 /**
+ * 转化卡牌类界面手杀样式配置
+ * @type {Object}
+ */
+export const replace_dialog_shousha = {
+	name: "转化卡牌类界面手杀样式",
+	init: true,
+	intro: "开启后，转化/视为类技能会把手牌区变暗并生成临时虚拟卡牌，像手杀一样选择，重启生效",
+};
+
+/**
  * 自由选将筛选框配置
  * @type {Object}
  */
@@ -138,5 +148,6 @@ export const miscConfigs = {
 	mx_decade_characterDialog,
 	enableRecastInteraction,
 	enableEquipCopy,
+	replace_dialog_shousha,
 	stuff_title_end,
 };

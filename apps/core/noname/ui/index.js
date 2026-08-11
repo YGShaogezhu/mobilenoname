@@ -178,8 +178,8 @@ export class UI {
 	timer;
 	/**
 	 * 计算手牌展开偏移量
-	 * - 触屏设备：点击选中时展开
-	 * - PC端：仅鼠标悬浮时展开
+	 * - 优先：恰好选中一张时展开该牌
+	 * - 其次（非触屏）：鼠标悬浮时展开
 	 * @param {HTMLElement[]} cards - 手牌数组
 	 * @param {{cardWidth?: number, currentMargin?: number}} [options] - 配置选项
 	 * @returns {{spreadIndex: number, spreadLeft: number, spreadRight: number}}
@@ -192,20 +192,24 @@ export class UI {
 		const currentMargin = options.currentMargin || cardWidth;
 		if (currentMargin >= cardWidth - 2) return result;
 
-		const isTouchscreen = lib.config.touchscreen;
+		let selectedIndex = -1;
 		for (let i = 0; i < cards.length; i++) {
-			let shouldSpread = false;
-			if (isTouchscreen) {
-				shouldSpread = cards[i].classList?.contains("selected");
-			} else {
-				shouldSpread = cards[i] === ui._handcardHover;
+			if (!cards[i].classList?.contains("selected")) continue;
+			if (selectedIndex !== -1) {
+				selectedIndex = -1;
+				break;
 			}
-			if (shouldSpread) {
-				if (result.spreadIndex !== -1) {
-					result.spreadIndex = -1;
+			selectedIndex = i;
+		}
+
+		if (selectedIndex !== -1) {
+			result.spreadIndex = selectedIndex;
+		} else if (!lib.config.touchscreen) {
+			for (let i = 0; i < cards.length; i++) {
+				if (cards[i] === ui._handcardHover) {
+					result.spreadIndex = i;
 					break;
 				}
-				result.spreadIndex = i;
 			}
 		}
 

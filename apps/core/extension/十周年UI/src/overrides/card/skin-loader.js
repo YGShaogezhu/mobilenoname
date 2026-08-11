@@ -11,7 +11,6 @@ import { cardSkinMeta } from "../../config/utils.js";
  * @type {Object<string, string>}
  */
 const FALLBACK_MAP = {
-	bingkele: "decade",
 	gold: "caise",
 };
 

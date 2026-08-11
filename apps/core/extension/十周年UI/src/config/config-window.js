@@ -332,6 +332,7 @@ function getConfigsByTab(tabId) {
 			{ isTitle: true, name: "游戏功能" },
 			{ key: "enableRecastInteraction", name: "重铸交互", type: "toggle" },
 			{ key: "enableEquipCopy", name: "装备入手", type: "toggle" },
+			{ key: "replace_dialog_shousha", name: "转化卡牌类界面手杀样式", type: "toggle" },
 			{ key: "mx_decade_characterDialog", name: "自由选将筛选框", type: "select" },
 			{ key: "eruda", name: "调试助手", type: "toggle" },
 		],

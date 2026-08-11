@@ -34,6 +34,13 @@ export function createCardElement(position, info, noclick) {
 		$suitnum: card.node.suitnum,
 		$range: card.node.range,
 		$gaintag: card.node.gaintag,
+		$cardType: element.create("card-type", card),
+		$distance: element.create("distance", card),
+		$virtual: element.create("virtual-mark", card),
+		$zhuan: element.create("zhuanhua-mark", card),
+		$color: element.create("color", card),
+		$guo: element.create("guo-mark", card),
+		$hezong: element.create("hezong-mark", card),
 	};
 	for (const i in extend) card[i] = extend[i];
 
@@ -58,7 +65,7 @@ export function createCardElement(position, info, noclick) {
 		if (lib.cardSelectObserver) lib.cardSelectObserver.observe(card, { attributes: true });
 	}
 
-	card.$suitnum.$num = element.create(null, card.$suitnum, "span");
+	card.$suitnum.$num = element.create("num", card.$suitnum, "span");
 	card.$suitnum.$num.style.fontFamily =
 		'"STHeiti","SimHei","Microsoft JhengHei","Microsoft YaHei","WenQuanYi Micro Hei",Helvetica,Arial,sans-serif';
 	card.$suitnum.$br = element.create(null, card.$suitnum, "br");

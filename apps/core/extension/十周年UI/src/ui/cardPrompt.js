@@ -264,7 +264,9 @@ const resetHandTips = () => {
  */
 const ensureTip = () => {
 	closeCardDialog();
-	return (ui.cardDialog = decadeUI.showHandTip());
+	const tip = (ui.cardDialog = decadeUI.showHandTip());
+	if (tip.$info) tip.$info.innerHTML = "";
+	return tip;
 };
 
 /**
@@ -644,6 +646,7 @@ const appendDiscardSkillPrefix = (tip, event, compareSkill) => {
  */
 const handleDiscard = event => {
 	const discardTip = ensureTip();
+	suppressPromptDialogs(event);
 	const compareSkill = getCompareSkill(event);
 	const showPhase = markPhaseDiscard(event);
 
@@ -678,15 +681,16 @@ const handleDiscard = event => {
 const handleRespondUse = (event, compareSkill) => {
 	if (!event.respondTo) return false;
 
+	const respondTipText = buildRespondTipText(event);
+	if (!respondTipText) return false;
+
 	const respondTip = ensureTip();
+	suppressPromptDialogs(event);
 
 	if (compareSkill) {
 		appendSkillName(respondTip, compareSkill, event.player);
 		respondTip.appendText("，");
 	}
-
-	const respondTipText = buildRespondTipText(event);
-	if (!respondTipText) return false;
 
 	showTip(respondTip, respondTipText);
 	return true;
@@ -701,12 +705,28 @@ const handleDyingUse = event => {
 	if (event.type !== "dying" || !event.dying) return false;
 
 	const dyingTip = ensureTip();
+	suppressPromptDialogs(event);
 	const dyingName = resolveName(event.dying) ?? get.translation(event.dying);
 
 	appendTipHTML(dyingTip, dyingName, "phase");
 	dyingTip.appendText(sanitizePrompt(`濒死，需要${1 - event.dying.hp}个桃，是否帮助？`));
 	showTip(dyingTip);
 	return true;
+};
+
+const originalPrompts = new WeakMap();
+const originalDialogs = new WeakMap();
+
+/**
+ * 保存原始值
+ * @param {GameEvent} event
+ * @param {string} key
+ * @param {WeakMap} map
+ */
+const saveOriginal = (event, key, map) => {
+	if (!map.has(event)) {
+		map.set(event, event[key]);
+	}
 };
 
 // 显示出牌阶段默认提示
@@ -727,12 +747,206 @@ const showCardTip = (tip, cardName) => {
 	}
 };
 
+/**
+ * 判断是否为纯文字提示 dialog（可并入 hand-tip）
+ * @param {*} dialog
+ * @returns {boolean}
+ */
+const isTextPromptDialog = dialog => {
+	if (!dialog || typeof dialog !== "object" || typeof dialog.close !== "function") return false;
+	if (dialog.forcebutton || dialog._scrollset) return false;
+	if (dialog.classList?.contains("fullheight") || dialog.classList?.contains("noupdate")) return false;
+	if (Array.isArray(dialog.buttons) && dialog.buttons.length > 0) return false;
+	if (dialog.classList?.contains("prompt")) return true;
+	const content = dialog.content || dialog.querySelector?.(".content");
+	if (!content) return dialog.classList?.contains("prompt");
+	const meaningful = [...content.children].filter(node => {
+		if (!node || node.classList?.contains("caption")) return false;
+		const text = sanitizePrompt(node.textContent || "");
+		return text.length > 0;
+	});
+	return meaningful.length <= 1;
+};
+
+/**
+ * 从 dialog 提取提示文案
+ * @param {*} dialog
+ * @returns {{title: string, detail: string}}
+ */
+const extractDialogPromptText = dialog => {
+	if (!dialog || typeof dialog !== "object") return { title: "", detail: "" };
+	const content = dialog.content || dialog.querySelector?.(".content");
+	const caption = content?.querySelector?.(".caption") || dialog.querySelector?.(".caption");
+	const title = sanitizePrompt(caption?.textContent || "");
+	const details = [];
+	if (content) {
+		for (const node of content.children) {
+			if (!node || node === caption || node.classList?.contains("caption")) continue;
+			const text = sanitizePrompt(node.textContent || "");
+			if (text) details.push(text);
+		}
+	}
+	return { title, detail: details.join(" ") };
+};
+
+/**
+ * 读取事件上的 prompt 文案（含已保存的原始值）
+ * @param {GameEvent} event
+ * @returns {string}
+ */
+const resolveEventPromptText = event => {
+	const saved = originalPrompts.get(event);
+	if (typeof saved === "string" && saved) return sanitizePrompt(saved);
+	if (typeof event.prompt === "string" && event.prompt) return sanitizePrompt(event.prompt);
+	if (typeof event.prompt === "function") {
+		try {
+			const result = event.prompt(event);
+			if (typeof result === "string") return sanitizePrompt(result);
+		} catch (e) {}
+	}
+	if (typeof event.dialog === "string" && event.dialog) return sanitizePrompt(event.dialog);
+	return "";
+};
+
+/**
+ * 读取技能自带的短提示
+ * @param {GameEvent} event
+ * @returns {string}
+ */
+const resolveSkillPromptText = event => {
+	const skill = event.skill;
+	if (!skill) return "";
+	const info = get.info(skill);
+	if (!info) return "";
+	if (typeof info.prompt === "function") {
+		try {
+			const result = info.prompt(event, event.player);
+			if (typeof result === "string") return sanitizePrompt(result);
+		} catch (e) {}
+	} else if (typeof info.prompt === "string") {
+		return sanitizePrompt(info.prompt);
+	}
+	return "";
+};
+
+/**
+ * 关闭纯文字 prompt dialog，并把文案并入 hand-tip
+ * @param {GameEvent} event
+ * @returns {{title: string, detail: string, closed: boolean}}
+ */
+const suppressPromptDialogs = event => {
+	let title = resolveEventPromptText(event);
+	let detail = typeof event.prompt2 === "string" ? sanitizePrompt(event.prompt2) : "";
+	let closed = false;
+
+	const absorb = dialog => {
+		if (!isTextPromptDialog(dialog)) return false;
+		const extracted = extractDialogPromptText(dialog);
+		if (!title && extracted.title) title = extracted.title;
+		if (!detail && extracted.detail) detail = extracted.detail;
+		closeDialog(dialog);
+		closed = true;
+		return true;
+	};
+
+	if (typeof event.dialog === "object" && absorb(event.dialog)) {
+		event.dialog = false;
+	}
+
+	if (event.skillDialog && typeof event.skillDialog === "object" && absorb(event.skillDialog)) {
+		event.skillDialog = false;
+	}
+
+	if (ui.dialog && ui.dialog !== event.dialog && ui.dialog !== event.skillDialog) {
+		absorb(ui.dialog);
+	}
+
+	saveOriginal(event, "prompt", originalPrompts);
+	saveOriginal(event, "dialog", originalDialogs);
+	event.prompt = false;
+	event.prompt2 = false;
+
+	if (!title) {
+		const skillPrompt = resolveSkillPromptText(event);
+		if (skillPrompt) title = skillPrompt;
+	}
+
+	return { title, detail, closed };
+};
+
+/**
+ * 将 dialog prompt 文案渲染到 hand-tip
+ * @param {Dialog} tip
+ * @param {GameEvent} event
+ * @param {{title?: string, detail?: string}} promptInfo
+ * @param {string} [compareSkill]
+ */
+const applyPromptToTip = (tip, event, promptInfo = {}, compareSkill) => {
+	const skillName = event.skill || compareSkill;
+	const title = sanitizePrompt(promptInfo.title || "");
+	const detail = sanitizePrompt(promptInfo.detail || "");
+
+	if (skillName) {
+		const skillLabel = sanitizePrompt(get.skillTranslation(get.sourceSkillFor ? get.sourceSkillFor(cleanSkillName(skillName)) : cleanSkillName(skillName), event.player));
+		appendSkillName(tip, skillName, event.player);
+		tip.appendText("：");
+
+		// caption 常为技能名；真正提示在 detail，否则用 title
+		if (title && title !== skillLabel) {
+			tip.appendText(title);
+			if (detail) tip.setInfomation?.(detail);
+		} else if (detail) {
+			tip.appendText(detail);
+		} else {
+			tip.appendText(sanitizePrompt("请选择要使用的牌"));
+		}
+		return;
+	}
+
+	if (title) {
+		tip.appendText(title);
+		if (detail) tip.setInfomation?.(detail);
+	} else if (detail) {
+		tip.appendText(detail);
+	} else {
+		tip.appendText(sanitizePrompt("请选择要使用的牌"));
+	}
+};
+
+/**
+ * 是否为引擎默认“请选择/请使用牌”提示
+ * @param {string} text
+ * @returns {boolean}
+ */
+const isDefaultUsePrompt = text => {
+	const plain = sanitizePrompt(text);
+	if (!plain) return true;
+	if (plain === "请选择要使用的牌" || plain === "请选择一张卡牌") return true;
+	return /^请使用.+张/.test(plain);
+};
+
 // 处理出牌阶段
 const handlePhaseUse = event => {
 	if (event.type !== "phase") return false;
 
 	const selectedCards = ui.selected?.cards ?? [];
 	const tip = ensureTip();
+	const promptInfo = suppressPromptDialogs(event);
+	const customPrompt = !isDefaultUsePrompt(promptInfo.title) || !!promptInfo.detail;
+
+	// 普通出牌选中单牌：展示牌提示
+	if (selectedCards.length === 1 && !event.skill) {
+		showCardTip(tip, get.name(selectedCards[0]));
+		showTip(tip);
+		return true;
+	}
+
+	// 技能或自定义 dialog prompt → hand-tip
+	if (event.skill || customPrompt) {
+		applyPromptToTip(tip, event, promptInfo);
+		showTip(tip);
+		return true;
+	}
 
 	if (selectedCards.length === 1) {
 		showCardTip(tip, get.name(selectedCards[0]));
@@ -752,7 +966,25 @@ const handleWuxieUse = event => {
 	if (event.type !== "wuxie") return false;
 
 	const wuxieTip = ensureTip();
+	suppressPromptDialogs(event);
 	showTip(wuxieTip, buildWuxieTipText(event));
+	return true;
+};
+
+/**
+ * 处理技能/自定义 prompt（非出牌阶段等特殊分支）
+ * @param {GameEvent} event
+ * @param {string} [compareSkill]
+ * @returns {boolean}
+ */
+const handleGenericPromptUse = (event, compareSkill) => {
+	const promptInfo = suppressPromptDialogs(event);
+	const skillName = event.skill || compareSkill;
+	if (!skillName && !promptInfo.title && !promptInfo.detail && !promptInfo.closed) return false;
+
+	const tip = ensureTip();
+	applyPromptToTip(tip, event, promptInfo, compareSkill);
+	showTip(tip);
 	return true;
 };
 
@@ -766,7 +998,8 @@ const handleUse = event => {
 	if (handleWuxieUse(event)) return;
 	if (handleRespondUse(event, compareSkill)) return;
 	if (handleDyingUse(event)) return;
-	handlePhaseUse(event);
+	if (handlePhaseUse(event)) return;
+	handleGenericPromptUse(event, compareSkill);
 };
 
 /**
@@ -775,6 +1008,7 @@ const handleUse = event => {
  */
 const handleRespond = event => {
 	const tip = ensureTip();
+	suppressPromptDialogs(event);
 	const compareSkill = getCompareSkill(event);
 
 	if (compareSkill) {
@@ -788,51 +1022,6 @@ const handleRespond = event => {
 	} else {
 		tip.appendText("请打出响应牌");
 		showTip(tip);
-	}
-};
-
-const originalPrompts = new WeakMap();
-const originalDialogs = new WeakMap();
-
-/**
- * 保存原始值
- * @param {GameEvent} event
- * @param {string} key
- * @param {WeakMap} map
- */
-const saveOriginal = (event, key, map) => {
-	if (!map.has(event)) {
-		map.set(event, event[key]);
-	}
-};
-
-/**
- * 临时隐藏prompt和dialog
- * @param {GameEvent} event
- */
-const hidePrompt = event => {
-	saveOriginal(event, "prompt", originalPrompts);
-	saveOriginal(event, "dialog", originalDialogs);
-	event.prompt = false;
-	event.prompt2 = false;
-	if (event.dialog) {
-		closeDialog(event.dialog);
-		event.dialog = false;
-	}
-};
-
-/**
- * 恢复原始prompt和dialog
- * @param {GameEvent} event
- */
-const restorePrompt = event => {
-	if (originalPrompts.has(event)) {
-		event.prompt = originalPrompts.get(event);
-		originalPrompts.delete(event);
-	}
-	if (originalDialogs.has(event)) {
-		event.dialog = originalDialogs.get(event);
-		originalDialogs.delete(event);
 	}
 };
 

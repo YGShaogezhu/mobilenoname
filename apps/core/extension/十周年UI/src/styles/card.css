@@ -31,6 +31,11 @@
 	opacity: 1;
 }
 
+/* 手杀样式(player2)：黑金手牌选中改用 SS_heijinka，隐藏 CSS 金色选中框 */
+body[data-style="off"] .card.layered-card[data-card-face="3"].selected::before {
+	opacity: 0;
+}
+
 /** 卡牌层级 */
 
 #arena > .card.thrown {
@@ -146,29 +151,44 @@
 	opacity: 1;
 }
 
+/* 多牌转化折叠：仅主牌显示使用信息 */
+.card.thrown[data-viewas-fold="1"]:not([data-viewas-primary="1"]) > .used-info {
+	display: none !important;
+}
+
 /** 卡牌转换提示 */
 
 .card > .gaintag.info,
 .card.button > .gaintag.info {
 	position: absolute;
-	left: 4px;
-	top: calc(50% - 16px);
+	--w: 56px;
+	--h: calc(var(--w) * 50 / 104); /*高和长*/
+	width: var(--w); /*按比例调节*/
+	height: var(--h); /*同理*/
+	left: -1px;
+	top: calc(50% + 10px);
 	right: 4px;
-	bottom: auto;
-	width: auto;
-	font-size: 20px;
-	font-family: yuanli;
-	line-height: 24px;
-	color: #fffff0;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* 底图下方有留白，垫一点把字往视觉红区中心靠 */
+	padding-bottom: 14%;
+	color: #fef2f2;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: shousha;
+	line-height: 1.2;
 	text-align: center;
-	text-shadow: none;
-	white-space: normal;
-	background-image: url("../../image/ui/card-base/cardBaseMap.png") !important;
-	background-size: cover;
-	border: 1px solid black;
-	border-radius: 2px;
+	text-shadow: -1.4px 0px 2.5px #a01358, 0px -1.4px 2.5px #a01358, 1.4px 0px 2.5px #a01358, 0px 1.4px 2.5px #a01358;
+	white-space: nowrap;
+	background-image: url("../../image/ui/card-base/biaoji.png") !important;
+	background-size: 100% 100%;
+	border-radius: none;
+	border: none;
 	pointer-events: none;
-	z-index: 2;
+	/* 高于分层插画(.image z-index:3)，避免标记被盖住 */
+	z-index: 7;
 }
 
 .card > .gaintag.info:empty,
@@ -248,6 +268,7 @@
 	border: 1px solid black;
 	border-radius: 2px;
 	pointer-events: none;
+	z-index: 8;
 }
 
 .card > .temp-name[data-nature="fire"] {
@@ -269,6 +290,124 @@
 
 .card > .temp-name:empty {
 	display: none;
+}
+
+/** 选中转化：正中牌名标签（card-base，宽度与牌同宽） */
+.card > .viewas-label {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	width: 100%;
+	height: auto;
+	transform: translateY(-50%);
+	pointer-events: none;
+	z-index: 9;
+	line-height: 0;
+	box-sizing: border-box;
+	container-type: inline-size;
+}
+
+.card > .viewas-label > img,
+.card > .viewas-label > .viewas-label-bg {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: fill;
+	/* 底部轻微黑色投影 */
+	filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.641));
+}
+
+/* 非杀闪桃酒：shousha.png 底图 + 文字 */
+.card > .viewas-label.is-text {
+	line-height: normal;
+}
+
+.card > .viewas-label.is-text > .viewas-label-text {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -2px;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 6% 4%;
+	font-family: "HYZLSJ", yuanli, sans-serif;
+	font-size: clamp(22px, 14cqi, 18px);
+	font-weight: normal;
+	color: #000;
+	letter-spacing: -0.12em;
+	text-indent: -0.12em; /* 抵消末字右侧空隙，视觉更居中 */
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: clip;
+	line-height: 1;
+	pointer-events: none;
+	/* 参考 card_name / top-name 白边描边 */
+	/* text-shadow:
+		0.3px 0 1.8px #fff,
+		0.3px 0 1.8px #fff,
+		0.3px 0 1.8px #fff,
+		0 0.3px 1.8px #fff,
+		0 -0.3px 1.8px #fff,
+		-0.3px 0 1.8px #fff,
+		0.6px 0 1.5px #fff,
+		-0.6px 0 1.5px #fff,
+		0 0.6px 1.5px #fff,
+		0 -0.6px 1.5px #fff; */
+}
+
+.card > .viewas-label:empty {
+	display: none;
+}
+
+/** 打出转化：右上角转标（分层 / 整图共用） */
+.card > .zhuanhua-mark {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 28%;
+	height: auto;
+	aspect-ratio: 1;
+	z-index: 10;
+	pointer-events: none;
+}
+
+.card > .zhuanhua-mark:empty {
+	display: none;
+}
+
+.card > .zhuanhua-mark > img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+/** 虚拟牌标记（整图模式；分层见 layered-card.css） */
+.card > .virtual-mark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 28%;
+	height: auto;
+	aspect-ratio: 1;
+	z-index: 10;
+	pointer-events: none;
+}
+
+.card > .virtual-mark:empty {
+	display: none;
+}
+
+.card > .virtual-mark > img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
 }
 
 /* 暗弱特殊显示 */

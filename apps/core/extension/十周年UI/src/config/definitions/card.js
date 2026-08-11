@@ -122,7 +122,7 @@ export const handFoldMin = {
  */
 export const cardPrettify = {
 	name: "卡牌美化",
-	init: "decade",
+	init: "gold",
 	get item() {
 		return getAllCardSkinPresets().reduce(
 			(options, skin) => {

@@ -68,13 +68,13 @@ export const assetList = [
 	{ name: "Ss_PaiJu_wushang" },
 	{ name: "SS_jiuwo" },
 	{ name: "zhuanhuanji" },
+	{ name: "kapaizhuanhuan" },
+	{ name: "cardFace/SS_heijinka" },
 	{ name: "jineng" },
 	{ name: "jinengXX" },
 	{ name: "baikuang" },
 	{ name: "ss_miaoshouhuichun" },
 	{ name: "ss_yishugaochao" },
-	{ name: "shenyimiaoshou" },
-	{ name: "qingnangjishi" },
 
 	// 特殊装备
 	{ name: "RWJGD_xiao" },

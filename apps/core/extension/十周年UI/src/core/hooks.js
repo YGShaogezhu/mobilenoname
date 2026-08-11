@@ -1,7 +1,9 @@
-﻿/**
+/**
  * @fileoverview 钩子初始化模块，注册各种UI钩子函数
  */
 import { lib, game, ui, get, ai, _status } from "noname";
+import { clearLayeredMarks } from "../overrides/card/layered-card.js";
+import { setViewAsLabel, clearViewAsLabel, clearCardTempSuitNum } from "../ui/card-utils.js";
 
 /**
  * 初始化钩子
@@ -31,16 +33,33 @@ export function initHooks() {
 			cardname = get.name(cardskb);
 			cardnature = get.nature(cardskb);
 		}
-		if (card.name !== cardname || !get.is.sameNature(card.nature, cardnature, true)) {
-			if (!card._tempName) card._tempName = ui.create.div(".temp-name", card);
-			let tempname2 = get.translation(cardname);
-			if (cardnature) {
-				card._tempName.dataset.nature = cardnature;
-				if (cardname === "sha") tempname2 = get.translation(cardnature) + tempname2;
+		const renamed = card.name !== cardname || !get.is.sameNature(card.nature, cardnature, true);
+		if (renamed) {
+			// viewAs 选中 / mod.cardname（如雪恨）改名：统一叠正中 card-base，不加转标
+			// 分层卡隐藏了 .temp-name，必须用 viewas-label 才能看见转化效果
+			if (card._tempName) {
+				card._tempName.delete();
+				delete card._tempName;
 			}
-			card._tempName.innerHTML = tempname2;
-			card._tempName.tempname = tempname2;
-			card.dataset.low = 1;
+			setViewAsLabel(card, cardname, cardnature);
+			if (goon) clearLayeredMarks(card);
+			card.dataset.low = goon ? 0 : 1;
+		} else {
+			// 未改名：清掉选中态标签与误加的转标
+			clearViewAsLabel(card);
+			if (card.dataset.zhuanhua === "1" || card.dataset.zhangba === "1" || card.dataset.qice === "1") {
+				clearLayeredMarks(card);
+			}
+			if (card.dataset.view == 1 || card.dataset.view === "1") {
+				if (card._tempName) {
+					card._tempName.delete();
+					delete card._tempName;
+				}
+				card.dataset.view = 0;
+				card.dataset.low = 0;
+			} else {
+				card.dataset.low = 0;
+			}
 		}
 		const cardnumber = get.number(card),
 			cardsuit = get.suit(card);
@@ -80,11 +99,12 @@ export function initHooks() {
 			card.dataset.low = 0;
 			card.dataset.view = 0;
 		}
-		if (card._tempSuitNum) {
-			card._tempSuitNum.delete();
-			delete card._tempSuitNum;
+		if (card._tempSuitNum || card._layeredTempSN) {
+			clearCardTempSuitNum(card);
 			card.dataset.views = 0;
 		}
+		clearViewAsLabel(card);
+		clearLayeredMarks(card);
 		if (decadeUI?.layout) decadeUI.layout.invalidateHand();
 	};
 

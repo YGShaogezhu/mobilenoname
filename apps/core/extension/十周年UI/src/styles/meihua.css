@@ -200,8 +200,8 @@
 #arena > .hand-tip,
 #arena > .hand-tip-info,
 #arena > .hand-tip span {
-	font-size: 17px !important;
-	font-family: "yuanli" !important;
+	font-size: 20px !important;
+	font-family: "FZLBJW" !important;
 	bottom: var(--hand-tip-bottom, calc(20% + 10px)) !important;
 }
 

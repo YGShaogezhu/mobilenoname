@@ -15,6 +15,15 @@ export {
 	getFallbackKey,
 	buildSkinUrl,
 	generateSkinFilename,
+	// 手杀分层拼卡
+	applyLayeredCard,
+	clearLayeredCard,
+	isLayeredMode,
+	getLayeredBase,
+	refreshLayeredMarks,
+	refreshGuozhanMarks,
+	updateLayeredMarks,
+	clearLayeredMarks,
 	// 卡牌覆写方法
 	cardInit,
 	cardCopy,

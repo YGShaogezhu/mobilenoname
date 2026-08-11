@@ -87,37 +87,54 @@ export function createLayoutModule() {
 				baseShift = 0;
 			const folded = totalW > limitW && xMargin < csw - 0.5;
 
-			if (folded && !expand && typeof ui.getSpreadOffset === "function") {
+			if (folded && typeof ui.getSpreadOffset === "function") {
 				const spread = ui.getSpreadOffset(cards, { cardWidth: csw, currentMargin: xMargin });
 				({ spreadIndex: selectedIndex, spreadLeft: spreadOffsetLeft, spreadRight: spreadOffsetRight } = spread);
-				if (selectedIndex !== -1) {
+				// 非滚动折叠时把选中牌夹进可视区；滚动模式交给横向滚动
+				if (selectedIndex !== -1 && !expand) {
 					const selX = xStart + selectedIndex * xMargin;
 					const maxSelX = Math.max(0, limitW - csw);
 					baseShift = Math.round(Math.max(0, Math.min(maxSelX, selX)) - selX);
 				}
 			}
 
+			// 滚动模式下左侧让位会把牌推到负坐标，整体右移补足
+			const leftPad = expand && spreadOffsetLeft ? spreadOffsetLeft : 0;
+
 			cards.forEach((card, i) => {
-				let fx = xStart + i * xMargin + baseShift;
+				let fx = xStart + i * xMargin + baseShift + leftPad;
 				if (spreadOffsetLeft || spreadOffsetRight) {
 					if (i < selectedIndex) fx -= spreadOffsetLeft;
 					else if (i > selectedIndex) fx += spreadOffsetRight;
 				}
 				const x = Math.round(fx);
+				const selected = card.classList.contains("selected");
 				card.tx = x;
 				card.ty = y;
 				card.scaled = true;
+				card.style.zIndex = selected || i === selectedIndex ? String(1000 + i) : String(i + 1);
 				card.style.transform = `translate(${x}px,${y}px) scale(${cs})`;
 				card._transform = card.style.transform;
-				card.updateTransform(card.classList.contains("selected"));
+				card.updateTransform(selected);
+				// scrollh 下原生 updateTransform 不上移，布局侧补一层
+				if (selected && expand) {
+					card.style.transform = `${card._transform} translateY(-20px)`;
+				}
 			});
 
 			const container = ui.handcards1Container;
+			const spreadExtra = (spreadOffsetLeft || 0) + (spreadOffsetRight || 0);
 			if (expand) {
 				container.classList.add("scrollh");
 				container.style.overflowX = "scroll";
 				container.style.overflowY = "hidden";
-				handNode.style.width = `${Math.round(cards.length * xMargin + (csw - xMargin))}px`;
+				handNode.style.width = `${Math.round(cards.length * xMargin + (csw - xMargin) + spreadExtra)}px`;
+				if (selectedIndex !== -1) {
+					const selCard = cards[selectedIndex];
+					const viewW = container.clientWidth || limitW;
+					const target = Math.max(0, (selCard.tx || 0) + csw / 2 - viewW / 2);
+					container.scrollLeft = target;
+				}
 			} else {
 				container.classList.remove("scrollh");
 				container.style.overflowX = container.style.overflowY = "";
@@ -140,7 +157,30 @@ export function createLayoutModule() {
 			});
 			if (!ui.thrown.length) return;
 
-			const cards = ui.thrown;
+			const rawCards = ui.thrown;
+			// 折叠组内：主牌（第一张）排到最右侧压在最上
+			const cards = [];
+			for (let i = 0; i < rawCards.length; ) {
+				const cur = rawCards[i];
+				if (cur.dataset.viewasFold === "1" && cur._viewAsGroupId) {
+					const gid = cur._viewAsGroupId;
+					const group = [];
+					while (i < rawCards.length && rawCards[i].dataset.viewasFold === "1" && rawCards[i]._viewAsGroupId === gid) {
+						group.push(rawCards[i++]);
+					}
+					group.sort((a, b) => {
+						const ap = a.dataset.viewasPrimary === "1" ? 1 : 0;
+						const bp = b.dataset.viewasPrimary === "1" ? 1 : 0;
+						return ap - bp;
+					});
+					cards.push(...group);
+				} else {
+					cards.push(cur);
+					i++;
+				}
+			}
+			ui.thrown = cards;
+
 			const bounds = decadeUI.boundsCaches.arena;
 			bounds.check();
 			const { width: pw, height: ph, cardWidth: cw, cardHeight: ch } = bounds;
@@ -150,25 +190,50 @@ export function createLayoutModule() {
 
 			// 弃牌区最大宽度限制为屏幕宽度的70%
 			const maxWidth = pw * DISCARD_MAX_WIDTH_RATIO;
-			const totalW = cards.length * csw + (cards.length - 1) * 2;
-			// 实际可用宽度取最大宽度限制和屏幕宽度的较小值
-			const limitW = Math.min(maxWidth, pw);
+			const foldGap = Math.max(22, Math.round(csw * 0.16)); // 转化多牌折叠露边
 
-			let xMargin = csw + 2;
-			// 起始位置：居中显示
-			let xStart = (pw - Math.min(totalW, limitW)) / 2 + (csw - cw) / 2;
-
-			// 超出限制宽度时，压缩卡牌间距实现折叠效果
-			if (totalW > limitW) {
-				xMargin = (limitW - csw) / (cards.length - 1);
+			// 连续 viewas-fold 组按折叠间距计宽，其余牌正常间距
+			const gaps = [];
+			for (let i = 0; i < cards.length - 1; i++) {
+				const a = cards[i];
+				const b = cards[i + 1];
+				const sameFold =
+					a.dataset.viewasFold === "1" &&
+					b.dataset.viewasFold === "1" &&
+					a._viewAsGroupId &&
+					a._viewAsGroupId === b._viewAsGroupId;
+				gaps.push(sameFold ? foldGap : csw + 2);
 			}
 
+			let totalW = csw;
+			for (const g of gaps) totalW += g;
+			const limitW = Math.min(maxWidth, pw);
+
+			let scaleGaps = gaps.slice();
+			if (totalW > limitW && gaps.length) {
+				const overflow = totalW - limitW;
+				const shrinkable = gaps.reduce((s, g) => (g > foldGap ? s + (g - foldGap) : s), 0);
+				if (shrinkable > 0) {
+					const ratio = Math.min(1, overflow / shrinkable);
+					scaleGaps = gaps.map(g => (g > foldGap ? g - (g - foldGap) * ratio : g));
+					totalW = csw + scaleGaps.reduce((s, g) => s + g, 0);
+				}
+			}
+
+			let xStart = (pw - Math.min(totalW, limitW)) / 2 + (csw - cw) / 2;
+			let x = Math.round(xStart);
 			cards.forEach((card, i) => {
-				const x = Math.round(xStart + i * xMargin);
 				card.tx = x;
 				card.ty = y;
 				card.scaled = true;
+				// 清掉手牌选中残留的 inline z-index
+				if (card.dataset.viewasFold === "1") {
+					card.style.zIndex = card.dataset.viewasPrimary === "1" ? "15" : "10";
+				} else {
+					card.style.zIndex = "";
+				}
 				card.style.transform = `translate(${x}px,${y}px) scale(${cs})`;
+				if (i < scaleGaps.length) x += Math.round(scaleGaps[i]);
 			});
 		},
 

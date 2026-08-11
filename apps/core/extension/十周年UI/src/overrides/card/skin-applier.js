@@ -3,7 +3,7 @@
  * @description 将皮肤应用到卡牌DOM元素
  * @module overrides/card/skin-applier
  */
-import { lib, get } from "noname";
+import { lib, get, game } from "noname";
 import { cardSkinMeta } from "../../config/utils.js";
 import {
 	getCardResources,
@@ -18,13 +18,24 @@ import {
 	loadSkinImage,
 	loadFallbackSkin,
 } from "./skin-loader.js";
+import { applyLayeredCard, clearLayeredCard } from "./layered-card.js";
+
+/** 已移除的皮肤键 → 迁移目标 */
+const REMOVED_SKIN_MAP = {
+	decade: "online",
+	bingkele: "online",
+};
 
 /**
  * 获取当前皮肤配置
  * @returns {{skinKey: string|null, isOff: boolean}} 皮肤配置
  */
 function getSkinConfig() {
-	const skinKey = lib.config.extension_十周年UI_cardPrettify;
+	let skinKey = lib.config.extension_十周年UI_cardPrettify;
+	if (REMOVED_SKIN_MAP[skinKey]) {
+		skinKey = REMOVED_SKIN_MAP[skinKey];
+		game.saveConfig("extension_十周年UI_cardPrettify", skinKey);
+	}
 	const isOff = !skinKey || skinKey === "off";
 	return { skinKey, isOff };
 }
@@ -36,6 +47,9 @@ function getSkinConfig() {
 function clearSkinStyle(cardElement) {
 	cardElement.classList.remove("decade-card");
 	cardElement.style.removeProperty("background");
+	if (cardElement.classList.contains("layered-card")) {
+		clearLayeredCard(cardElement);
+	}
 }
 
 /**
@@ -172,9 +186,6 @@ export function applyCardSkin(cardElement, card) {
 
 	const { skinKey, isOff } = getSkinConfig();
 
-	// 清除旧皮肤样式
-	cardElement.classList.remove("decade-card");
-
 	if (isOff) {
 		clearSkinStyle(cardElement);
 		return;
@@ -182,6 +193,19 @@ export function applyCardSkin(cardElement, card) {
 
 	const skin = cardSkinMeta[skinKey];
 	if (!skin) return;
+
+	// 手杀分层拼卡：与整图美化互斥
+	if (skin.mode === "layered") {
+		cardElement.classList.remove("decade-card");
+		cardElement.style.removeProperty("background");
+		applyLayeredCard(cardElement, skin.base || "1");
+		return;
+	}
+
+	// 离开分层模式时清掉零件层
+	if (cardElement.classList.contains("layered-card")) {
+		clearLayeredCard(cardElement);
+	}
 
 	// 保存原始背景
 	saveOriginalBackground(cardElement);

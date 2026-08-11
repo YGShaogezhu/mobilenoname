@@ -97,6 +97,8 @@ export function initDecadeModule() {
 		this.css(`${decadeUIPath}src/styles/player${styleIndex !== -1 ? styleIndex + 1 : 2}.css`);
 		this.css(`${decadeUIPath}src/styles/equip.css`);
 		this.css(`${decadeUIPath}src/styles/layout.css`);
+		// 分层拼卡需覆盖 layout 中对 .top-name / .image 的规则
+		this.css(`${decadeUIPath}src/styles/layered-card.css`);
 		document.body.setAttribute("data-style", style);
 
 		if (getConfigValue("meanPrettify", false)) {

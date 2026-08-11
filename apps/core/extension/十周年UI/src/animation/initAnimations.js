@@ -7,6 +7,7 @@
 import { lib, game, ui, get, ai, _status } from "noname";
 import { skillDefines, cardDefines, chupaiAnimations, initCardEffects } from "./configs/skillAnimations.js";
 import { cardTriggers } from "./configs/cardTriggers.js";
+import { initHeijinkaSelectObserver } from "../overrides/card/heijinka-select.js";
 
 /**
  * 初始化技能动画定义和绑定
@@ -113,4 +114,7 @@ export function initSkillAnimations(animation) {
 
 	// 手杀样式卡牌使用/结算特效
 	initCardEffects();
+
+	// 手杀黑金卡选中特效（SS_heijinka）
+	initHeijinkaSelectObserver();
 }

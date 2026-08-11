@@ -280,9 +280,6 @@ export const animateSkill = {
 				if (isMobile) {
 					decadeUI.animation.playSpine({ name: "ss_miaoshouhuichun", scale: 0.7, speed: 0.8 });
 					game.playAudio("../extension", decadeUI.extensionName, "audio/ss_miaoshouhuichun.mp3");
-				} else {
-					decadeUI.animation.playSpine({ name: "shenyimiaoshou", scale: 0.68, y: [0, 0.52], speed: 0.8 });
-					game.playAudio("../extension", decadeUI.extensionName, "audio/ss_shenyimiaoshou.mp3");
 				}
 			});
 		},
@@ -310,9 +307,6 @@ export const animateSkill = {
 				if (isMobile) {
 					decadeUI.animation.playSpine({ name: "ss_yishugaochao", scale: 0.7, speed: 0.8 });
 					game.playAudio("../extension", decadeUI.extensionName, "audio/ss_yishugaochao.mp3");
-				} else {
-					decadeUI.animation.playSpine({ name: "qingnangjishi", scale: 0.68, y: [0, 0.52], speed: 0.8 });
-					game.playAudio("../extension", decadeUI.extensionName, "audio/ss_qingnangjishi.mp3");
 				}
 			});
 		},

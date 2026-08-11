@@ -5,6 +5,8 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
+import { applyCardSkin } from "../card/skin-applier.js";
+import { isLayeredMode } from "../card/layered-card.js";
 
 /** @type {Function|null} 基础摸牌方法引用 */
 let basePlayerDraw = null;
@@ -452,6 +454,7 @@ export function playerThrow(cards, time, record, nosource) {
 				const card = ui.create.card().init([evt.card.suit, evt.card.number, evt.card.name, evt.card.nature]);
 				if (evt.card.suit == "none") card.node.suitnum.style.display = "none";
 				card.dataset.virtual = 1;
+				if (isLayeredMode()) applyCardSkin(card, card);
 				cards = [card];
 			}
 		}
@@ -467,7 +470,31 @@ export function playerThrow(cards, time, record, nosource) {
 	for (let i = 0; i < cards.length; i++) {
 		card = cards[i];
 		if (card) {
-			clone = card.copy("thrown");
+			const isVirtual = card.dataset?.virtual === "1" || card.classList?.contains("temp-virtual-card");
+			// copy() 不保留 $virtual 等引用，虚拟牌重建 thrown 再拼装
+			if (isVirtual) {
+				clone = ui.create.card().init([card.suit, card.number, card.name, card.nature]);
+				if (card.suit == "none") clone.node.suitnum.style.display = "none";
+				clone.dataset.virtual = "1";
+				clone.classList.add("thrown", "temp-virtual-card");
+				if (isLayeredMode()) {
+					applyCardSkin(clone, clone);
+				} else {
+					const ext = window.decadeUI?.extensionName || "十周年UI";
+					clone.style.backgroundImage = `url("${lib.assetURL}extension/${ext}/image/ui/cardtexture/card1.png")`;
+					clone.style.backgroundSize = "100% 100%";
+					clone.classList.remove("decade-card");
+					if (clone.$virtual && !clone.$virtual.firstChild) {
+						const img = document.createElement("img");
+						img.draggable = false;
+						img.src = `${lib.assetURL}extension/${ext}/image/ui/card-base/xuni.png`;
+						clone.$virtual.appendChild(img);
+					}
+				}
+				card.clone = clone;
+			} else {
+				clone = card.copy("thrown");
+			}
 			if (duiMod && (card.throwWith == "h" || card.throwWith == "s")) {
 				clone.tx = Math.round(hand.x + card.tx);
 				clone.ty = Math.round(hand.y + 30 + card.ty);

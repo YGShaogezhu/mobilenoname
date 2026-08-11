@@ -4,8 +4,10 @@
  * @module overrides/card/overrides
  */
 import { lib, game, ui, get, _status } from "noname";
+import { cardSkinMeta } from "../../config/utils.js";
 import { applyCardSkin, handleSkinFallback } from "./skin-applier.js";
 import { getSkinCache, isSkinPreloaded, getFallbackKey, getFallbackSkinUrl, generateSkinFilename } from "./skin-loader.js";
+import { isLayeredMode, refreshGuozhanMarks } from "./layered-card.js";
 import { CARD_ANIMATION, LAYOUT } from "../../constants.js";
 
 /** @type {Function|null} 基础卡牌初始化方法 */
@@ -13,6 +15,9 @@ let baseCardInit = null;
 
 /** @type {Function|null} 基础卡牌复制方法 */
 let baseCardCopy = null;
+
+/** @type {Function|null} 基础 addGaintag */
+let baseAddGaintag = null;
 
 /**
  * 设置基础卡牌方法
@@ -22,6 +27,19 @@ let baseCardCopy = null;
 export function setBaseCardMethods(init, copy) {
 	baseCardInit = init;
 	baseCardCopy = copy;
+
+	// 临时合纵 gaintag 变化时同步分层标记
+	const proto = lib.element.Card?.prototype;
+	if (proto?.addGaintag && !baseAddGaintag) {
+		baseAddGaintag = proto.addGaintag;
+		proto.addGaintag = function (...args) {
+			const result = baseAddGaintag.apply(this, args);
+			if (this.classList?.contains("layered-card") || isLayeredMode()) {
+				refreshGuozhanMarks(this);
+			}
+			return result;
+		};
+	}
 }
 
 /**
@@ -43,6 +61,12 @@ export function cardCopy() {
 
 	const skinKey = lib.config.extension_十周年UI_cardPrettify;
 	if (!skinKey || skinKey === "off") return clone;
+
+	// 分层模式：复制后重跑拼装（不依赖 card-skins 预读）
+	if (cardSkinMeta[skinKey]?.mode === "layered") {
+		applyCardSkin(clone, clone);
+		return clone;
+	}
 
 	if (!isSkinPreloaded(skinKey)) return clone;
 

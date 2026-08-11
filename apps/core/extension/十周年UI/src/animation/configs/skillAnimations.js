@@ -67,10 +67,10 @@ export const skillDefines = {
 	yinfengjia_skill: { name: "effect_yinfengjia", scale: 0.5 },
 	zheji: { name: "Ss_ZB_ZheJi", scale: 0.5 },
 
-	// 延时锦囊
-	lebu: { name: "effect_lebusishu", scale: 0.7 },
-	bingliang: { name: "effect_bingliangcunduan", scale: 0.7 },
-	shandian: { name: "effect_shandian", scale: 0.7 },
+	// 延时锦囊（骨骼帧约 512px，移动端座位约 120×180，0.7 过大）
+	lebu: { name: "effect_lebusishu", scale: 0.35 },
+	bingliang: { name: "effect_bingliangcunduan", scale: 0.35 },
+	shandian: { name: "effect_shandian", scale: 0.35 },
 };
 
 /**

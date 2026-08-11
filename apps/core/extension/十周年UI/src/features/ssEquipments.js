@@ -598,7 +598,7 @@ function overrideAddVirtualEquip() {
 
 		game.broadcastAll(
 			function (card, cards, cardx, player, isViewAsCard, cardShownName, subtype, cardname, characterCard, SSEquip) {
-				const assPath = (window.decadeUIPath || "") + "image/ui/ass/";
+				const assPath = (window.decadeUIPath || `${lib.assetURL}extension/十周年UI/`) + "image/ui/ass/";
 				const textShadow = "-1.3px 0px 2.2px #000, 0px -1.3px 2.2px #000, 1.3px 0px 2.2px #000 ,0px 1.3px 2.2px #000";
 
 				if (subtype == "equip1" && !SSEquip[cardShownName]) {
@@ -898,9 +898,14 @@ function overrideSyncDisable() {
 				for (let i = 0; i < num; i++) {
 					const card = game.createCard("feichu_" + index, suits[index] || get.translation(index) + "栏", "");
 					card.fix();
+					card.classList.remove("decade-card", "layered-card");
+					card.style.removeProperty("background");
+					card.style.removeProperty("background-image");
+					card.removeAttribute("data-card-face");
 					card.style.transform = "";
 					card.classList.remove("drawinghidden");
 					card.classList.add("feichu");
+					card.classList.add("ss-equip-card");
 					delete card._transform;
 					const equipNum = get.equipNum(card);
 					let equipped = false;

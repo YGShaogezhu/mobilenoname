@@ -34,6 +34,7 @@ import { applyLibOverrides } from "../overrides/lib.js";
 import { getObjtype, applyGetOverrides } from "../overrides/get.js";
 import { gameLogv, applyGameOverrides } from "../overrides/game.js";
 import { applyMoveAnimFix } from "../overrides/moveAnimFix.js";
+import { applyTempCardOverrides } from "../overrides/temp-card.js";
 
 import { registerDecadeUIHooks, playerAwakenSkill, playerSetIdentity, playerGetState, playerMarkSkill, playerUnmarkSkill, playerReinitCharacter, playerSetSeatNum, playerUninit, playerReinit, playerUpdate, playerUseCard, playerRespond, playerLose, playerUseCardAnimateBefore, playerRespondAnimateBefore, playerChangeZhuanhuanji, playerSetModeState, playerHandleEquipChange, playerMark, playerMarkCharacter, playerUpdateMark, playerMarkSkillCharacter, playerPlayDynamic, playerStopDynamic, playerApplyDynamicSkin, playerSay, playerDieAfter, playerSkill, playerSyncExpand, playerSetSkillYinYang, player$SetSkillYinYang, playerSetSkillState, player$SetSkillState, playerTryCardAnimate, playerTryJudgeAnimate, playerPopup, playerDamagepop, playerCompare, playerCompareMultiple, playerCheckAndAddExperienceSuffix, playerQueueCssAnimation, playerDamage, playerUpdateShowCards, playerCheckBoundsCache, playerLine, playerPhaseJudge, playerGain2, playerDraw, playerGive, playerThrow, playerThrowordered2, playerAddVirtualJudge, playerDirectgain, playerDirectgains } from "../overrides/player.js";
 
@@ -255,6 +256,7 @@ export const createDecadeUIObject = () => ({
 
 		const restoreFns = [];
 		restoreFns.push(...applyGameOverrides());
+		restoreFns.push(...applyTempCardOverrides());
 		restoreFns.push(...applyLibOverrides());
 		restoreFns.push(...applyDialogOverrides());
 		restoreFns.push(...applyGetOverrides());

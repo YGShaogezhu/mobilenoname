@@ -10,5 +10,20 @@ export { applyCardSkin, handleSkinFallback, refreshCardSkin } from "./skin-appli
 // 皮肤加载器（按需导出）
 export { getCardResources, getSkinCache, isSkinPreloaded, getFallbackKey, buildSkinUrl, generateSkinFilename } from "./skin-loader.js";
 
+// 手杀分层拼卡
+export {
+	applyLayeredCard,
+	clearLayeredCard,
+	isLayeredMode,
+	getLayeredBase,
+	isEquipConvertSkill,
+	refreshLayeredMarks,
+	refreshGuozhanMarks,
+	updateLayeredMarks,
+	clearLayeredMarks,
+	applyLayeredTempSuitNum,
+	clearLayeredTempSuitNum,
+} from "./layered-card.js";
+
 // 卡牌覆写方法
 export { cardInit, cardCopy, cardUpdateTransform, cardMoveTo, cardMoveDelete, setBaseCardMethods, applyCardOverrides } from "./overrides.js";

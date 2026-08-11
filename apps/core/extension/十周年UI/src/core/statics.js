@@ -134,24 +134,24 @@ export function createStaticsModule() {
 	 * 注册外部扩展的卡牌皮肤
 	 * @param {Object} options - 注册选项
 	 * @param {string} options.extensionName - 扩展名称
-	 * @param {string} [options.skinKey="decade"] - 皮肤类型键名（decade/caise/online/gold/bingkele）
+	 * @param {string} [options.skinKey="online"] - 皮肤类型键名（online/caise/gold）
 	 * @param {string} [options.folder] - 皮肤文件夹名，默认与skinKey相同
 	 * @param {string} [options.extension="png"] - 图片扩展名
 	 * @param {string[]} [options.cardNames] - 卡牌名称列表，不提供则自动扫描目录
 	 * @example
 	 * registerDecadeCardSkin({
 	 *   extensionName: '我的扩展',
-	 *   skinKey: 'decade',
+	 *   skinKey: 'online',
 	 *   cardNames: ['mycard1', 'mycard2']
 	 * });
 	 * @example
 	 * registerDecadeCardSkin({
 	 *   extensionName: '我的扩展',
-	 *   skinKey: 'decade'
+	 *   skinKey: 'online'
 	 * });
 	 */
 	const registerCardSkin = options => {
-		const { extensionName, skinKey = "decade", folder, extension = "png", cardNames } = options || {};
+		const { extensionName, skinKey = "online", folder, extension = "png", cardNames } = options || {};
 
 		if (!extensionName) {
 			console.warn("[十周年UI] registerCardSkin: 缺少 extensionName");
@@ -241,7 +241,7 @@ export function createStaticsModule() {
 	const loadBuiltinSkins = async () => {
 		await discoverDynamicSkins();
 
-		const allPresets = getAllCardSkinPresets();
+		const allPresets = getAllCardSkinPresets().filter(skin => skin.mode !== "layered");
 		const tasks = allPresets.map(async skin => {
 			const folder = skin.dir || skin.key;
 			const dir = `extension/${decadeUIName}/image/card-skins/${folder}`;

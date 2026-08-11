@@ -6,6 +6,8 @@
 
 import { lib, game, ui, get, _status } from "noname";
 import { getBaseUiClickIntro } from "./base.js";
+import { setViewAsLabel, clearViewAsLabel, clearCardTempSuitNum } from "../../ui/card-utils.js";
+import { clearLayeredMarks } from "../card/layered-card.js";
 
 /**
  * 卡牌点击处理
@@ -54,23 +56,20 @@ export function uiClickCard(e) {
 			this.classList.remove("selected");
 			this.updateTransform();
 
-			// 清理临时名称
-			if (this.dataset.view == 1) {
-				this.dataset.view = 0;
-				if (this._tempName) {
-					this._tempName.delete();
-					delete this._tempName;
-					this.dataset.low = 0;
-				}
+			// 清理转化正中标签 / 临时名称 / 误加的转标
+			clearViewAsLabel(this);
+			clearLayeredMarks(this);
+			if (this._tempName) {
+				this._tempName.delete();
+				delete this._tempName;
 			}
+			this.dataset.view = 0;
+			this.dataset.low = 0;
 
 			// 清理临时花色点数
-			if (this.dataset.views == 1) {
+			if (this.dataset.views == 1 || this._layeredTempSN || this._tempSuitNum) {
 				this.dataset.views = 0;
-				if (this._tempSuitNum) {
-					this._tempSuitNum.delete();
-					delete this._tempSuitNum;
-				}
+				clearCardTempSuitNum(this);
 			}
 
 			if (decadeUI && decadeUI.layout) decadeUI.layout.invalidateHand();
@@ -159,35 +158,15 @@ function handleViewAsCard(card, skill) {
 	if (vsuit == "none") vsuit = rsuit;
 	if (!vnum) vnum = rnum;
 
-	// 显示临时名称
+	// 显示正中转化标签（图1），不替换牌面、不加转标、不隐藏花色点数
 	if (rname != vname || !get.is.sameNature(rnature, vnature, true)) {
-		if (card._tempName) {
-			card._tempName.delete();
-			delete card._tempName;
-		}
-		if (!card._tempName) card._tempName = ui.create.div(".temp-name", card);
-
-		let tempname = "",
-			tempname2 = get.translation(vname);
-		if (vnature) {
-			card._tempName.dataset.nature = vnature;
-			if (vname == "sha") {
-				tempname2 = get.translation(vnature) + tempname2;
-			}
-		}
-		tempname += tempname2;
-		card._tempName.innerHTML = tempname;
-		card._tempName.tempname = tempname;
-		card.dataset.low = 1;
-		card.dataset.view = 1;
+		setViewAsLabel(card, vname, vnature);
+		clearLayeredMarks(card);
 	}
 
 	// 显示临时花色点数
 	if (rsuit != vsuit || rnum != vnum) {
-		if (card._tempSuitNum) {
-			card._tempSuitNum.delete();
-			delete card._tempSuitNum;
-		}
+		clearCardTempSuitNum(card);
 		decadeUI.cardTempSuitNum(card, vsuit, vnum);
 		card.dataset.views = 1;
 	}

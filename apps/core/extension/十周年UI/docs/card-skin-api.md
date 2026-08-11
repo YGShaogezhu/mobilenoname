@@ -11,19 +11,19 @@
 ```javascript
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["mycard1", "mycard2"],
 });
 ```
 
-此写法将注册扩展 `我的扩展` 中的卡牌 `mycard1` 和 `mycard2` 的十周年风格皮肤。
+此写法将注册扩展 `我的扩展` 中的卡牌 `mycard1` 和 `mycard2` 的 OL 风格皮肤。
 
 ### 2. 参数说明
 
 | 参数          | 类型     | 必填 | 默认值   | 说明                           |
 | ------------- | -------- | ---- | -------- | ------------------------------ |
 | extensionName | string   | ✓    | -        | 扩展名称，用于定位图片路径     |
-| skinKey       | string   | ✗    | 'decade' | 皮肤类型，决定使用哪套皮肤风格 |
+| skinKey       | string   | ✗    | 'online' | 皮肤类型，决定使用哪套皮肤风格 |
 | cardNames     | string[] | ✗    | -        | 卡牌名称列表，推荐指定         |
 | extension     | string   | ✗    | 'png'    | 图片文件扩展名                 |
 
@@ -31,13 +31,11 @@ registerDecadeCardSkin({
 
 十周年UI内置以下皮肤类型：
 
-| skinKey  | 说明         | 对应设置选项   |
-| -------- | ------------ | -------------- |
-| decade   | 十周年风格   | 十周年卡牌样式 |
-| caise    | 彩色风格     | 彩色卡牌样式   |
-| online   | OL风格       | OL卡牌样式     |
-| gold     | 手杀金卡风格 | 手杀金卡样式   |
-| bingkele | 哈基米风格   | 哈基米卡牌样式 |
+| skinKey | 说明         | 对应设置选项   |
+| ------- | ------------ | -------------- |
+| online  | OL风格       | OL卡牌样式     |
+| caise   | 彩色风格     | 彩色卡牌样式   |
+| gold    | 手杀金卡风格 | 手杀金卡样式   |
 
 用户在十周年UI设置中选择对应的卡牌样式后，会自动使用该类型的皮肤。
 
@@ -54,15 +52,15 @@ extension/{extensionName}/image/card-skins/{skinKey}/{cardName}.{extension}
 ```javascript
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["sha", "shan"],
 });
 ```
 
 对应图片路径：
 
-- `extension/我的扩展/image/card-skins/decade/sha.png`
-- `extension/我的扩展/image/card-skins/decade/shan.png`
+- `extension/我的扩展/image/card-skins/online/sha.jpg`
+- `extension/我的扩展/image/card-skins/online/shan.jpg`
 
 ## 二、注册方式
 
@@ -73,7 +71,7 @@ registerDecadeCardSkin({
 ```javascript
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["mycard1", "mycard2", "mycard3"],
 });
 ```
@@ -85,7 +83,7 @@ registerDecadeCardSkin({
 ```javascript
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 });
 ```
 
@@ -101,7 +99,7 @@ registerDecadeCardSkin({
 // extension.js (precontent)
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["mycard1"],
 });
 ```
@@ -114,14 +112,14 @@ registerDecadeCardSkin({
 // extension.js (content)
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["mycard1"],
 });
 ```
 
 ## 四、完整示例
 
-### 示例1：为自定义卡牌添加十周年皮肤
+### 示例1：为自定义卡牌添加 OL 皮肤
 
 扩展目录结构：
 
@@ -130,9 +128,9 @@ registerDecadeCardSkin({
 ├── extension.js
 └── image/
     └── card-skins/
-        └── decade/
-            ├── mysha.png
-            └── myshan.png
+        └── online/
+            ├── mysha.jpg
+            └── myshan.jpg
 ```
 
 extension.js：
@@ -141,7 +139,7 @@ extension.js：
 // precontent 或 content 中均可
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "online",
 	cardNames: ["mysha", "myshan"],
 });
 ```
@@ -149,13 +147,6 @@ registerDecadeCardSkin({
 ### 示例2：同时注册多种皮肤风格
 
 ```javascript
-// 十周年风格
-registerDecadeCardSkin({
-	extensionName: "我的扩展",
-	skinKey: "decade",
-	cardNames: ["mycard"],
-});
-
 // OL风格
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
@@ -169,6 +160,13 @@ registerDecadeCardSkin({
 	skinKey: "caise",
 	cardNames: ["mycard"],
 });
+
+// 手杀金卡风格
+registerDecadeCardSkin({
+	extensionName: "我的扩展",
+	skinKey: "gold",
+	cardNames: ["mycard"],
+});
 ```
 
 对应目录结构：
@@ -177,12 +175,12 @@ registerDecadeCardSkin({
 我的扩展/
 └── image/
     └── card-skins/
-        ├── decade/
-        │   └── mycard.png
         ├── online/
-        │   └── mycard.png
-        └── caise/
-            └── mycard.png
+        │   └── mycard.jpg
+        ├── caise/
+        │   └── mycard.webp
+        └── gold/
+            └── mycard.webp
 ```
 
 ### 示例3：使用JPG格式图片
@@ -190,7 +188,7 @@ registerDecadeCardSkin({
 ```javascript
 registerDecadeCardSkin({
 	extensionName: "我的扩展",
-	skinKey: "decade",
+	skinKey: "caise",
 	cardNames: ["mycard"],
 	extension: "jpg",
 });

@@ -12,6 +12,7 @@ export * from "./ui.js";
 export * from "./lib.js";
 export * from "./content.js";
 export * from "./moveAnimFix.js";
+export { applyTempCardOverrides } from "./temp-card.js";
 
 export { setBaseCardMethods } from "./card.js";
 export { setBaseContentMethods } from "./content.js";

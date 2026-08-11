@@ -6,6 +6,8 @@
 
 import { lib, game, ui, get, ai, _status } from "noname";
 import { getBasePlayerMethods, playShowCardAudio } from "./base.js";
+import { applyCardSkin } from "../card/skin-applier.js";
+import { isLayeredMode } from "../card/layered-card.js";
 
 /**
  * 使用卡牌覆写
@@ -72,7 +74,7 @@ export function playerLose() {
 
 /**
  * 使用卡牌动画前覆写
- * @description 处理lose_map以控制是否显示弃牌动画
+ * @description 有实体牌时交由 lose 抛出；纯虚拟牌在此补出牌区展示
  * @param {Object} event - 事件对象
  * @returns {void}
  * @this {Object} 玩家对象
@@ -80,15 +82,12 @@ export function playerLose() {
 export function playerUseCardAnimateBefore(event) {
 	const base = getBasePlayerMethods();
 	base.useCardAnimateBefore?.apply(this, arguments);
-
-	if (hasActualLostCards(event)) {
-		event.throw = false;
-	}
+	handleUseRespondThrow(this, event);
 }
 
 /**
  * 响应动画前覆写
- * @description 处理lose_map以控制是否显示弃牌动画
+ * @description 有实体牌时交由 lose 抛出；纯虚拟牌在此补出牌区展示
  * @param {Object} event - 事件对象
  * @returns {void}
  * @this {Object} 玩家对象
@@ -96,10 +95,83 @@ export function playerUseCardAnimateBefore(event) {
 export function playerRespondAnimateBefore(event) {
 	const base = getBasePlayerMethods();
 	base.respondAnimateBefore?.apply(this, arguments);
+	handleUseRespondThrow(this, event);
+}
+
+/**
+ * useCard/respond 抛牌策略
+ * @param {Object} player
+ * @param {Object} event
+ */
+function handleUseRespondThrow(player, event) {
+	if (!event || event.animate === false) return;
 
 	if (hasActualLostCards(event)) {
 		event.throw = false;
+		return;
 	}
+
+	// 无实体牌（如文鸯椎锋）：本体仅在 card_animation_info 开启时抛虚拟牌，这里始终补上
+	if (needsVirtualThrow(event)) {
+		event.throw = false;
+		throwVirtualUseCard(player, event);
+	}
+}
+
+/**
+ * 是否需要在临时出牌区展示虚拟牌
+ * @param {Object} event
+ * @returns {boolean}
+ */
+function needsVirtualThrow(event) {
+	if (!event?.card) return false;
+	if (event.throw === false) return false;
+	const cards = event.cards;
+	return !cards || cards.length === 0;
+}
+
+/**
+ * 创建并抛出虚拟牌到临时出牌区
+ * @param {Object} player
+ * @param {Object} event
+ */
+function throwVirtualUseCard(player, event) {
+	const card = event.card;
+	const suit = get.suit(card) || "none";
+	const number = typeof card.number === "number" ? card.number : "虚拟";
+	const thrown = ui.create.card().init([suit, number, card.name, card.nature]);
+
+	if (suit === "none") {
+		thrown.node.suitnum.style.display = "none";
+	}
+
+	thrown.dataset.virtual = "1";
+	thrown.classList.add("temp-virtual-card");
+
+	if (isLayeredMode()) {
+		applyCardSkin(thrown, thrown);
+	} else {
+		const ext = window.decadeUI?.extensionName || "十周年UI";
+		thrown.style.backgroundImage = `url("${lib.assetURL}extension/${ext}/image/ui/cardtexture/card1.png")`;
+		thrown.style.backgroundSize = "100% 100%";
+		thrown.classList.remove("decade-card");
+		fillVirtualMark(thrown);
+	}
+
+	player.$throw(thrown);
+}
+
+/**
+ * 非分层模式下补虚拟标记
+ * @param {HTMLElement} card
+ */
+function fillVirtualMark(card) {
+	if (!card?.$virtual || card.$virtual.firstChild) return;
+	const ext = window.decadeUI?.extensionName || "十周年UI";
+	const img = document.createElement("img");
+	img.draggable = false;
+	img.src = `${lib.assetURL}extension/${ext}/image/ui/card-base/xuni.png`;
+	card.$virtual.appendChild(img);
 }
 
 /**

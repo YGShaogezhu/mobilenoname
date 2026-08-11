@@ -1,0 +1,512 @@
+/**
+ * 手杀分层拼卡
+ *
+ * 底框设计稿（卡槽 108×150，百分比按设计稿映射）：
+ *   白卡 card1 = 127×173，边框极薄，内区几乎铺满
+ *   金卡 card2 = 137×183，金边约 L/R/T≈5px（映射后），底边更薄
+ *   黑金 card3 = 137×182，黑金边约四周 5.5–6px
+ *
+ * face=1 / 2 / 3 各自维护完整布局变量；虚拟牌走白卡底，转化牌保留当前底框仅叠标记
+ */
+
+.card.layered-card {
+	container-type: size;
+	color: rgb(77, 60, 51);
+	text-shadow: none;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	position: relative;
+	/* 未选中时裁零件；选中时放出 card_select 外扩边框 */
+	overflow: hidden;
+}
+
+.card.layered-card.selected {
+	overflow: visible;
+}
+
+/* thrown（含虚拟牌）必须绝对定位，避免 relative 占流后再叠 translate 把间距拉大 */
+#arena > .card.layered-card.thrown,
+.card.layered-card.thrown {
+	position: absolute;
+}
+
+/* ---------- 白卡：薄边，内区大 ---------- */
+.card.layered-card[data-card-face="1"] {
+	--lc-w: 127;
+	--lc-h: 173;
+	--suit-t: 7;
+	--suit-l: 4;
+	--suit-w: 21;
+	--name-t: 18;
+	--name-l: 28;
+	--name-w: 94;
+	--name-h: 28;
+    --type-t: 48;
+    --type-h: 18;
+	--art-t: 58;
+	--art-mx: 3px;
+	--art-mb: 1px;
+	--dist-r: 6;
+	--dist-b: 4;
+	background-image: url("../../image/ui/cardtexture/card1.png");
+}
+
+/* ---------- 金卡：金边占位，零件相对内区内缩 ---------- */
+.card.layered-card[data-card-face="2"] {
+    --lc-w: 136;
+    --lc-h: 182;
+    --suit-t: 8;
+    --suit-l: 8;
+    --suit-w: 23;
+    --name-t: 19;
+    --name-l: 31;
+    --name-w: 98;
+	--name-h: 30;
+    --type-t: 50;
+    --type-h: 24;
+    --art-t: 66;
+    --art-mx: 9px;
+    --art-mb: 1.5px;
+    --dist-r: 10;
+    --dist-b: 4;
+	background-image: url("../../image/ui/cardtexture/card2.png");
+}
+
+/* ---------- 黑金：四周边框更匀，底边也需内缩 ---------- */
+.card.layered-card[data-card-face="3"] {
+    --lc-w: 136;
+    --lc-h: 182;
+    --suit-t: 8;
+    --suit-l: 8;
+    --suit-w: 23;
+    --name-t: 19;
+	--name-l: 31;
+    --name-w: 98;
+	--name-h: 30;
+    --type-t: 50;
+    --type-h: 24;
+    --art-t: 66;
+    --art-mx: 9px;
+    --art-mb: 1.5px;
+    --dist-r: 10;
+    --dist-b: 4;
+	background-image: url("../../image/ui/cardtexture/card3.png");
+}
+
+/* 无 face 时回退白卡刻度，避免变量为空 */
+.card.layered-card:not([data-card-face]) {
+	--lc-w: 127;
+	--lc-h: 173;
+	--suit-t: 7;
+	--suit-l: 4;
+	--suit-w: 21;
+	--name-t: 18;
+	--name-l: 28;
+	--name-w: 94;
+	--name-h: 28;
+	--type-t: 45;
+	--type-h: 16;
+	--art-t: 58;
+	--art-mx: 4px;
+	--art-mb: 2px;
+	--dist-r: 6;
+	--dist-b: 4;
+}
+
+.card.layered-card:empty,
+.card.layered-card.infohidden {
+	background-image: url("../../image/ui/cardtexture/card1.png");
+	background-size: 100% 100% !important;
+	box-shadow: none;
+}
+
+.card.layered-card img {
+	-webkit-user-drag: none;
+	pointer-events: none;
+}
+
+/* 隐藏原生文字层 */
+.card.layered-card > .name,
+.card.layered-card > .name2,
+.card.layered-card > .info,
+.card.layered-card > .intro,
+.card.layered-card > .range,
+.card.layered-card > .gaintag,
+.card.layered-card > .background,
+.card.layered-card > .judge-mark,
+.card.layered-card > .temp-name {
+	display: none !important;
+}
+
+/* 判定区：恢复判定图标，并隐藏分层零件（与整图皮肤判定区表现一致） */
+.player > .judges > .card.layered-card > .judge-mark {
+	display: block !important;
+}
+
+.player > .judges > .card.layered-card > *:not(.judge-mark) {
+	display: none !important;
+}
+
+.card.layered-card > .card-mask {
+	display: block !important;
+}
+
+/* 分层模式仍显示正中转化标签 */
+.card.layered-card > .viewas-label {
+	display: block;
+}
+
+/* 分层模式仍显示手牌标记（gaintag） */
+.card.layered-card > .gaintag.info:not(:empty) {
+	display: block !important;
+}
+
+/* 花色点数 */
+.card.layered-card > .suit-num {
+	position: absolute;
+	top: calc(100% * var(--suit-t) / var(--lc-h));
+	left: calc(100% * var(--suit-l) / var(--lc-w));
+	width: calc(100% * var(--suit-w) / var(--lc-w));
+	text-align: center;
+	z-index: 5;
+	line-height: 1;
+	font-size: 0;
+	color: inherit;
+	text-shadow: none;
+}
+
+.card.layered-card > .suit-num > .num,
+.card.layered-card > .suit-num > span:first-child {
+	display: block;
+	width: 100%;
+	aspect-ratio: 18 / 22;
+	margin: 0 auto;
+}
+
+.card.layered-card > .suit-num > .suit {
+	display: block;
+	width: 110%;
+	aspect-ratio: 24 / 20;
+	margin: 0 auto;
+	margin-top: 4%;
+}
+
+.card.layered-card[data-card-type="basic"] > .suit-num > .num,
+.card.layered-card[data-card-type="basic"] > .suit-num > span:first-child {
+	width: 100%;
+	aspect-ratio: 18 / 22;
+}
+
+.card.layered-card > .suit-num img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+.card.layered-card[data-virtual="1"] > .suit-num,
+.card.layered-card.temp-virtual-card > .suit-num,
+.card.layered-card[data-zhangba="1"] > .suit-num,
+.card.layered-card[data-qice="1"] > .suit-num,
+.card.layered-card[data-viewas-multi="1"] > .suit-num {
+	display: none;
+}
+
+/* 手牌区临时牌 / 虚拟预览：不与 tempsuitnum 叠花色冲突 */
+.card.layered-card.temp-card > .tempsuitnum,
+.card.layered-card.temp-virtual-card > .tempsuitnum,
+.card.layered-card.vituralCard > .tempsuitnum,
+/* 分层美化：临时花色直接换图，隐藏 viewsuitnum 叠层 */
+.card.layered-card > .tempsuitnum {
+	display: none;
+}
+
+/* 牌名条 */
+.card.layered-card > .top-name,
+.card.layered-card:not(.fullskin) > .top-name {
+	position: absolute;
+	top: calc(100% * var(--name-t) / var(--lc-h));
+	left: calc(100% * var(--name-l) / var(--lc-w));
+	right: auto;
+	bottom: auto;
+	width: calc(100% * var(--name-w) / var(--lc-w));
+	height: calc(100% * var(--name-h) / var(--lc-h));
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0;
+	font-family: inherit;
+	font-weight: normal;
+	color: inherit;
+	text-shadow: none;
+	text-align: center;
+	line-height: normal;
+}
+
+.card.layered-card > .top-name > .name-bg {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.card.layered-card > .top-name > .name-bg > .bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	object-fit: fill;
+}
+
+.card.layered-card > .top-name > .name-bg > .name-text {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+/* 基本牌大字名：杀闪桃酒 72×64；火/雷/刺杀 120×82 */
+.card.layered-card > .top-name.base {
+	top: calc(100% * 6 / var(--lc-h));
+	left: 5px;
+	right: 0;
+	width: 100%;
+	height: calc(100% * 60 / var(--lc-h));
+}
+
+.card.layered-card > .top-name.base > .name-bg {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.card.layered-card > .top-name.base > .name-bg > .bg {
+	display: none;
+}
+
+.card.layered-card > .top-name.base > .name-bg > .name-text {
+	width: auto;
+	height: auto;
+	max-width: 78%;
+	max-height: 100%;
+	margin: 0 auto;
+	object-fit: contain;
+	object-position: center center;
+}
+
+.card.layered-card > .top-name.base.wide-name > .name-bg > .name-text {
+	max-width: 96%;
+	max-height: 120%;
+}
+
+.card.layered-card > .top-name.base[data-name-id="huosha"] > .name-bg > .name-text {
+	transform: translateX(-12%);
+}
+
+.card.layered-card > .top-name.base[data-name-id="leisha"] > .name-bg > .name-text {
+	transform: translateX(-9%);
+}
+
+.card.layered-card > .top-name.base[data-name-id="cisha"] > .name-bg > .name-text {
+	transform: translateX(-5%);
+}
+
+.card.layered-card > .top-name > .name-bg > span.name-text {
+	font-size: calc(100cqw * 15 / var(--lc-w));
+	line-height: 1;
+	color: #351d01;
+	width: auto;
+	height: auto;
+}
+
+/* 类型 */
+.card.layered-card > .card-type {
+	position: absolute;
+	top: calc(100% * var(--type-t) / var(--lc-h));
+	left: 0;
+	right: 0;
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: calc(100% * var(--type-h) / var(--lc-h));
+}
+
+.card.layered-card > .card-type > img {
+	height: 100%;
+	width: auto;
+	max-width: 36%;
+	display: block;
+	object-fit: contain;
+}
+
+.card.layered-card[data-card-type="basic"] > .card-type {
+	display: none;
+}
+
+/* 插画：左右/底边用像素边距，顶边避开名条类型区 */
+.card.layered-card > .image,
+#arena:not(.chess) > .card.layered-card > .image,
+#arena:not(.chess) .handcards > .card.layered-card > .image,
+#arena.oblongcard:not(.chess) > .card.layered-card > .image,
+#arena.oblongcard:not(.chess) .handcards > .card.layered-card > .image {
+	position: absolute;
+	left: var(--art-mx);
+	right: var(--art-mx);
+	bottom: var(--art-mb);
+	top: calc(100% * var(--art-t) / var(--lc-h));
+	width: auto;
+	height: auto;
+	z-index: 3;
+	display: flex !important;
+	visibility: visible !important;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	background-size: 0 !important;
+	background-image: none !important;
+}
+
+.card.layered-card > .image > img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center bottom;
+	display: block;
+}
+
+/* 装备距离 / 马 */
+.card.layered-card > .distance {
+	position: absolute;
+	right: calc(100% * var(--dist-r) / var(--lc-w));
+	bottom: calc(100% * var(--dist-b) / var(--lc-h));
+	z-index: 6;
+	display: flex;
+	align-items: flex-end;
+}
+
+.card.layered-card[data-card-subtype="equip1"] > .distance {
+	top: calc(100% * 130 / var(--lc-h));
+	bottom: auto;
+	padding: calc(100% * 4 / var(--lc-h)) 0;
+}
+
+.card.layered-card[data-card-subtype="equip1"] > .distance > img:first-child {
+	position: absolute;
+	right: calc(100cqw * 32 / var(--lc-w));
+	left: -32px;
+	width: calc(100cqw * 44 / var(--lc-w));
+	height: calc(100cqh * 22 / var(--lc-h));
+}
+
+.card.layered-card[data-card-subtype="equip1"] > .distance > img:last-child {
+	width: calc(100cqw * 30 / var(--lc-w));
+	height: calc(100cqh * 36 / var(--lc-h));
+}
+
+.card.layered-card[data-card-subtype="equip3"] > .distance,
+.card.layered-card[data-card-subtype="equip4"] > .distance {
+	top: calc(100% * 128 / var(--lc-h));
+	bottom: auto;
+	right: auto;
+	left: calc(100% * 94 / var(--lc-w));
+	padding: 0;
+}
+
+.card.layered-card[data-card-subtype="equip3"] > .distance > img:first-child,
+.card.layered-card[data-card-subtype="equip4"] > .distance > img:first-child {
+	height: calc(100cqh * 20 / var(--lc-h));
+	width: auto;
+	position: absolute;
+	left: calc(-100cqw * 16 / var(--lc-w));
+	top: calc(100cqh * 1 / var(--lc-h));
+	z-index: -1;
+}
+
+.card.layered-card[data-card-subtype="equip3"] > .distance > img:last-child,
+.card.layered-card[data-card-subtype="equip4"] > .distance > img:last-child {
+	height: calc(100cqh * 26 / var(--lc-h));
+	margin-left: calc(-100cqw * 5 / var(--lc-w));
+}
+
+/* 虚拟 / 转化标记（不改底框背景，避免金/黑金刻度与白底错位） */
+.card.layered-card > .virtual-mark {
+	position: absolute;
+	top: calc(70% * var(--suit-t) / var(--lc-h));
+    left: calc(110% * var(--suit-l) / var(--lc-w));
+    width: calc(120% * var(--suit-w) / var(--lc-w));
+    height: calc(120% * 40 / var(--lc-h));
+	z-index: 10;
+}
+
+.card.layered-card > .zhuanhua-mark {
+	position: absolute;
+	top: calc(100% * 4 / var(--lc-h));
+	left: calc(100% * 95 / var(--lc-w));
+	right: auto;
+	width: calc(100% * 36 / var(--lc-w));
+	height: calc(100% * 36 / var(--lc-h));
+	aspect-ratio: auto;
+	z-index: 10;
+}
+
+.card.layered-card > .color {
+	position: absolute;
+	top: calc(100% * var(--suit-t) / var(--lc-h));
+	left: calc(100% * var(--suit-l) / var(--lc-w));
+	width: calc(100% * var(--suit-w) / var(--lc-w));
+	height: calc(100% * 40 / var(--lc-h));
+	z-index: 10;
+}
+
+.card.layered-card > .virtual-mark:empty,
+.card.layered-card > .zhuanhua-mark:empty,
+.card.layered-card > .color:empty,
+.card.layered-card > .guo-mark:empty,
+.card.layered-card > .hezong-mark:empty {
+	display: none;
+}
+
+.card.layered-card > .virtual-mark > img,
+.card.layered-card > .zhuanhua-mark > img,
+.card.layered-card > .color > img,
+.card.layered-card > .guo-mark > img,
+.card.layered-card > .hezong-mark > img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+/* 国无懈：左列、花色点数正下方（不与类型条同行） */
+.card.layered-card > .guo-mark {
+	position: absolute;
+	top: calc(
+		100% * var(--suit-t) / var(--lc-h) + 100cqw * var(--suit-w) / var(--lc-w) * (22 / 18 + 1.1 * 20 / 24) + 100% * 2 / var(--lc-h)
+	);
+	left: calc(150% * var(--suit-l) / var(--lc-w));
+	width: calc(150% * var(--suit-w) / var(--lc-w));
+	aspect-ratio: 1;
+	height: auto;
+	z-index: 8;
+	pointer-events: none;
+}
+
+/* 合纵：插画区左下角 */
+.card.layered-card > .hezong-mark {
+	position: absolute;
+	left: var(--art-mx);
+	bottom: calc(var(--art-mb) + 100% * 2 / var(--lc-h));
+	width: calc(100% * 30 / var(--lc-w));
+	height: calc(100% * 30 / var(--lc-h));
+	z-index: 8;
+	pointer-events: none;
+}

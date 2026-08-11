@@ -471,3 +471,8 @@ body[data-style="codename"] .equips-wrap > .equips-back > div {
 .equips-wrap > .equips > div.equip-card-selectable.selected::before {
 	opacity: 1;
 }
+
+/* 手杀样式(player2)：黑金装备选中改用 SS_heijinka */
+body[data-style="off"] .equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="3"].selected::before {
+	opacity: 0;
+}
