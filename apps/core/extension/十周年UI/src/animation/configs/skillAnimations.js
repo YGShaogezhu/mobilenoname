@@ -221,13 +221,16 @@ export function initCardEffects() {
 						// 1. 目标身上羊出现
 						anim.playSpine({ name: "shunshouqianyang", action: "yangchuxian", speed: 1.5 }, { scale: 0.65, parent: target });
 
-						var bodyHeight = decadeUI.get.bodySize().height;
+						var bodySize = decadeUI.get.bodySize();
+						var bodyHeight = bodySize.height;
 						var r1 = target.getBoundingClientRect();
-						var r2 = player.getBoundingClientRect();
+						// 自己使用时终点：水平取屏幕正中，竖直取手牌区上沿；他人仍落到武将中心
+						var handZone = player === game.me && (ui.handcards1Container || ui.handcards1 || ui.me);
+						var r2 = (handZone || player).getBoundingClientRect();
 						var x1 = r1.left + r1.width / 2;
 						var y1 = bodyHeight - (r1.top + r1.height / 2);
-						var x2 = r2.left + r2.width / 2;
-						var y2 = bodyHeight - (r2.top + r2.height / 2);
+						var x2 = handZone ? bodySize.width / 2 : r2.left + r2.width / 2;
+						var y2 = handZone ? bodyHeight - r2.top + 20 : bodyHeight - (r2.top + r2.height / 2);
 						var dx = x2 - x1;
 						var dy = y2 - y1;
 						var dist = Math.sqrt(dx * dx + dy * dy);
@@ -243,7 +246,7 @@ export function initCardEffects() {
 						if (dist > 1) {
 							var angle = (Math.atan2(dy, dx) * 180) / Math.PI - 90;
 							var lengthScale = Math.max(0.2, dist / 600);
-							var thicknessScale = 0.5;
+							var thicknessScale = 0.7;
 							rope = anim.playSpine(
 								{ name: "shunshouqianyang", action: "xian", speed: 1, loop: true },
 								{
@@ -258,7 +261,7 @@ export function initCardEffects() {
 
 						game.playAudio("../extension/十周年UI/audio/shunshouqianyang.mp3");
 
-						// 3. 羊从目标飞到使用者，到达后收绳并在本体播放落地
+						// 3. 羊从目标飞到手牌区上方（或使用者），到达后收绳并播放落地
 						setTimeout(function () {
 							if (!window.decadeUI) return;
 							var flying = anim.playSpine(
@@ -273,7 +276,7 @@ export function initCardEffects() {
 								if (flying) anim.stopSpine(flying);
 								anim.playSpine(
 									{ name: "shunshouqianyang", action: "yang", speed: 1.5 },
-									{ scale: 0.65, parent: player }
+									handZone ? { x: ex, y: ey, scale: 0.65 } : { scale: 0.65, parent: player }
 								);
 							}, MOVE_MS);
 						}, APPEAR_MS);
