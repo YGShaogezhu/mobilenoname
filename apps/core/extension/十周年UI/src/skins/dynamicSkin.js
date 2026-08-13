@@ -10,107 +10,72 @@ import { lib, game, ui, get, ai, _status } from "noname";
  * @description 动态皮肤配置表，按武将名和皮肤名组织
  */
 export const dynamicSkinConfig = {
-
-	sunhanhua: {//孙寒华
-		蛇年限定: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/蛇年限定/XingXiang',
-			shan: 'TeShu',
-			x: [0, 1.30],
-			y: [0, 0.50],
-			scale: 0.4,
-			angle: 0,
-			//speed: 1,
-			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/蛇年限定/BeiJing',
-				x: [0, 0.4],
-				y: [0, 0.5],
-				scale: 0.3,
-			},
-		},
-		莲华熠熠: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/莲华熠熠/XingXiang',
-			x: [0, 0.10],
-			y: [0, 0.25],
-			scale: 0.4,
-			angle: -15,
-			//speed: 1,
-			//action: 'DaiJi',
-			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/莲华熠熠/BeiJing',
-				scale: 0.3,
-				x: [0, 0.4],
-				y: [0, 0.5]
-			},
-		},
-		威灵尽显: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/威灵尽显/XingXiang',
-			x: [0, 0.45],
-			y: [0, 0.45],
-			scale: 0.4,
-			angle: -15,
-			//speed: 1,
-			//action: 'DaiJi',
-			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/威灵尽显/BeiJing',
-				scale: 0.3,
-				x: [0, 0.4],
-				y: [0, 0.5]
-			},
-		},
-		蛇年狂欢: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/蛇年狂欢/XingXiang',
-			x: [0, -1.50],
-			y: [0, -0.05],
+	pot_weiyan: {//势魏延
+		狂志吞天: {
+			name: '势魏延/狂志吞天/XingXiang',
+			x: [0, 0.25],
+			y: [0, 0.19],
 			scale: 0.5,
-			angle: 0,
-			//speed: 1,
-			action: 'BeiJing',
+			unpackPremultipliedAlpha: true,
+			alpha: true,
 			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/蛇年狂欢/BeiJing',
+				name: '势魏延/狂志吞天/BeiJing',
+				x: [0, 1.06],
+				y: [0, 0.61],
 				scale: 0.3,
-				x: [0, 0.4],
-				y: [0, 0.5],
+			},
+			special: {
+				使命成功: {
+					name: 'pot_weiyan/狂志吞天2',
+				},
+				使命失败: {
+					name: 'pot_weiyan/狂志吞天3',
+				},
+				condition: {
+					shimingjiSuccess: {
+						transform: ["使命成功"],
+					},
+					shimingjiFail: {
+						transform: ['使命失败'],
+					},
+				},
 			},
 		},
-		心宇同一: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/心宇同一/XingXiang',
-			x: [0, 0.65],
-			y: [0, 0.2],
-			angle: -24,
-			scale: 0.4,
-			//speed: 1,
-			//action: 'DaiJi',
-			skin: "skin_1",
-			gongji: {
-				skin: "skin_1",
+		狂志吞天2: {
+			name: '势魏延/狂志吞天2/XingXiang',
+			x: [0, 1.30],
+			y: [0, 0.07],
+			angle: -20,
+			scale: 0.48,
+			audio: {
+				skill: '势魏延/audio/狂志吞天2',
+				victory: '势魏延/audio/狂志吞天2',
+
 			},
 			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/心宇同一/BeiJing',
+				name: '势魏延/狂志吞天2/BeiJing',
+				x: [0, 1.06],
+				y: [0, 0.61],
 				scale: 0.3,
-				x: [0, 0.4],
-				y: [0, 0.5],
 			},
 		},
-		心宇同一2: {
-			name: '袖里乾坤/袖里乾坤·组4/孙寒华/心宇同一2/XingXiang_1',
-			x: [0, 0.65],
-			y: [0, 0.35],
-			scale: 0.4,
-			//speed: 1,
-			//action: 'DaiJi',
-			skin: "skin_1",
-			gongji: {
-				skin: "skin_1",
+		狂志吞天3: {
+			name: '势魏延/狂志吞天3/XingXiang',
+			x: [0, 1.84],
+			y: [0, 0.18],
+			scale: 0.45,
+			audio: {
+				skill: '势魏延/audio/狂志吞天3',
+				victory: '势魏延/audio/狂志吞天3',
 			},
 			beijing: {
-				name: '袖里乾坤/袖里乾坤·组4/孙寒华/心宇同一2/BeiJing_1',
+				name: '势魏延/狂志吞天3/BeiJing',
+				x: [0, 1.06],
+				y: [0, 0.61],
 				scale: 0.3,
-				x: [0, 0.4],
-				y: [0, 0.5],
 			},
 		},
 	},
-
 };
 
 /**
@@ -124,7 +89,7 @@ export function setupDynamicSkin() {
 
 	// 动皮共享
 	const dynamicSkinExtend = {
-		
+
 	};
 	decadeUI.get.extend(decadeUI.dynamicSkin, dynamicSkinExtend);
 }

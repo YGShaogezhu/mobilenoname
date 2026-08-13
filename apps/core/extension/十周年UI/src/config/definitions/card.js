@@ -39,7 +39,7 @@ export const kapaitexiao = {
  */
 export const shoushatexiao = {
 	name: "手杀特效",
-	intro: "开启后播放免伤、技能发动、救我、恢复体力等手杀局内特效",
+	intro: "开启后播放免伤、技能发动、救我、勾玉回血/扣血等手杀局内特效",
 	init: true,
 };
 

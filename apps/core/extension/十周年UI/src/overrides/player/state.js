@@ -260,7 +260,7 @@ function updateHpDisplay(player) {
 	if (!player.storage.nohp && useTextStyle) {
 		const hpText = isNaN(hp) ? "×" : hp === Infinity ? "∞" : hp;
 		const maxText = isNaN(hpMax) ? "×" : hpMax === Infinity ? "∞" : hpMax;
-		hpNode.innerHTML = `${hpText}<br>/<br>${maxText}<div></div>`;
+		hpNode.innerHTML = `${hpText}<br>\\<br>${maxText}<div></div>`;
 
 		if (hp === 0) {
 			hpNode.lastChild.classList.add("lost");

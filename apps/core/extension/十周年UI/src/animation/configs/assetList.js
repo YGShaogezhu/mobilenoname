@@ -23,8 +23,10 @@ export const assetList = [
 	{ name: "effect_shoujidonghua" },
 	{ name: "effect_tengjiafangyu" },
 	{ name: "effect_tengjiaranshao" },
-	{ name: "effect_zhiliao" },
 	{ name: "effect_loseHp" },
+	// 勾玉回血 / 扣血特效
+	{ name: "skeleton" },
+	{ name: "skeletonxHp" },
 
 	// 数字特效
 	{ name: "globaltexiao/xunishuzi/SS_PaiJu_xunishanghai" },

@@ -1,0 +1,20 @@
+
+skeletonxHp.png
+size: 64,32
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+DIAOXUELIZI
+  rotate: false
+  xy: 2, 2
+  size: 20, 20
+  orig: 64, 64
+  offset: 22, 22
+  index: -1
+baisudung_00
+  rotate: false
+  xy: 24, 5
+  size: 18, 17
+  orig: 18, 17
+  offset: 0, 0
+  index: -1

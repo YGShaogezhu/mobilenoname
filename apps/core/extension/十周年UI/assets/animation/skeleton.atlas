@@ -1,0 +1,83 @@
+
+skeleton.png
+size: 512,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+JiaxueLizi01
+  rotate: false
+  xy: 2, 21
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+baisudung_011
+  rotate: false
+  xy: 2, 2
+  size: 18, 17
+  orig: 18, 17
+  offset: 0, 0
+  index: -1
+jxxtlg1_00
+  rotate: false
+  xy: 2, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_01
+  rotate: false
+  xy: 68, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_02
+  rotate: false
+  xy: 134, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_03
+  rotate: false
+  xy: 200, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_04
+  rotate: false
+  xy: 266, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_05
+  rotate: false
+  xy: 332, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+jxxtlg1_06
+  rotate: false
+  xy: 398, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+xl_00
+  rotate: false
+  xy: 464, 87
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+xl_01
+  rotate: false
+  xy: 36, 21
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

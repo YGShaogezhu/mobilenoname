@@ -120,6 +120,108 @@ export const animateSkill = {
 	},
 
 	/**
+	 * 勾玉回血特效
+	 * @description 恢复体力时在对应勾玉位置播放 skeleton 动画
+	 */
+	decadeUI_hpRecover: {
+		trigger: { player: "recoverBegin" },
+		forced: true,
+		charlotte: true,
+		silent: true,
+		popup: false,
+		filter(event) {
+			return lib.config.extension_十周年UI_shoushatexiao && event.num > 0 && !!window.decadeUI?.animation;
+		},
+		async content(event, trigger, player) {
+			game.broadcastAll(
+				(player, num) => {
+					if (!window.decadeUI?.animation) return;
+					const anim = { name: "skeleton", speed: 0.7, action: "animation" };
+					// 主视角大卡与人机小卡血条相对位置不同，分两套 y
+					const isMe = player === game.me;
+					const yMap = isMe
+						? { 5: 0.45, 4: 0.36, 3: 0.27, 2: 0.18, 1: 0.09, 6: 0.32 }
+						: { 5: 0.54, 4: 0.45, 3: 0.36, 2: 0.27, 1: 0.18, 6: 0.41 };
+					const posOf = key => ({ scale: 0.4, x: [0, 0.08], y: [0, yMap[key]], parent: player });
+					const useOrbs = (!player.hujia && player.maxHp <= 5) || (player.hujia && player.maxHp <= 3);
+					if (useOrbs) {
+						const from = Math.max(0, player.hp);
+						const to = Math.max(1, Math.min(player.maxHp, player.hp + num));
+						for (let i = from; i < to; i++) {
+							if (!yMap[i + 1]) continue;
+							decadeUI.animation.playSpine(anim, posOf(i + 1));
+						}
+					} else {
+						decadeUI.animation.playSpine(anim, posOf(6));
+					}
+				},
+				player,
+				trigger.num
+			);
+		},
+	},
+
+	/**
+	 * 勾玉扣血特效
+	 * @description 无护甲受伤时在勾玉位置播放 skeletonxHp 动画
+	 */
+	decadeUI_hpLose: {
+		trigger: { player: "damageBegin4" },
+		forced: true,
+		charlotte: true,
+		silent: true,
+		popup: false,
+		firstDo: true,
+		priority: -10,
+		filter(event, player) {
+			return (
+				lib.config.extension_十周年UI_shoushatexiao &&
+				typeof event.num === "number" &&
+				event.num > 0 &&
+				!player.hujia &&
+				!!window.decadeUI?.animation
+			);
+		},
+		async content(event, trigger, player) {
+			game.broadcastAll(
+				(player, num) => {
+					if (!window.decadeUI?.animation) return;
+					const anim = { name: "skeletonxHp", speed: 1.2, action: "animation" };
+					let hp = player.hp;
+					let count = num;
+					const baseY = 0.46;
+
+					while (count > 0) {
+						let yOffset;
+						let onlyOnce = false;
+						if (player.maxHp <= 5) {
+							yOffset = -(5 - Math.max(hp, 1)) * 15.5;
+						} else {
+							yOffset = -24;
+							onlyOnce = true;
+						}
+						decadeUI.animation.playSpine(anim, {
+							scale: 0.56,
+							x: [-5.5, 0.14],
+							y: [yOffset, baseY],
+							parent: player,
+						});
+						count--;
+						if (count > 0 && !onlyOnce) {
+							hp--;
+							if (hp < 1) break;
+						} else {
+							break;
+						}
+					}
+				},
+				player,
+				trigger.num
+			);
+		},
+	},
+
+	/**
 	 * 免伤特效
 	 * @description 伤害被闪避或取消时播放免伤动画
 	 */

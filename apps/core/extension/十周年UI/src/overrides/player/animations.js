@@ -101,8 +101,6 @@ export function playerDamagepop(num, nature = "soil", font, nobroadcast) {
 		const pair = DAMAGE_ACTIONS[nature] || DAMAGE_ACTIONS.__default;
 		const action = num <= -2 ? pair[1] : pair[0];
 		animation.playSpine({ name: "effect_shoujidonghua", action }, { scale: 0.8, parent: player });
-	} else if (num > 0 && nature === "wood") {
-		animation.playSpine("effect_zhiliao", { scale: 0.7, parent: player });
 	}
 }
 
