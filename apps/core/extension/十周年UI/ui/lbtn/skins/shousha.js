@@ -6,6 +6,7 @@
 import { _status } from "noname";
 import { createBaseLbtnPlugin } from "./base.js";
 import { initChatSystem } from "../chatSystem.js";
+import { canRecastCard, shouldShowRecastingBtn } from "../../../src/skills/recast.js";
 
 /**
  * 创建手杀风格lbtn插件
@@ -381,6 +382,7 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 			initChatSystem(lib, game, ui, get);
 			this.initArenaReady();
 			base.initBaseRewrites.call(this);
+			this.initSelectAllOverride();
 
 			if (lib.announce?.subscribe) {
 				lib.announce.subscribe("gameStart", () => setTimeout(showDistanceDisplay, 100));
@@ -408,6 +410,34 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 					}
 				});
 			}
+		},
+
+		/**
+		 * 禁用弃牌等场景的「全选」控件（保留一键选牌）
+		 */
+		initSelectAllOverride() {
+			ui.create.cardChooseAll = () => null;
+
+			const initObserver = () => {
+				if (!ui.control) return;
+				const observer = new MutationObserver(mutations => {
+					mutations.forEach(mutation => {
+						mutation.addedNodes.forEach(node => {
+							if (node.nodeType === 1 && node.classList?.contains("control")) {
+								const first = node.firstElementChild;
+								if (first && /^[全反]选$/.test(first.innerHTML) && node.childElementCount === 1) {
+									node.remove();
+									ui.updatec?.();
+								}
+							}
+						});
+					});
+				});
+				observer.observe(ui.control, { childList: true });
+			};
+
+			if (ui.control) initObserver();
+			else lib.arenaReady?.push(initObserver);
 		},
 
 		/**
@@ -766,29 +796,36 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 					});
 				});
 
-				if (ui.skills2?.skills?.length) {
-					const recastingSkills = ui.skills2.skills.filter(skill => skill === "_recasting");
-					if (recastingSkills.length) {
-						confirm.skills2 = recastingSkills.map(skill => {
-							const item = document.createElement("div");
-							item.link = skill;
-							item.classList.add("recasting-btn");
-							item.innerHTML = `<img draggable='false' src='${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/CZ.png'>`;
-							item.style.backgroundImage = `url('${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/game_btn_bg2.png')`;
-							item.style.transform = "scale(0.75)";
-							item.style.setProperty("padding", "25px 10px", "important");
-							item.style.setProperty("margin", "0 -12px", "important");
-							item.dataset.type = "skill2";
-							item.addEventListener(lib.config.touchscreen ? "touchend" : "click", function (e) {
-								if (_status.event?.skill === "_recasting") return;
-								e.stopPropagation();
-								ui.click.skill(this.link);
-								ui.updateSkillControl?.(game.me, true);
-							});
-							return item;
-						});
-						confirm.skills2.forEach(item => confirm.insertBefore(item, confirm.firstChild));
-					}
+				// 重铸按钮：默认隐藏，选中可重铸牌后再显示；点击即重铸
+				{
+					const item = document.createElement("div");
+					item.classList.add("recasting-btn");
+					item.innerHTML = `<img draggable='false' src='${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/CZ.png'>`;
+					item.style.backgroundImage = `url('${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/game_btn_bg2.png')`;
+					item.style.transform = "scale(0.75)";
+					item.style.setProperty("padding", "25px 10px", "important");
+					item.style.setProperty("margin", "0 -12px", "important");
+					item.style.display = "none";
+					item.dataset.type = "skill2";
+					item.addEventListener(lib.config.touchscreen ? "touchend" : "click", function (e) {
+						e.stopPropagation();
+						const player = game.me;
+						const cards = ui.selected.cards || [];
+						if (!player || !cards.length) return;
+						if ((ui.selected.targets?.length ?? 0) > 0) return;
+						if (!cards.every(card => canRecastCard(card, player))) return;
+
+						const event = _status.event;
+						if (event?.name === "chooseToRespond") {
+							event._decadeUI_shouldRecast = true;
+						}
+
+						const okBtn = confirm.node.ok;
+						okBtn.classList.remove("disabled");
+						ui.click.ok(okBtn);
+					});
+					confirm.recastingBtn = item;
+					confirm.insertBefore(item, confirm.firstChild);
 				}
 
 				confirm.update = () => {
@@ -805,16 +842,8 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 						confirm.node.ok.classList.remove("xiandingji");
 					}
 
-					if (confirm.skills2) {
-						if (_status.event.skill && _status.event.skill !== confirm.dataset.skill) {
-							confirm.dataset.skill = _status.event.skill;
-							confirm.skills2.forEach(item => item.remove());
-							ui.updatec();
-						} else if (!_status.event.skill && confirm.dataset.skill) {
-							delete confirm.dataset.skill;
-							confirm.skills2.forEach(item => confirm.insertBefore(item, confirm.firstChild));
-							ui.updatec();
-						}
+					if (confirm.recastingBtn) {
+						confirm.recastingBtn.style.display = shouldShowRecastingBtn() ? "" : "none";
 					}
 					ui.updateSkillControl?.(game.me, true);
 				};

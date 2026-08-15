@@ -23,7 +23,12 @@ export {
 	clearLayeredMarks,
 	applyLayeredTempSuitNum,
 	clearLayeredTempSuitNum,
+	resolveBiaojiId,
+	refreshAozhanTaoCards,
+	setupAozhanTaoRefresh,
 } from "./layered-card.js";
+
+export { setupGuozhanBiaojiCards, createBiaojiMarkCard, BIAOJI_MARK_CARD } from "./guozhan-biaoji.js";
 
 // 卡牌覆写方法
 export { cardInit, cardCopy, cardUpdateTransform, cardMoveTo, cardMoveDelete, setBaseCardMethods, applyCardOverrides } from "./overrides.js";

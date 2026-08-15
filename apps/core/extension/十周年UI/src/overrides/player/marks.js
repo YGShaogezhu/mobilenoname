@@ -6,6 +6,8 @@
 
 import { lib, game, ui, get, ai, _status } from "noname";
 import { getBasePlayerMethods } from "./base.js";
+import { BIAOJI_MARK_CARD, createBiaojiMarkCard } from "../card/guozhan-biaoji.js";
+import { isLayeredMode } from "../card/layered-card.js";
 
 /**
  * 需要过滤的技能标记前缀列表
@@ -153,6 +155,14 @@ export function playerMark(item, info, skill) {
 function createMarkElement(item, skill) {
 	let mark;
 	let itemName = item;
+
+	// 国战标记：分层模式下用标记卡代替纯文字
+	if (typeof item === "string" && BIAOJI_MARK_CARD[item] && isLayeredMode()) {
+		const biaojiCard = createBiaojiMarkCard(item);
+		if (biaojiCard && get.itemtype(biaojiCard) === "card") {
+			return createMarkElement(biaojiCard, skill || item);
+		}
+	}
 
 	if (get.itemtype(item) === "card") {
 		mark = item.copy("mark");

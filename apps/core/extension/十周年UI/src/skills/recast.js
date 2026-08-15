@@ -2,9 +2,24 @@
  * 重铸交互模块 - 实现可重铸卡牌的"使用/重铸"合并交互
  */
 import { lib, game, ui, get, _status } from "noname";
+
+/** 是否为手杀按钮风格 */
+export function isShoushaStyle() {
+	return lib.config.extension_十周年UI_newDecadeStyle === "off";
+}
+
+/**
+ * 重铸特性是否启用
+ * 手杀风格始终启用（CZ 选牌后重铸）；其它风格依赖 Beta 开关
+ */
+export function isRecastFeatureActive() {
+	if (isShoushaStyle()) return true;
+	return lib.config.extension_十周年UI_enableRecastInteraction !== false;
+}
+
 export function canRecastCard(card, player) {
 	if (!card || !player) return false;
-	if (lib.config.extension_十周年UI_enableRecastInteraction === false) return false;
+	if (!isRecastFeatureActive()) return false;
 
 	if (!lib.filter.cardRecastable(card, player, null, true)) return false;
 
@@ -77,6 +92,16 @@ export function getCardMinTarget(card) {
 	return 1;
 }
 
+/** 当前是否应显示手杀 CZ 重铸按钮 */
+export function shouldShowRecastingBtn() {
+	const player = game.me;
+	const selectedCard = ui.selected.cards?.[0];
+	if (!selectedCard || !player) return false;
+	if (_status.event?.skill) return false;
+	if ((ui.selected.targets?.length ?? 0) > 0) return false;
+	return canRecastCard(selectedCard, player);
+}
+
 // 可重铸卡牌无目标时转为重铸
 export const recastAnimateSkill = {
 	_decadeUI_recastable_recast: {
@@ -86,8 +111,7 @@ export const recastAnimateSkill = {
 		silent: true,
 		priority: Infinity + 1,
 		filter(event, player) {
-			if (lib.config.extension_十周年UI_newDecadeStyle === "off") return false;
-			if (lib.config.extension_十周年UI_enableRecastInteraction === false) return false;
+			if (!isRecastFeatureActive()) return false;
 
 			if (event.name === "useCard") {
 				if (event.targets?.length > 0) return false;
@@ -162,6 +186,12 @@ export const recastBaseSkill = {
 	},
 };
 
+function updateRecastingBtnVisibility() {
+	const btn = ui.confirm?.recastingBtn;
+	if (!btn) return;
+	btn.style.display = shouldShowRecastingBtn() ? "" : "none";
+}
+
 // 设置可重铸卡牌的交互逻辑
 export function setupRecastableCards() {
 	if (lib.hooks?.checkEnd) {
@@ -171,20 +201,29 @@ export function setupRecastableCards() {
 			const eventName = event?.name;
 			if (eventName !== "chooseToUse" && eventName !== "chooseToRespond") return;
 
-			const okBtn = ui.confirm.firstChild;
+			const okBtn = ui.confirm.node?.ok || ui.confirm.firstChild;
 			if (!okBtn || okBtn.link !== "ok") return;
 
 			const selectedCard = ui.selected.cards?.[0];
 			const player = event?.player;
+			const shousha = isShoushaStyle();
+
+			updateRecastingBtnVisibility();
 
 			if (!selectedCard || !player || !canRecastCard(selectedCard, player)) return;
 
 			if (eventName === "chooseToRespond") {
 				const canRespond = event.filterCard?.(selectedCard, player);
 				if (canRespond) {
-					okBtn.innerHTML = "确定";
-					okBtn.classList.remove("disabled");
+					if (!shousha) {
+						okBtn.innerHTML = "确定";
+						okBtn.classList.remove("disabled");
+					}
 					delete event._decadeUI_shouldRecast;
+				} else if (shousha) {
+					// 手杀：由 CZ 触发重铸，确定保持禁用
+					okBtn.classList.add("disabled");
+					event._decadeUI_shouldRecast = true;
 				} else {
 					okBtn.innerHTML = "重铸";
 					okBtn.classList.remove("disabled");
@@ -194,12 +233,19 @@ export function setupRecastableCards() {
 			}
 
 			if (ui.selected.targets.length === 0) {
-				okBtn.innerHTML = "重铸";
-				okBtn.classList.remove("disabled");
+				if (shousha) {
+					// 手杀：确定保持禁用外观，点 CZ 再确认
+					okBtn.classList.add("disabled");
+				} else {
+					okBtn.innerHTML = "重铸";
+					okBtn.classList.remove("disabled");
+				}
 			} else {
 				const card = get.card();
 				const minTarget = card ? getCardMinTarget(card) : 1;
-				okBtn.innerHTML = "确定";
+				if (!shousha) {
+					okBtn.innerHTML = "确定";
+				}
 				if (ui.selected.targets.length >= minTarget) {
 					okBtn.classList.remove("disabled");
 				} else {
@@ -212,7 +258,7 @@ export function setupRecastableCards() {
 	if (lib.hooks?.uncheckEnd) {
 		lib.hooks.uncheckEnd.add("_decadeUI_recastable_confirm_reset", () => {
 			if (!ui.confirm) return;
-			const okBtn = ui.confirm.firstChild;
+			const okBtn = ui.confirm.node?.ok || ui.confirm.firstChild;
 			const text = okBtn?.innerHTML;
 			if (text === "重铸") {
 				okBtn.innerHTML = "确定";
@@ -221,14 +267,14 @@ export function setupRecastableCards() {
 			if (event?._decadeUI_shouldRecast) {
 				delete event._decadeUI_shouldRecast;
 			}
+			updateRecastingBtnVisibility();
 		});
 	}
 }
 
 // 初始化重铸模块
 export function initRecast() {
-	if (lib.config.extension_十周年UI_enableRecastInteraction === false) return;
-	if (lib.config.extension_十周年UI_newDecadeStyle === "off") return;
+	if (!isRecastFeatureActive()) return;
 
 	Object.assign(lib.skill, recastAnimateSkill, recastBaseSkill);
 	game.addGlobalSkill("_decadeUI_recastable_recast");

@@ -3,7 +3,7 @@
  * @description 用 cardtexture 零件按层拼装卡牌，与整图 decade-card 美化互斥
  * @module overrides/card/layered-card
  */
-import { lib, get } from "noname";
+import { lib, get, _status } from "noname";
 import { cardSkinMeta } from "../../config/utils.js";
 
 const RED_SUITS = ["heart", "diamond"];
@@ -18,6 +18,18 @@ const NAME_ALIAS = {
 const TEXTURE_ALIAS = {
 	diaohulishan: "diaohu",
 	jingxienu: "jingxienuo",
+};
+
+/** 国战标记卡：游戏牌名 / 技能名 → 素材 id */
+const BIAOJI_ASSET_ID = {
+	xianqu: "xianqu",
+	xianqu_mark: "xianqu",
+	yinyangyu: "yinyangyu",
+	yinyang_mark: "yinyangyu",
+	yexinjia: "yexinjia",
+	yexinjia_mark: "yexinjia",
+	zhulianbihe: "zhulianbihe",
+	zhulianbihe_mark: "zhulianbihe",
 };
 
 /**
@@ -102,7 +114,29 @@ function getShaNameByNature(nature) {
  */
 function getRealType(cardElement) {
 	const type = cardElement.dataset.cardType || "";
-	return type === "delay" ? "trick" : type;
+	if (type === "delay") return "trick";
+	// 标记卡 stub 用 special，拼装时按锦囊牌名条布局
+	if (type === "special" || resolveBiaojiId(cardElement)) return "trick";
+	return type;
+}
+
+/**
+ * 鏖战模式下实体桃（不用 get.name，mod 会改成杀/闪）
+ * @param {HTMLElement} cardElement
+ * @returns {boolean}
+ */
+function isAozhanTao(cardElement) {
+	return Boolean(_status._aozhan && cardElement?.name === "tao");
+}
+
+/**
+ * 国战标记卡素材 id
+ * @param {HTMLElement} cardElement
+ * @returns {string|null}
+ */
+export function resolveBiaojiId(cardElement) {
+	const name = cardElement?.name;
+	return (name && BIAOJI_ASSET_ID[name]) || null;
 }
 
 /**
@@ -288,20 +322,43 @@ function fillNameImage(cardElement, realType) {
 	if (!$name) return;
 
 	emptyNode($name);
-	$name.classList.remove("base", "trick", "equip", "wide-name");
+	$name.classList.remove("base", "trick", "equip", "wide-name", "special");
 	$name.removeAttribute("data-name-id");
-	$name.classList.add(realType === "basic" ? "base" : realType);
 
 	const root = getAssetRoot();
-	const nameId = resolveNameId(cardElement, realType);
+	const biaojiId = resolveBiaojiId(cardElement);
+	const aozhanTao = isAozhanTao(cardElement);
+
+	const wrapper = document.createElement("div");
+	wrapper.className = "name-bg";
+
+	if (biaojiId) {
+		$name.classList.add("trick");
+		$name.dataset.nameId = biaojiId;
+		const bgImg = createImage(`${root}/card_name_bg.png`);
+		bgImg.className = "bg";
+		wrapper.appendChild(bgImg);
+		const nameImg = createImage(`${root}/gz_txt_${biaojiId}.png`, () => {
+			wrapper.replaceChildren();
+			const span = document.createElement("span");
+			span.className = "name-text";
+			span.textContent = get.translation(cardElement.name) || "";
+			wrapper.appendChild(span);
+		});
+		nameImg.className = "name-text";
+		wrapper.appendChild(nameImg);
+		$name.appendChild(wrapper);
+		return;
+	}
+
+	$name.classList.add(realType === "basic" ? "base" : realType);
+
+	const nameId = aozhanTao ? "aozhantao" : resolveNameId(cardElement, realType);
 	$name.dataset.nameId = nameId;
 	// 火/雷/刺杀大字为 120×82，杀闪桃酒为 72×64，需单独校正居中
 	if (realType === "basic" && ["huosha", "leisha", "cisha"].includes(nameId)) {
 		$name.classList.add("wide-name");
 	}
-
-	const wrapper = document.createElement("div");
-	wrapper.className = "name-bg";
 
 	if (realType !== "basic") {
 		const bgImg = createImage(`${root}/card_name_bg.png`);
@@ -309,8 +366,11 @@ function fillNameImage(cardElement, realType) {
 		wrapper.appendChild(bgImg);
 	}
 
-	const nameUrl =
-		realType === "basic" ? `${root}/card_normal_${nameId}.png` : `${root}/card_name_${nameId}.png`;
+	const nameUrl = aozhanTao
+		? `${root}/gz_txt_aozhantao.png`
+		: realType === "basic"
+			? `${root}/card_normal_${nameId}.png`
+			: `${root}/card_name_${nameId}.png`;
 	const nameImg = createImage(nameUrl, () => {
 		wrapper.replaceChildren();
 		const span = document.createElement("span");
@@ -332,7 +392,8 @@ function fillCardType(cardElement, realType) {
 	const node = cardElement.$cardType;
 	if (!node) return;
 	emptyNode(node);
-	if (realType === "basic" || !realType) return;
+	// 标记卡 / 基本牌不显示类型条
+	if (resolveBiaojiId(cardElement) || realType === "basic" || !realType) return;
 
 	const root = getAssetRoot();
 	const typeUrl = realType === "trick" ? `${root}/card_type_name_2.png` : `${root}/card_type_name_3.png`;
@@ -349,6 +410,15 @@ function fillCardTexture(cardElement) {
 	emptyNode(image);
 
 	const root = getAssetRoot();
+	const biaojiId = resolveBiaojiId(cardElement);
+	if (biaojiId) {
+		image.appendChild(createImage(`${root}/gz_ic_card_${biaojiId}.png`));
+		return;
+	}
+	if (isAozhanTao(cardElement)) {
+		image.appendChild(createImage(`${root}/gz_ic_card_aozhantao.png`));
+		return;
+	}
 	const textureId = resolveTextureId(cardElement);
 	image.appendChild(createImage(`${root}/card_texture_${textureId}.png`));
 }
@@ -676,6 +746,7 @@ export function clearLayeredCard(cardElement, options = {}) {
 	const restoreText = options.restoreText !== false;
 	cardElement.classList.remove("layered-card");
 	cardElement.removeAttribute("data-card-face");
+	delete cardElement.dataset.biaoji;
 	cardElement.style.removeProperty("background");
 	cardElement.style.removeProperty("background-image");
 	cardElement.style.removeProperty("background-size");
@@ -720,34 +791,88 @@ export function applyLayeredCard(cardElement, base = "1") {
 
 	ensureLayeredNodeRefs(cardElement);
 
-	// 虚拟预览牌固定白底；转化出牌沿用当前/传入底框
-	const face = isVirtualCard(cardElement) ? "1" : String(base || getLayeredBase() || "1");
+	const biaojiId = resolveBiaojiId(cardElement);
+	if (biaojiId) {
+		cardElement.dataset.biaoji = "1";
+	} else {
+		delete cardElement.dataset.biaoji;
+	}
+
+	// 虚拟预览牌固定白底；转化出牌沿用当前/传入底框；标记卡用专用底
+	const face = biaojiId ? "biaoji" : isVirtualCard(cardElement) ? "1" : String(base || getLayeredBase() || "1");
 	cardElement.classList.add("layered-card");
 	cardElement.classList.remove("decade-card");
 	cardElement.dataset.cardFace = face;
 	cardElement.style.removeProperty("background");
 	cardElement.style.removeProperty("background-image");
 
-	fillSuitNum(cardElement);
-	fillNameImage(cardElement, realType);
-	fillCardType(cardElement, realType);
-	fillCardTexture(cardElement);
+	if (biaojiId) {
+		emptyNode(cardElement.$suitnum?.$num);
+		emptyNode(cardElement.$suitnum?.$suit);
+		fillNameImage(cardElement, realType);
+		fillCardType(cardElement, realType);
+		fillCardTexture(cardElement);
+		if (cardElement.$distance) emptyNode(cardElement.$distance);
+	} else {
+		fillSuitNum(cardElement);
+		fillNameImage(cardElement, realType);
+		fillCardType(cardElement, realType);
+		fillCardTexture(cardElement);
 
-	if (realType === "equip") {
-		fillEquipmentDistance(cardElement);
-	} else if (cardElement.$distance) {
-		emptyNode(cardElement.$distance);
-	}
+		if (realType === "equip") {
+			fillEquipmentDistance(cardElement);
+		} else if (cardElement.$distance) {
+			emptyNode(cardElement.$distance);
+		}
 
-	// 重绘后保留红颜等临时花色点数
-	if (cardElement._layeredTempSN && cardElement.dataset.tempsn) {
-		const tempNum = cardElement.dataset.tempnum;
-		fillSuitNum(cardElement, {
-			suit: cardElement.dataset.tempsn,
-			number: tempNum != null && tempNum !== "" ? tempNum : cardElement.number,
-		});
+		// 重绘后保留红颜等临时花色点数
+		if (cardElement._layeredTempSN && cardElement.dataset.tempsn) {
+			const tempNum = cardElement.dataset.tempnum;
+			fillSuitNum(cardElement, {
+				suit: cardElement.dataset.tempsn,
+				number: tempNum != null && tempNum !== "" ? tempNum : cardElement.number,
+			});
+		}
 	}
 
 	refreshLayeredMarks(cardElement);
 	refreshGuozhanMarks(cardElement);
+}
+
+/**
+ * 进入鏖战后刷新场上 / 手牌区已有桃的分层素材
+ */
+export function refreshAozhanTaoCards() {
+	if (!isLayeredMode() || !_status._aozhan) return;
+	const face = getLayeredBase() || "1";
+	document.querySelectorAll('.card[data-card-name="tao"]').forEach(card => {
+		if (card.classList.contains("infohidden")) return;
+		if (!card.name) card.name = "tao";
+		applyLayeredCard(card, face);
+	});
+}
+
+/**
+ * 监听 _status._aozhan 置位，刷新已有桃牌
+ */
+export function setupAozhanTaoRefresh() {
+	if (_status._decadeuiAozhanWatch) return;
+	_status._decadeuiAozhanWatch = true;
+
+	let current = _status._aozhan;
+	Object.defineProperty(_status, "_aozhan", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			return current;
+		},
+		set(value) {
+			const prev = current;
+			current = value;
+			if (value && !prev) {
+				queueMicrotask(() => refreshAozhanTaoCards());
+			}
+		},
+	});
+	if (current) refreshAozhanTaoCards();
 }

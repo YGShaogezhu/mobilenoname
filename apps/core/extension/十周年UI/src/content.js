@@ -49,6 +49,7 @@ import { initSkills } from "./skills/index.js";
 import { createLbtnPlugin } from "../ui/lbtn/plugin.js";
 import { createSkillPlugin } from "../ui/skill/plugin.js";
 import { createCharacterPlugin } from "../ui/character/plugin.js";
+import { setupGuozhanBiaojiCards } from "./overrides/card/guozhan-biaoji.js";
 
 /**
  * 完成核心初始化
@@ -70,6 +71,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 
 	decadeUI.init();
 
+	setupGuozhanBiaojiCards();
 	setupGameAnimation(lib, game, ui, get, ai, _status);
 	setupEffects();
 	initComponent(decadeUI);

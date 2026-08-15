@@ -29,7 +29,7 @@ import { controlAdd, controlOpen, controlClose, controlReplace, controlUpdateLay
 import { dialogOpen, applyDialogOverrides } from "../overrides/dialog.js";
 import { eventAddMessageHook, eventTriggerMessage } from "../overrides/event.js";
 import { cardCopy, cardInit, cardUpdateTransform, cardMoveTo, cardMoveDelete } from "../overrides/card.js";
-import { createContentGain, contentJudge, createContentLose } from "../overrides/content.js";
+import { createContentGain, contentJudge, createContentLose, createContentChooseNumbers } from "../overrides/content.js";
 import { applyLibOverrides } from "../overrides/lib.js";
 import { getObjtype, applyGetOverrides } from "../overrides/get.js";
 import { gameLogv, applyGameOverrides } from "../overrides/game.js";
@@ -124,7 +124,7 @@ export const createDecadeUIObject = () => ({
 					tryJudgeAnimate: lib.element.player.tryJudgeAnimate,
 					popup: lib.element.player.popup,
 				},
-				content: { lose: lib.element.content.lose, gain: lib.element.content.gain },
+				content: { lose: lib.element.content.lose, gain: lib.element.content.gain, chooseNumbers: lib.element.content.chooseNumbers },
 				},
 			},
 		};
@@ -209,6 +209,7 @@ export const createDecadeUIObject = () => ({
 						gain: createContentGain(base.lib.element.content.gain),
 						judge: contentJudge(),
 						lose: createContentLose(base.lib.element.content.lose),
+						chooseNumbers: createContentChooseNumbers(base.lib.element.content.chooseNumbers),
 					},
 				},
 			},

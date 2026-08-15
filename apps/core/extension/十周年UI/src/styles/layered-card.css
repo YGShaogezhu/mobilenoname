@@ -547,3 +547,43 @@
 	z-index: 8;
 	pointer-events: none;
 }
+
+/* ---------- 国战标记卡：专用底框，无花色/类型 ---------- */
+.card.layered-card[data-biaoji="1"],
+.card.layered-card[data-card-face="biaoji"] {
+	background-image: url("../../image/ui/cardtexture/gz_bg_biaoji_card.png") !important;
+	background-size: 100% 100% !important;
+	background-position: 0 0 !important;
+	box-shadow: none;
+	overflow: hidden;
+}
+
+.card.layered-card[data-biaoji="1"] > .lc-frame,
+.card.layered-card[data-card-face="biaoji"] > .lc-frame {
+	display: none;
+}
+
+.card.layered-card[data-biaoji="1"] > .suit-num,
+.card.layered-card[data-card-face="biaoji"] > .suit-num,
+.card.layered-card[data-biaoji="1"] > .card-type,
+.card.layered-card[data-card-face="biaoji"] > .card-type,
+.card.layered-card[data-biaoji="1"] > .distance,
+.card.layered-card[data-card-face="biaoji"] > .distance {
+	display: none !important;
+}
+
+.card.layered-card[data-biaoji="1"] > .top-name,
+.card.layered-card[data-card-face="biaoji"] > .top-name {
+	/* 与锦囊牌名条同一套变量 */
+	top: calc(100% * var(--name-t) / var(--lc-h));
+	left: calc(100% * var(--name-l) / var(--lc-w));
+	width: calc(100% * var(--name-w) / var(--lc-w));
+	height: calc(100% * var(--name-h) / var(--lc-h));
+}
+
+/* 武将旁迷你标记：铺满格子 */
+.player > .dui-marks > .card.mark.layered-card[data-biaoji="1"],
+.player > .dui-marks > .card.mark.layered-card[data-card-face="biaoji"] {
+	background-size: 100% 100% !important;
+	overflow: hidden;
+}

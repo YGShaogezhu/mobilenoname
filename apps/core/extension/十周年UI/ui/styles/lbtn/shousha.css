@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 手杀风格 - 按钮控制样式
  */
 
@@ -166,20 +166,26 @@
 	line-height: 30px;
 	text-align: center;
 	padding: 10px 15px !important;
-	min-width: 140px !important;
-	min-height: 18px !important;
+	min-width: 110px !important;
+	max-width: 160px;
+	min-height: 0 !important;
+	height: auto !important;
+	flex: 0 0 auto !important;
 	margin-left: 2px !important;
 	margin-right: 2px !important;
-	margin-top: 20px !important;
+	margin-top: 24px !important;
 	margin-bottom: 0px !important;
-	-webkit-text-stroke: 0.5px #5b6727;
-	text-shadow:
-		1px 1px 0px #5b6727,
-		-1px -1px 0px #5b6727;
-	color: #e3d08b;
-	font-family: "HYZLSJ";
+	/* 选项文字：字色 + 描边 */
+	color: #d8d891;
+	font-family: "FZLBJW";
 	font-size: 30px;
 	font-weight: 500;
+	-webkit-text-stroke: 1px #4a5320;
+	paint-order: stroke fill;
+	text-shadow:
+		0 1px 0 #1a140c,
+		0 2px 2px rgba(0, 0, 0, 0.45),
+		0 0 4px rgba(200, 160, 70, 0.28);
 	border-radius: 4px;
 	overflow: visible;
 	transition: none;
@@ -214,6 +220,24 @@
 	padding: 20px 0px !important;
 }
 
+/* 背水选项：仅换背景图，文字/尺寸与普通选项一致 */
+.control > div.beishui-btn {
+	background-image: url("../../assets/lbtn/uibutton/beishui.png") !important;
+	background-size: 100% 100% !important;
+	background-color: transparent !important;
+	background-repeat: no-repeat;
+}
+
+/* 一键选牌 / 不无懈：图标 + 与取消相同的 primary2 背景 */
+.control > div.yjxp-btn > img,
+.control > div.wx-btn > img {
+	display: block;
+	pointer-events: none;
+	max-height: 36px;
+	width: auto;
+	margin: 0 auto;
+}
+
 .control > div + div {
 	margin-left: 15px;
 }
@@ -234,21 +258,23 @@
 .lbtn-confirm > [data-type="skill2"]:not(.recasting-btn) {
 	background-image: url("../../assets/lbtn/uibutton/cbtn.png") !important;
 	background-size: 100% 100% !important;
-	padding: 10px 15px !important;
+	padding: 4px 10px !important;
 	margin: 0 2px !important;
 	transform: none !important;
-	-webkit-text-stroke: 0.5px #5b6727;
+	color: #d8d891;
+	font-family: "FZLBJW";
+	font-size: 22px;
+	-webkit-text-stroke: 1px #4a5320;
+	paint-order: stroke fill;
 	text-shadow:
-		1px 1px 0px #5b6727,
-		-1px -1px 0px #5b6727;
-	color: #e3d08b;
-	font-family: "HYZLSJ";
-	font-size: 30px;
+		0 1px 0 #1a140c,
+		0 2px 2px rgba(0, 0, 0, 0.45),
+		0 0 4px rgba(200, 160, 70, 0.28);
 	border-radius: 4px;
 	text-align: center;
-	line-height: 30px;
-	min-width: 80px !important;
-	min-height: 18px !important;
+	line-height: 22px;
+	min-width: 72px !important;
+	min-height: 0 !important;
 }
 
 .lbtn-confirm[data-skill] > [data-type="skill2"] {
@@ -265,12 +291,14 @@
 	margin-top: 18px !important;
 	margin-left: -10px !important;
 	margin-right: -10px !important;
-	-webkit-text-stroke: 0.5px #5b6727;
+	color: #d8d891;
+	font-family: "FZLBJW";
+	-webkit-text-stroke: 1px #4a5320;
+	paint-order: stroke fill;
 	text-shadow:
-		1px 1px 0px #5b6727,
-		-1px -1px 0px #5b6727;
-	color: #e3d08b;
-	font-family: "HYZLSJ";
+		0 1px 0 #1a140c,
+		0 2px 2px rgba(0, 0, 0, 0.45),
+		0 0 4px rgba(200, 160, 70, 0.28);
 	border-radius: 4px;
 	text-align: center;
 	line-height: 30px;
@@ -325,7 +353,7 @@
 .handcardNumber {
 	bottom: -3px;
 	right: 270px;
-	font-family: "HYZLSJ";
+	font-family: "FZLBJW";
 	color: #ffffff;
 	font-weight: 100 !important;
 	font-size: 13px !important;
@@ -351,7 +379,7 @@
 	left: 490px;
 	bottom: 18px;
 	height: 8px;
-	font-family: "HYZLSJ";
+	font-family: "FZLBJW";
 	font-weight: 500;
 	line-height: 25px;
 	text-align: right;
@@ -417,7 +445,7 @@
 	position: absolute;
 	line-height: 16px;
 	text-align: center;
-	font-family: "HYZLSJ";
+	font-family: "FZLBJW";
 	font-stretch: ultra-condensed;
 	font-size: 25px;
 	text-shadow:
@@ -756,5 +784,162 @@
 	height: 435px;
 	left: 110px;
 	bottom: 60px;
+}
+
+/* chooseNumbers 加减条（移动版）—— 避开 .control > div 选项绿底/布局 */
+.lbtn-confirm > .choose-number-bars,
+.lbtn-confirm > .choose-number-bars.control {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 8px;
+	flex: 0 0 auto !important;
+	width: auto !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	height: auto !important;
+	min-height: 0 !important;
+	margin: 0 6px !important;
+	margin-top: 0 !important;
+	padding: 0 !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	transform: scale(0.92);
+	transform-origin: center center;
+	pointer-events: auto;
+	overflow: visible !important;
+	color: inherit !important;
+	font-size: inherit !important;
+	-webkit-text-stroke: 0 !important;
+	text-shadow: none !important;
+}
+
+.lbtn-confirm > .choose-number-bars:active,
+.lbtn-confirm > .choose-number-bars.control:active {
+	transform: scale(0.92) !important;
+}
+
+.lbtn-confirm .choose-number-bar:active,
+.lbtn-confirm .choose-number-dec:active,
+.lbtn-confirm .choose-number-add:active,
+.lbtn-confirm .choose-number-label:active {
+	transform: none !important;
+}
+
+#arena > #dui-controls > .control:not(.disabled) > .choose-number-bars:active,
+#arena > #dui-controls > .control:not(.disabled) > .choose-number-bars.control:active {
+	transform: scale(0.92) !important;
+}
+
+.lbtn-confirm .choose-number-bar,
+.lbtn-confirm .choose-number-bar.control {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 5px !important;
+	flex: 0 0 auto !important;
+	width: auto !important;
+	min-width: 240px !important;
+	max-width: none !important;
+	height: 64px !important;
+	min-height: 64px !important;
+	padding: 0 36px 0 30px !important;
+	margin: 0 !important;
+	box-sizing: border-box;
+	background-color: transparent !important;
+	background-image: url("../../assets/lbtn/uibutton/game_btn_bg2.png") !important;
+	background-size: 100% 100% !important;
+	background-repeat: no-repeat !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	overflow: visible !important;
+	position: relative !important;
+	left: auto !important;
+	top: auto !important;
+	transform: none !important;
+	color: inherit !important;
+	font-size: inherit !important;
+	line-height: normal !important;
+	-webkit-text-stroke: 0 !important;
+	text-shadow: none !important;
+}
+
+.lbtn-confirm .choose-number-dec,
+.lbtn-confirm .choose-number-add,
+.lbtn-confirm .choose-number-label {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	flex: 0 0 auto !important;
+	position: relative !important;
+	left: auto !important;
+	top: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	min-height: 0 !important;
+	height: auto !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	transform: none !important;
+	overflow: visible !important;
+	color: inherit !important;
+	font-size: inherit !important;
+	line-height: normal !important;
+	-webkit-text-stroke: 0 !important;
+	text-shadow: none !important;
+}
+
+.lbtn-confirm .choose-number-dec,
+.lbtn-confirm .choose-number-add {
+	width: 47px !important;
+	height: 48px !important;
+	cursor: pointer;
+}
+
+.lbtn-confirm .choose-number-dec > img,
+.lbtn-confirm .choose-number-add > img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+}
+
+.lbtn-confirm .choose-number-label {
+	width: 46px !important;
+	height: 37px !important;
+	background-image: url("../../assets/lbtn/uibutton/game_choose_label_bg.png") !important;
+	background-size: 100% 100% !important;
+	background-repeat: no-repeat !important;
+}
+
+.lbtn-confirm .choose-number-label > span {
+	display: block;
+	font-family: "FZLBJW", "shousha", serif;
+	font-size: 22px;
+	line-height: 1;
+	color: #c9c475;
+	-webkit-text-stroke: 1px #3a3420;
+	paint-order: stroke fill;
+	text-shadow:
+		0 1px 0 #1a140c,
+		0 2px 2px rgba(0, 0, 0, 0.45);
+	pointer-events: none;
+}
+
+.lbtn-confirm .choose-number-dec.disabled,
+.lbtn-confirm .choose-number-add.disabled {
+	filter: grayscale(100%) !important;
+	-webkit-filter: grayscale(100%) !important;
+	opacity: 0.7;
+	pointer-events: none;
+	cursor: default;
 }
 

@@ -24,6 +24,8 @@ export {
 	refreshGuozhanMarks,
 	updateLayeredMarks,
 	clearLayeredMarks,
+	refreshAozhanTaoCards,
+	setupAozhanTaoRefresh,
 	// 卡牌覆写方法
 	cardInit,
 	cardCopy,

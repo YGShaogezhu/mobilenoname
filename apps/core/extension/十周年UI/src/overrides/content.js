@@ -3,6 +3,7 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
+import { createChooseNumberBars } from "../ui/chooseNumberBar.js";
 
 /** @type {Object|null} 基础方法引用 */
 let baseContentMethods = null;
@@ -13,6 +14,164 @@ let baseContentMethods = null;
  */
 export function setBaseContentMethods(methods) {
 	baseContentMethods = methods;
+}
+
+/**
+ * 是否为移动版样式（手杀 lbtn）
+ * @returns {boolean}
+ */
+function isMobileDecadeStyle() {
+	return lib.config.extension_十周年UI_newDecadeStyle === "off";
+}
+
+/**
+ * 移动版 chooseNumbers：dialog 仅提示，确认条旁加减选数
+ * @param {Function} baseChooseNumbers - 原始 chooseNumbers
+ * @returns {Function}
+ */
+export function createContentChooseNumbers(baseChooseNumbers) {
+	return async function chooseNumbers(event, trigger, player) {
+		if (!isMobileDecadeStyle()) {
+			return baseChooseNumbers.call(this, event, trigger, player);
+		}
+
+		if (event.chooseTime && _status.connectMode && !game.online) {
+			event.time = lib.configOL.choose_timeout;
+			game.broadcastAll(time => {
+				lib.configOL.choose_timeout = time;
+			}, event.chooseTime);
+		}
+
+		let result;
+		if (!Array.isArray(event.numbers)) {
+			event.numbers = [];
+		}
+		if (!event.numbers.length) {
+			event.list.forEach(item => {
+				if (Array.isArray(item)) {
+					if (["asc", "sort"].includes(item[0])) {
+						event.numbers.push(item.slice(1).sort((a, b) => a - b)[0]);
+					} else if (item[0] == "desc") {
+						event.numbers.push(item.slice(1).sort((a, b) => b - a)[0]);
+					} else {
+						event.numbers.push(item[0]);
+					}
+				} else {
+					event.numbers.push(item.min || 0);
+				}
+			});
+		}
+
+		if (event.isMine()) {
+			result = await new Promise(resolve => {
+				_status.imchoosing = true;
+				event.settleed = false;
+				event.dialog = ui.create.dialog(event.prompt || "请调整以下数值", "forcebutton", "hidden");
+				if (event.prompt2) {
+					event.dialog.addText(event.prompt2);
+				}
+
+				for (const item of event.list) {
+					event.dialog.addText(item.prompt || "选择一个数值");
+				}
+				event.dialog.add(" <br> ");
+				event.dialog.open();
+
+				/** @type {ReturnType<typeof createChooseNumberBars>|null} */
+				let numberBars = null;
+
+				const cleanup = () => {
+					numberBars?.remove();
+					numberBars = null;
+					event.dialog?.close();
+					if (ui.confirm) {
+						ui.confirm.close();
+					}
+				};
+
+				const syncConfirm = () => {
+					if (event.filterOk(event)) {
+						if (event.forced) {
+							ui.create.confirm("o");
+						} else {
+							ui.create.confirm("oc");
+						}
+					} else if (!event.forced) {
+						ui.create.confirm("c");
+					} else if (ui.confirm) {
+						ui.confirm.close();
+					}
+					numberBars?.attachToConfirm();
+				};
+
+				const onNumberChange = () => {
+					numberBars?.refreshAll();
+					syncConfirm();
+				};
+
+				numberBars = createChooseNumberBars(event, onNumberChange);
+
+				event.switchToAuto = () => {
+					if (!event.filterOk(event)) {
+						if (!event.forced) {
+							event._result = { bool: false };
+						} else {
+							event._result = "ai";
+						}
+					} else {
+						event._result = "ai";
+					}
+					cleanup();
+					game.resume();
+					_status.imchoosing = false;
+					resolve(event._result);
+				};
+
+				event.custom.replace.confirm = bool => {
+					if (bool) {
+						event._result = { bool: true, numbers: event.numbers };
+					} else {
+						event._result = { bool: false };
+					}
+					cleanup();
+					game.resume();
+					_status.imchoosing = false;
+					resolve(event._result);
+				};
+
+				syncConfirm();
+				game.pause();
+				game.countChoose();
+				event.choosing = true;
+			});
+		} else if (event.isOnline()) {
+			result = await event.sendAsync();
+		} else {
+			result = "ai";
+		}
+
+		if (event.time) {
+			game.broadcastAll(time => {
+				lib.configOL.choose_timeout = time;
+			}, event.time);
+		}
+
+		if ((!result || result == "ai" || (event.forced && !result.bool)) && event.processAI) {
+			const numbers = event.processAI(event);
+			if (typeof numbers == "boolean") {
+				if (numbers == true) {
+					result = { bool: true, numbers: event.numbers };
+				} else {
+					result = { bool: false };
+				}
+			} else if (Array.isArray(numbers)) {
+				result = { bool: true, numbers };
+			} else {
+				result = { bool: false };
+			}
+		}
+		event.result = result;
+	};
 }
 
 /**
