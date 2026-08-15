@@ -5,7 +5,7 @@
  */
 import { lib, game, ui, get, ai, _status } from "noname";
 
-export { throttle, observeSize, lerp, getBrowserInfo, useNewDpr } from "./utils.js";
+export { throttle, observeSize, lerp, getBrowserInfo, useNewDpr, getSpineScaleSize } from "./utils.js";
 export { CubicBezierEase, ease } from "./easing.js";
 export { TimeStep } from "./TimeStep.js";
 export { APNode } from "./APNode.js";

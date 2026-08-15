@@ -42,6 +42,11 @@ body > .background {
 	z-index: 7;
 }
 
+/* 转化白闪期间压过 thrown 牌（牌 CSS z-index 5 / 折叠 15，默认画布只有 7） */
+#decadeUI-canvas.viewas-anim-front {
+	z-index: 1000 !important;
+}
+
 #decadeUI-canvas-background {
 	z-index: -1;
 }
@@ -146,6 +151,7 @@ body > .background {
 	height: 150px;
 	transition: none;
 	z-index: 3;
+	overflow: visible;
 }
 
 /* 右手布局 */
@@ -213,6 +219,7 @@ body > .background {
 	height: 100%;
 	transition: none;
 	z-index: 3;
+	overflow: visible;
 }
 
 .hand-cards > .handcards {
@@ -224,6 +231,7 @@ body > .background {
 	margin: 0;
 	padding: 0;
 	transition: none;
+	overflow: visible;
 }
 
 .hand-cards > .handcards > .card {

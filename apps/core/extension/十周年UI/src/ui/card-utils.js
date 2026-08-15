@@ -11,6 +11,7 @@ import {
 	applyLayeredTempSuitNum,
 	clearLayeredTempSuitNum,
 } from "../overrides/card/layered-card.js";
+import { getSpineScaleSize } from "../animation/utils.js";
 
 /** 有独立正中标签图的基本牌 */
 const VIEWAS_IMAGE_CARDS = new Set(["sha", "shan", "tao", "jiu"]);
@@ -308,22 +309,64 @@ export function morphThrownToViewAs(card, event, opts = {}) {
 }
 
 /**
- * 是否为转化出牌（实体牌名/属性与结算牌不同）
+ * 是否为「牌名/属性与结算牌不同」的实体牌
+ * @param {HTMLElement} card
  * @param {object} event
- * @param {HTMLElement} [card]
  * @returns {boolean}
  */
-function isViewAsThrowEvent(card, event) {
-	if (!card || !event || lib.config.cardtempname === "off") return false;
-	if (!["useCard", "respond"].includes(event.name) || !event.card) return false;
-	if (card.dataset.virtual === "1") return false;
+function isNameMismatchedThrow(card, event) {
+	if (!card || !event?.card) return false;
 	const cardname = event.card.name;
 	const cardnature = get.nature(event.card);
 	return card.name !== cardname || !get.is.sameNature(cardnature, card.nature, true);
 }
 
 /**
- * 收集本次转化对应的 thrown 克隆（按材料顺序）
+ * 事件是否带 viewAs 技能（丈八/玄剑/龙魂等；材料牌名可与结果相同）
+ * @param {object} event
+ * @returns {boolean}
+ */
+function isSkillViewAsEvent(event) {
+	const skill = event?.skill;
+	if (!skill || typeof skill !== "string") return false;
+	const info = get.info(skill);
+	return Boolean(info?.viewAs);
+}
+
+/**
+ * 是否应调度转化出牌（白闪 + 变形）
+ * @description 除牌名不同外，带 viewAs 的技能出牌也算（避免两张杀当杀时完全不播）
+ * @param {HTMLElement} card
+ * @param {object} event
+ * @returns {boolean}
+ */
+function isViewAsThrowEvent(card, event) {
+	if (!card || !event || lib.config.cardtempname === "off") return false;
+	if (!["useCard", "respond"].includes(event.name) || !event.card) return false;
+	if (card.dataset.virtual === "1") return false;
+	if (card._viewAsMorphed) return false;
+	if (isSkillViewAsEvent(event)) return true;
+	return isNameMismatchedThrow(card, event);
+}
+
+/**
+ * 是否为多牌转化出牌（刚离手需先叠好再飞，故推迟第一次 layoutDiscard）
+ * @param {object} event
+ * @returns {boolean}
+ */
+export function isMultiViewAsThrowEvent(event) {
+	if (!event?.card || lib.config.cardtempname === "off") return false;
+	if (!["useCard", "respond"].includes(event.name)) return false;
+	const materials = event.card.cards;
+	if (!Array.isArray(materials) || materials.length < 2) return false;
+	if (isSkillViewAsEvent(event)) return true;
+	const cardname = event.card.name;
+	const cardnature = get.nature(event.card);
+	return materials.some(m => m && (m.name !== cardname || !get.is.sameNature(cardnature, m.nature, true)));
+}
+
+/**
+ * 收集本次转化对应的 thrown 克隆（严格按材料顺序；主牌=materials[0]）
  * @param {object} event
  * @param {HTMLElement} [hintCard]
  * @returns {HTMLElement[]}
@@ -333,7 +376,8 @@ function collectThrownClones(event, hintCard) {
 	const list = [];
 	if (Array.isArray(materials) && materials.length) {
 		for (const m of materials) {
-			if (m?.clone?.isConnected) list.push(m.clone);
+			const clone = m?.clone;
+			if (clone?.isConnected) list.push(clone);
 		}
 	}
 	if (!list.length && hintCard?.isConnected) list.push(hintCard);
@@ -348,41 +392,230 @@ function collectThrownClones(event, hintCard) {
 	return list;
 }
 
-/** 出牌飞入大致时长（与 waitCardArrive 超时一致） */
-const VIEWAS_THROW_MS = 420;
-/** 落地前提前多久开播转化动画 */
-const VIEWAS_ANIM_LEAD_MS = 200;
-/** 转化动画播放速度（越小白闪越久） */
-const VIEWAS_ANIM_SPEED = 0.50;
-/** 开播后至少保留多久白闪再变形 */
-const VIEWAS_WHITE_MS = 420;
-/** 相对牌面的缩放（资源自带外扩光晕，需明显小于 1 以免白框溢出牌边） */
-const VIEWAS_ANIM_SCALE = 0.90;
+/**
+ * 解析主牌：优先材料第一张的 clone
+ * @param {object} event
+ * @param {HTMLElement[]} thrown
+ * @returns {HTMLElement|null}
+ */
+function resolveViewAsPrimary(event, thrown) {
+	const first = event?.card?.cards?.[0]?.clone;
+	if (first?.isConnected) return first;
+	return thrown?.[0] || null;
+}
+
+/** 飞入过渡兜底时长（.card 约 0.46s；优先用 getAnimations().finished） */
+const VIEWAS_FLY_MS = 480;
+/** 停稳后再多留一点，避免刚好卡在过渡末帧 */
+const VIEWAS_FLY_BUFFER_MS = 40;
+/** 离手叠牌短过渡（只用固定延时，不用 listenTransition） */
+const VIEWAS_MERGE_MS = 120;
+/** 转化动画播放速度 */
+const VIEWAS_ANIM_SPEED = 0.7;
+/** 落地开播后再过多久换牌面 */
+const VIEWAS_WHITE_MS = 350;
+/** kapaizhuanhuan 素材 orig（atlas） */
+const VIEWAS_SPINE_ORIG = { w: 75, h: 100 };
+/** 卡槽 DOM 尺寸（与 .card / 分层卡一致） */
+const VIEWAS_CARD_BOX = { w: 108, h: 150 };
+/** 金 / 黑金外框可视尺寸（.lc-frame 118×160） */
+const VIEWAS_CARD_FACE = { w: 118, h: 160 };
+/**
+ * 相对「当前牌可视矩形」的覆盖比。
+ * orig 只是贴图，动画还会外扩光晕，故明显小于 1。
+ * 白卡按 108×150 盒子；金/黑金按 118×160 外框（不要按盒子 0.68，光晕会大过牌）。
+ */
+const VIEWAS_COVER_WHITE = { w: 0.54, h: 0.58 };
+const VIEWAS_COVER_FRAMED = { w: 0.52, h: 0.52 };
+/** 锚点：相对牌盒中心；金/黑金底框略上移，y 稍大于 0.5 */
+const VIEWAS_ANCHOR_WHITE = { x: 0.5, y: 0.5 };
+const VIEWAS_ANCHOR_FRAMED = { x: 0.5, y: 0.52 };
+/** Spine scaleX/Y 上下限，防止异常尺寸弄挂共用画布 */
+const VIEWAS_SCALE_MIN = 0.25;
+const VIEWAS_SCALE_MAX = 3.5;
+const VIEWAS_CANVAS_FRONT_CLASS = "viewas-anim-front";
+/** 播白闪时把 thrown 压到画布默认 z-index 7 之下 */
+const VIEWAS_CARD_UNDER_CANVAS_Z = "3";
 
 /**
- * 等待卡牌飞入临时区
+ * 是否为带外扩边框的分层卡（金 / 黑金）
  * @param {HTMLElement} card
- * @returns {Promise<void>}
+ * @returns {boolean}
  */
-function waitCardArrive(card) {
-	return new Promise(resolve => {
-		let done = false;
-		const finish = () => {
-			if (done) return;
-			done = true;
-			card.removeEventListener("transitionend", onEnd);
-			resolve();
-		};
-		const onEnd = e => {
-			if (!e.propertyName || e.propertyName === "transform") finish();
-		};
-		card.addEventListener("transitionend", onEnd);
-		setTimeout(finish, VIEWAS_THROW_MS);
+function isFramedLayeredCard(card) {
+	const face = card?.dataset?.cardFace;
+	return Boolean(card?.classList?.contains("layered-card") && (face === "2" || face === "3" || face === "4"));
+}
+
+/**
+ * 按本项目当前牌的可视大小套白闪（PC / 手机、手牌/临时区缩放都会变）
+ * 白卡罩主体；金/黑金只罩中间，边框外不铺满
+ * @param {HTMLElement} card
+ * @returns {{ scaleX: number, scaleY: number, x: number[], y: number[] }}
+ */
+function scaleViewAsSpineToCard(card) {
+	const framed = isFramedLayeredCard(card);
+	const cover = framed ? VIEWAS_COVER_FRAMED : VIEWAS_COVER_WHITE;
+	const anchor = framed ? VIEWAS_ANCHOR_FRAMED : VIEWAS_ANCHOR_WHITE;
+	// 用布局尺寸算 scale，避免手机 documentZoom 让白闪相对牌偏小；PC zoom≈1 与原先一致
+	const r = getSpineScaleSize(card) || card?.getBoundingClientRect?.();
+	if (!r?.width || !r?.height) {
+		return { scaleX: 1, scaleY: 1, x: [0, anchor.x], y: [0, anchor.y] };
+	}
+	const visW = framed ? r.width * (VIEWAS_CARD_FACE.w / VIEWAS_CARD_BOX.w) : r.width;
+	const visH = framed ? r.height * (VIEWAS_CARD_FACE.h / VIEWAS_CARD_BOX.h) : r.height;
+	const clamp = v => Math.min(VIEWAS_SCALE_MAX, Math.max(VIEWAS_SCALE_MIN, v));
+	return {
+		scaleX: clamp((visW * cover.w) / VIEWAS_SPINE_ORIG.w),
+		scaleY: clamp((visH * cover.h) / VIEWAS_SPINE_ORIG.h),
+		x: [0, anchor.x],
+		y: [0, anchor.y],
+	};
+}
+
+/**
+ * 清掉 thrown 上手牌选中残留的超高 z-index，并按折叠规则重设
+ * @param {HTMLElement[]} thrown
+ */
+function normalizeThrownViewAsZIndex(thrown) {
+	const list = Array.isArray(thrown) ? thrown : [];
+	for (const c of list) {
+		if (!c?.style) continue;
+		if (c.dataset.viewasFold === "1") {
+			c.style.zIndex = c.dataset.viewasPrimary === "1" ? "15" : "10";
+		} else {
+			c.style.zIndex = "";
+		}
+	}
+	if (Array.isArray(ui.thrown)) {
+		for (const t of ui.thrown) {
+			if (!t?.style || list.includes(t)) continue;
+			const z = parseInt(t.style.zIndex, 10);
+			if (!Number.isFinite(z) || z < 1000) continue;
+			t.style.zIndex = t.dataset.viewasFold === "1" ? (t.dataset.viewasPrimary === "1" ? "15" : "10") : "";
+		}
+	}
+}
+
+/**
+ * 把转化动画画布抬到 thrown 牌之上，并暂时压低牌的 z-index。
+ * thrown 折叠主牌是 15，默认画布只有 7，同层比较时牌会盖住白闪。
+ * @param {HTMLElement|null|undefined} canvas
+ * @param {HTMLElement[]} thrown
+ * @returns {() => void}
+ */
+function raiseViewAsAnimCanvas(canvas, thrown) {
+	const cards = (Array.isArray(thrown) ? thrown : []).filter(c => c?.style);
+	const prevCardZ = cards.map(c => [c, c.style.zIndex]);
+	for (const c of cards) {
+		c.style.zIndex = VIEWAS_CARD_UNDER_CANVAS_Z;
+	}
+	if (canvas) {
+		canvas.classList.add(VIEWAS_CANVAS_FRONT_CLASS);
+		canvas.style.setProperty("z-index", "500", "important");
+	}
+	let restored = false;
+	return () => {
+		if (restored) return;
+		restored = true;
+		if (canvas) {
+			canvas.classList.remove(VIEWAS_CANVAS_FRONT_CLASS);
+			canvas.style.removeProperty("z-index");
+		}
+		for (const [c, z] of prevCardZ) {
+			if (c?.style) c.style.zIndex = z;
+		}
+		normalizeThrownViewAsZIndex(thrown);
+	};
+}
+
+function waitAnimationFrames(count = 2) {
+	let p = Promise.resolve();
+	for (let i = 0; i < count; i++) {
+		p = p.then(() => new Promise(r => requestAnimationFrame(r)));
+	}
+	return p;
+}
+
+/**
+ * 正在跑的 transform 过渡（含 transition: all）
+ * @param {HTMLElement} card
+ * @returns {Animation[]}
+ */
+function getCardFlyAnimations(card) {
+	if (typeof card.getAnimations !== "function") return [];
+	return card.getAnimations().filter(a => {
+		if (a.playState === "finished" || a.playState === "idle") return false;
+		const prop = a.transitionProperty || "";
+		return !prop || prop === "all" || String(prop).includes("transform");
 	});
 }
 
 /**
- * 转化出牌：飞行中折叠 → 快落地播动画 → 白闪后再变形为结果
+ * 等飞入过渡真正结束（跟 CSS / 开发者工具慢放同一条时间轴）
+ * 无 running animation 时才退回固定时长
+ * @param {HTMLElement} card
+ * @returns {Promise<void>}
+ */
+async function waitCardArrive(card) {
+	await waitAnimationFrames(2);
+	if (!card?.isConnected) return;
+
+	const running = getCardFlyAnimations(card);
+	if (running.length) {
+		await Promise.all(running.map(a => a.finished.catch(() => {})));
+		await waitAnimationFrames(1);
+		return;
+	}
+
+	await new Promise(r => setTimeout(r, VIEWAS_FLY_MS + VIEWAS_FLY_BUFFER_MS));
+}
+
+/**
+ * 手牌坐标处的折叠露边间距（与弃牌区 foldGap 同一公式，用当前手牌可视宽）
+ * @returns {number}
+ */
+function getViewAsHandFoldGap() {
+	const hand = decadeUI?.boundsCaches?.hand;
+	hand?.check?.();
+	const cw = hand?.cardWidth || 108;
+	const cs = hand?.cardScale || 1;
+	return Math.max(22, Math.round(cw * cs * 0.16));
+}
+
+/**
+ * 多牌转化：在克隆当前手牌坐标收成一叠（主牌在右、压最上）
+ * @param {HTMLElement[]} thrown
+ * @param {HTMLElement} primary
+ */
+function stackViewAsAtHand(thrown, primary) {
+	const list = thrown.filter(c => c?.isConnected);
+	if (list.length < 2 || !primary?.isConnected) return;
+
+	const others = list.filter(c => c !== primary);
+	const stack = [...others, primary];
+	const foldGap = getViewAsHandFoldGap();
+	const baseX = Number.isFinite(primary.tx) ? primary.tx : 0;
+	const baseY = Number.isFinite(primary.ty) ? primary.ty : 0;
+	const startX = baseX - others.length * foldGap;
+	const hand = decadeUI?.boundsCaches?.hand;
+	const scale = hand?.cardScale || 1;
+
+	stack.forEach((c, i) => {
+		const x = Math.round(startX + i * foldGap);
+		c.tx = x;
+		c.ty = baseY;
+		c.scaled = true;
+		c.style.transform = `translate(${x}px,${baseY}px) scale(${scale})`;
+	});
+}
+
+function layoutThrownNow() {
+	if (window.decadeUI?.layoutDiscard) decadeUI.layoutDiscard();
+}
+
+/**
+ * 转化出牌：多牌离手先叠 → 整叠飞入临时区 → 落地播白闪再变形
  * @param {object} event
  * @param {HTMLElement} [hintCard]
  */
@@ -393,57 +626,28 @@ export async function scheduleThrownViewAsMorph(event, hintCard) {
 	if (pendingViewAsGroups.has(groupKey)) return;
 	pendingViewAsGroups.add(groupKey);
 
-	try {
-		await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-		const materials = Array.isArray(event.card.cards) ? event.card.cards : [];
-		const isMulti = materials.length > 1;
-		let thrown = collectThrownClones(event, hintCard);
-		if (!thrown.length) return;
-
-		thrown.forEach(c => {
-			c.dataset.viewasFold = isMulti ? "1" : "0";
-			c._viewAsGroupId = groupKey;
-			delete c.dataset.viewasPrimary;
-			clearViewAsLabel(c);
-			if (c._tempName) {
-				c._tempName.delete?.();
-				delete c._tempName;
-			}
-			c.querySelectorAll?.(".temp-name")?.forEach(el => el.remove());
-		});
-
-		const primary = thrown[0];
-		primary.dataset.viewasPrimary = "1";
-
-		// 飞行中就往折叠位收拢
-		if (window.decadeUI?.layoutDiscard) {
-			decadeUI.layoutDiscard();
+	const flyThenFlash = async (thrown, primary, isMulti) => {
+		if (!primary?.isConnected) {
+			layoutThrownNow();
+			return;
 		}
-
-		const arrivePromise = Promise.all(thrown.map(c => waitCardArrive(c)));
+		normalizeThrownViewAsZIndex(thrown);
+		// 多牌：先写好临时区目标并 reflow，再等停稳；单牌入场时已在飞
+		if (isMulti) {
+			layoutThrownNow();
+			void primary.offsetWidth;
+		}
+		await waitCardArrive(primary);
+		if (!primary.isConnected) return;
 
 		const anim = window.decadeUI?.animation;
 		const canvas = anim?.canvas;
-		const prevCanvasZ = canvas?.style?.zIndex;
-		let canvasRaised = false;
-		const restoreCanvas = () => {
-			if (!canvasRaised || !canvas) return;
-			canvasRaised = false;
-			canvas.style.zIndex = prevCanvasZ ?? "";
-		};
+		let restoreCanvas = () => {};
 
-		// 快落地时开播
-		await new Promise(r => setTimeout(r, Math.max(0, VIEWAS_THROW_MS - VIEWAS_ANIM_LEAD_MS)));
-		if (!primary.isConnected) return;
-
-		const whitePromise = new Promise(r => setTimeout(r, VIEWAS_WHITE_MS));
+		normalizeThrownViewAsZIndex(thrown);
 		if (anim?.playSpine) {
 			try {
-				if (canvas) {
-					canvas.style.zIndex = "21";
-					canvasRaised = true;
-				}
+				restoreCanvas = raiseViewAsAnimCanvas(canvas, thrown);
 				anim.playSpine(
 					{
 						name: "kapaizhuanhuan",
@@ -451,15 +655,11 @@ export async function scheduleThrownViewAsMorph(event, hintCard) {
 						speed: VIEWAS_ANIM_SPEED,
 						oncomplete: restoreCanvas,
 					},
-					{ parent: primary, scale: 0.9, follow: true }
-					// {
-					// 	parent: primary,
-					// 	follow: true,
-					// 	// 按牌面宽高适配，再略缩小以免白框超出四周
-					// 	width: [0, 1],
-					// 	height: [0, 1],
-					// 	scale: VIEWAS_ANIM_SCALE,
-					// }
+					{
+						parent: primary,
+						follow: true,
+						...scaleViewAsSpineToCard(primary),
+					}
 				);
 				setTimeout(restoreCanvas, Math.ceil(1000 / VIEWAS_ANIM_SPEED));
 			} catch (e) {
@@ -468,10 +668,61 @@ export async function scheduleThrownViewAsMorph(event, hintCard) {
 			}
 		}
 
-		// 落地 + 白闪够久后再出结果
-		await Promise.all([arrivePromise, whitePromise]);
+		await new Promise(r => setTimeout(r, VIEWAS_WHITE_MS));
 		if (!primary.isConnected) return;
 		morphThrownToViewAs(primary, event, { isMulti });
+	};
+
+	try {
+		await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+		const materials = Array.isArray(event.card.cards) ? event.card.cards : [];
+		const isMulti = materials.length > 1;
+		let thrown = collectThrownClones(event, hintCard);
+		if (isMulti && thrown.length < materials.length) {
+			await new Promise(r => requestAnimationFrame(r));
+			thrown = collectThrownClones(event, hintCard);
+		}
+		if (!thrown.length) {
+			layoutThrownNow();
+			return;
+		}
+
+		const primary = resolveViewAsPrimary(event, thrown);
+		if (!primary) {
+			layoutThrownNow();
+			return;
+		}
+		if (!thrown.includes(primary)) thrown.unshift(primary);
+
+		thrown.forEach(c => {
+			c.style.zIndex = "";
+			clearViewAsLabel(c);
+			if (c._tempName) {
+				c._tempName.delete?.();
+				delete c._tempName;
+			}
+			c.querySelectorAll?.(".temp-name")?.forEach(el => el.remove());
+			if (!c?.isConnected) return;
+			c.dataset.viewasFold = isMulti ? "1" : "0";
+			c._viewAsGroupId = groupKey;
+			delete c.dataset.viewasPrimary;
+		});
+		primary.dataset.viewasPrimary = "1";
+		normalizeThrownViewAsZIndex(thrown);
+
+		const canStackAtHand = isMulti && thrown.length >= 2 && thrown.length >= materials.length;
+		if (canStackAtHand) {
+			void primary.offsetWidth;
+			stackViewAsAtHand(thrown, primary);
+			await new Promise(r => setTimeout(r, VIEWAS_MERGE_MS));
+			if (!primary.isConnected) {
+				layoutThrownNow();
+				return;
+			}
+		}
+
+		await flyThenFlash(thrown, primary, isMulti);
 	} finally {
 		setTimeout(() => pendingViewAsGroups.delete(groupKey), 1800);
 	}
@@ -609,8 +860,9 @@ function handleDefaultTag(card, player, event, decadeUI) {
 	_status.event = evt;
 
 	if (["useCard", "respond"].includes(event.name)) {
-		// 转化：飞行中折叠，快落地播动画，白闪后再出结果
-		const isConvert = isViewAsThrowEvent(card, event) && !card._viewAsMorphed;
+		// 转化：多牌离手先叠再飞，落地后白闪再出结果
+		// viewAs 技能（丈八等）即使材料牌名已是杀也要调度，变形落在材料第一张
+		const isConvert = isViewAsThrowEvent(card, event);
 		if (isConvert) {
 			clearViewAsLabel(card);
 			if (card._tempName) {

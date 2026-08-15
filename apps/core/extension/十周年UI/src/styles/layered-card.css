@@ -1,26 +1,48 @@
 /**
  * 手杀分层拼卡
  *
- * 底框设计稿（卡槽 108×150，百分比按设计稿映射）：
- *   白卡 card1 = 127×173，边框极薄，内区几乎铺满
- *   金卡 card2 = 137×183，金边约 L/R/T≈5px（映射后），底边更薄
- *   黑金 card3 = 137×182，黑金边约四周 5.5–6px
- *
- * face=1 / 2 / 3 各自维护完整布局变量；虚拟牌走白卡底，转化牌保留当前底框仅叠标记
+ * 卡槽 108×150。花色/牌名/插画三种底框共用一套内区刻度。
+ *   白卡 card1：铺满盒子
+ *   金卡 card2 / 黑金 card3 / 黑金卡2 card4：118×160 由 .lc-frame 画出盒子（约各边 5px）
  */
 
 .card.layered-card {
+	--lc-box-w: 108;
+	--lc-box-h: 150;
+	--lc-frame-w: 118;
+	--lc-frame-h: 160;
+	--lc-frame-left: -5px;
+	--lc-frame-top: -8px;
+	/* 内区设计稿刻度（三种底框共用，改一处全生效） */
+    --lc-w: 127;
+    --lc-h: 173;
+    --suit-t: 8;
+    --suit-l: 4;
+    --suit-w: 21;
+	--name-t: 16;
+    --name-l: 28;
+    --name-w: 94;
+    --name-h: 28;
+    --type-t: 48;
+    --type-h: 19;
+    --art-t: 60;
+    --art-mx: 5px;
+    --art-mb: 1px;
+    --dist-r: 6;
+    --dist-b: 4;
 	container-type: size;
 	color: rgb(77, 60, 51);
 	text-shadow: none;
-	background-size: 100% 100%;
 	background-repeat: no-repeat;
+	background-position: center;
 	position: relative;
-	/* 未选中时裁零件；选中时放出 card_select 外扩边框 */
 	overflow: hidden;
 }
 
-.card.layered-card.selected {
+.card.layered-card.selected,
+.card.layered-card[data-card-face="2"],
+.card.layered-card[data-card-face="3"],
+.card.layered-card[data-card-face="4"] {
 	overflow: visible;
 }
 
@@ -30,87 +52,102 @@
 	position: absolute;
 }
 
-/* ---------- 白卡：薄边，内区大 ---------- */
+/* ---------- 白卡：铺满 108×150 ---------- */
 .card.layered-card[data-card-face="1"] {
-	--lc-w: 127;
-	--lc-h: 173;
-	--suit-t: 7;
-	--suit-l: 4;
-	--suit-w: 21;
-	--name-t: 18;
-	--name-l: 28;
-	--name-w: 94;
-	--name-h: 28;
-    --type-t: 48;
-    --type-h: 18;
-	--art-t: 58;
-	--art-mx: 3px;
-	--art-mb: 1px;
-	--dist-r: 6;
-	--dist-b: 4;
 	background-image: url("../../image/ui/cardtexture/card1.png");
+	background-size: 100% 100% !important;
+	background-position: 0 0 !important;
 }
 
-/* ---------- 金卡：金边占位，零件相对内区内缩 ---------- */
+/* ---------- 金 / 黑金：卡片上先铺底图，外扩由 .lc-frame 画出盒子 ---------- */
 .card.layered-card[data-card-face="2"] {
-    --lc-w: 136;
-    --lc-h: 182;
-    --suit-t: 8;
-    --suit-l: 8;
-    --suit-w: 23;
-    --name-t: 19;
-    --name-l: 31;
-    --name-w: 98;
-	--name-h: 30;
-    --type-t: 50;
-    --type-h: 24;
-    --art-t: 66;
-    --art-mx: 9px;
-    --art-mb: 1.5px;
-    --dist-r: 10;
-    --dist-b: 4;
+	background-image: url("../../image/ui/cardtexture/card2.png") !important;
+	background-size: 118px 160px !important;
+	background-position: var(--lc-frame-left) var(--lc-frame-top) !important;
+	box-shadow: none;
+}
+
+.card.layered-card[data-card-face="3"] {
+	background-image: url("../../image/ui/cardtexture/card3.png") !important;
+	background-size: 118px 160px !important;
+	background-position: var(--lc-frame-left) var(--lc-frame-top) !important;
+	box-shadow: none;
+}
+
+.card.layered-card[data-card-face="4"] {
+	background-image: url("../../image/ui/cardtexture/card4.png") !important;
+	background-size: 118px 160px !important;
+	background-position: var(--lc-frame-left) var(--lc-frame-top) !important;
+	box-shadow: none;
+}
+
+.card.layered-card > .lc-frame {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 0;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100% 100%;
+}
+
+.card.layered-card[data-card-face="2"] > .lc-frame,
+.card.layered-card[data-card-face="3"] > .lc-frame,
+.card.layered-card[data-card-face="4"] > .lc-frame {
+	width: 118px;
+	height: 160px;
+	left: var(--lc-frame-left);
+	top: var(--lc-frame-top);
+}
+
+.card.layered-card[data-card-face="2"] > .lc-frame {
 	background-image: url("../../image/ui/cardtexture/card2.png");
 }
 
-/* ---------- 黑金：四周边框更匀，底边也需内缩 ---------- */
-.card.layered-card[data-card-face="3"] {
-    --lc-w: 136;
-    --lc-h: 182;
-    --suit-t: 8;
-    --suit-l: 8;
-    --suit-w: 23;
-    --name-t: 19;
-	--name-l: 31;
-    --name-w: 98;
-	--name-h: 30;
-    --type-t: 50;
-    --type-h: 24;
-    --art-t: 66;
-    --art-mx: 9px;
-    --art-mb: 1.5px;
-    --dist-r: 10;
-    --dist-b: 4;
+.card.layered-card[data-card-face="3"] > .lc-frame {
 	background-image: url("../../image/ui/cardtexture/card3.png");
 }
 
-/* 无 face 时回退白卡刻度，避免变量为空 */
-.card.layered-card:not([data-card-face]) {
-	--lc-w: 127;
-	--lc-h: 173;
-	--suit-t: 7;
-	--suit-l: 4;
-	--suit-w: 21;
-	--name-t: 18;
-	--name-l: 28;
-	--name-w: 94;
-	--name-h: 28;
-	--type-t: 45;
-	--type-h: 16;
-	--art-t: 58;
-	--art-mx: 4px;
-	--art-mb: 2px;
-	--dist-r: 6;
-	--dist-b: 4;
+.card.layered-card[data-card-face="4"] > .lc-frame {
+	background-image: url("../../image/ui/cardtexture/card4.png");
+}
+
+/* 判定区 / 他人装备栏是小格子：铺满即可，不要外扩底框 */
+.player > .judges > .card.layered-card[data-card-face="2"],
+.player > .equips > .card.layered-card[data-card-face="2"] {
+	background-image: url("../../image/ui/cardtexture/card2.png") !important;
+	background-size: 100% 100% !important;
+	overflow: hidden;
+}
+
+.player > .judges > .card.layered-card[data-card-face="3"],
+.player > .equips > .card.layered-card[data-card-face="3"] {
+	background-image: url("../../image/ui/cardtexture/card3.png") !important;
+	background-size: 100% 100% !important;
+	overflow: hidden;
+}
+
+.player > .judges > .card.layered-card[data-card-face="4"],
+.player > .equips > .card.layered-card[data-card-face="4"] {
+	background-image: url("../../image/ui/cardtexture/card4.png") !important;
+	background-size: 100% 100% !important;
+	overflow: hidden;
+}
+
+.player > .judges > .card.layered-card[data-card-face="2"]::after,
+.player > .judges > .card.layered-card[data-card-face="3"]::after,
+.player > .judges > .card.layered-card[data-card-face="4"]::after,
+.player > .equips > .card.layered-card[data-card-face="2"]::after,
+.player > .equips > .card.layered-card[data-card-face="3"]::after,
+.player > .equips > .card.layered-card[data-card-face="4"]::after,
+.player > .judges > .card.layered-card > .lc-frame,
+.player > .equips > .card.layered-card > .lc-frame,
+.card.layered-card:empty > .lc-frame,
+.card.layered-card.infohidden > .lc-frame {
+	display: none;
 }
 
 .card.layered-card:empty,
@@ -178,7 +215,7 @@
 .card.layered-card > .suit-num > .num,
 .card.layered-card > .suit-num > span:first-child {
 	display: block;
-	width: 100%;
+	width:  96%;
 	aspect-ratio: 18 / 22;
 	margin: 0 auto;
 }
@@ -273,7 +310,7 @@
 
 /* 基本牌大字名：杀闪桃酒 72×64；火/雷/刺杀 120×82 */
 .card.layered-card > .top-name.base {
-	top: calc(100% * 6 / var(--lc-h));
+	top: calc(100% * 2 / var(--lc-h));
 	left: 5px;
 	right: 0;
 	width: 100%;
@@ -283,7 +320,7 @@
 .card.layered-card > .top-name.base > .name-bg {
 	width: 100%;
 	height: 100%;
-	top: 0;
+	top: 2px;
 	align-items: flex-start;
 	justify-content: center;
 }
@@ -449,8 +486,8 @@
 
 .card.layered-card > .zhuanhua-mark {
 	position: absolute;
-	top: calc(100% * 4 / var(--lc-h));
-	left: calc(100% * 95 / var(--lc-w));
+	top: calc(100% * -2 / var(--lc-h));
+	left: calc(100% * 90 / var(--lc-w));
 	right: auto;
 	width: calc(100% * 36 / var(--lc-w));
 	height: calc(100% * 36 / var(--lc-h));
@@ -480,8 +517,8 @@
 .card.layered-card > .color > img,
 .card.layered-card > .guo-mark > img,
 .card.layered-card > .hezong-mark > img {
-	width: 100%;
-	height: 100%;
+	width: 115%;
+	height: 115%;
 	object-fit: contain;
 	display: block;
 }

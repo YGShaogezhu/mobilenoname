@@ -31,8 +31,19 @@
 	opacity: 1;
 }
 
+/* 金/黑金底框 118×160 外扩：选中框跟可视底框对齐（白卡仍用上方 108×150） */
+.card.layered-card[data-card-face="2"]::before,
+.card.layered-card[data-card-face="3"]::before,
+.card.layered-card[data-card-face="4"]::before {
+	top: calc(var(--lc-frame-top) - 7px);
+	left: calc(var(--lc-frame-left) - 7px);
+	width: calc(var(--lc-frame-w) * 1px);
+	height: calc(var(--lc-frame-h) * 1px);
+}
+
 /* 手杀样式(player2)：黑金手牌选中改用 SS_heijinka，隐藏 CSS 金色选中框 */
-body[data-style="off"] .card.layered-card[data-card-face="3"].selected::before {
+body[data-style="off"] .card.layered-card[data-card-face="3"].selected::before,
+body[data-style="off"] .card.layered-card[data-card-face="4"].selected::before {
 	opacity: 0;
 }
 
@@ -298,7 +309,7 @@ body[data-style="off"] .card.layered-card[data-card-face="3"].selected::before {
 	left: 0;
 	right: 0;
 	top: 50%;
-	width: 100%;
+	width: 102%;
 	height: auto;
 	transform: translateY(-50%);
 	pointer-events: none;

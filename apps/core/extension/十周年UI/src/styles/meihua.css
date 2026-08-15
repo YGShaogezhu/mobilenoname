@@ -193,6 +193,8 @@
 	top: 2px;
 	background-image: url(../../image/styles/decade/equipHand.png);
 	background-size: 100% 100%;
+	z-index: 7;
+	pointer-events: none;
 }
 
 /** 手牌提示 */

@@ -113,3 +113,59 @@ const browserInfo = getBrowserInfo();
 
 /** @type {boolean} 是否使用新版DPR计算方式 */
 export const useNewDpr = (browserInfo[0] === "chrome" && browserInfo[1] >= 128) || (browserInfo[0] === "firefox" && browserInfo[1] >= 126);
+
+/**
+ * 为 Spine 的 scaleX/Y 取与 APNode 布局空间一致的宽高。
+ * 手机 body.zoom < 1 时，getBoundingClientRect 常是可视尺寸；引擎里 scale 却按布局像素乘，
+ * 直接用 GBR 会让动画相对牌偏小。PC 上 zoom≈1，结果与原来相同。
+ * 若手机效果异常，把调用处改回 getBoundingClientRect 即可回退。
+ * @param {HTMLElement} domNode
+ * @returns {{ width: number, height: number }|null}
+ */
+export function getSpineScaleSize(domNode) {
+	if (!domNode?.getBoundingClientRect) return null;
+	const rect = domNode.getBoundingClientRect();
+	if (!rect.width || !rect.height) return null;
+
+	let width = rect.width;
+	let height = rect.height;
+	if (!useNewDpr) return { width, height };
+
+	const isNativeGetBoundingClientRect = HTMLElement.prototype.getBoundingClientRect.toString().includes("[native code]");
+	if (isNativeGetBoundingClientRect) {
+		let ancestorZoom = 1;
+		let ele = domNode;
+		while (ele && ele !== document.body) {
+			ancestorZoom *= parseFloat(window.getComputedStyle(ele).zoom) || 1;
+			ele = ele.parentElement;
+		}
+		const bodyZoomRaw = parseFloat(window.getComputedStyle(document.body).zoom);
+		const bodyZoom = Number.isFinite(bodyZoomRaw) && bodyZoomRaw > 0 ? bodyZoomRaw : window.documentZoom || 1;
+		const z = (ancestorZoom || 1) * bodyZoom;
+		if (z && z !== 1) {
+			width /= z;
+			height /= z;
+		}
+	} else {
+		const documentZoom = window.documentZoom || 1;
+		width *= documentZoom;
+		height *= documentZoom;
+		let zoom = 1;
+		let ele = domNode;
+		while (ele && ele !== document.body) {
+			zoom *= parseFloat(window.getComputedStyle(ele).zoom) || 1;
+			ele = ele.parentElement;
+		}
+		if (zoom && zoom !== 1) {
+			width /= zoom;
+			height /= zoom;
+		}
+		const bodyZoomRaw = parseFloat(window.getComputedStyle(document.body).zoom);
+		const bodyZoom = Number.isFinite(bodyZoomRaw) && bodyZoomRaw > 0 ? bodyZoomRaw : 1;
+		if (bodyZoom !== 1) {
+			width /= bodyZoom;
+			height /= bodyZoom;
+		}
+	}
+	return { width, height };
+}

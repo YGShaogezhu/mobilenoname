@@ -472,7 +472,20 @@ body[data-style="codename"] .equips-wrap > .equips-back > div {
 	opacity: 1;
 }
 
+/* 金/黑金底框外扩时选中框同步放大（装备栏边宽 4px） */
+.equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="2"]::before,
+.equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="3"]::before,
+.equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="4"]::before {
+	top: calc(var(--lc-frame-top) - 4px);
+	left: calc(var(--lc-frame-left) - 4px);
+	right: auto;
+	bottom: auto;
+	width: calc(var(--lc-frame-w) * 1px);
+	height: calc(var(--lc-frame-h) * 1px);
+}
+
 /* 手杀样式(player2)：黑金装备选中改用 SS_heijinka */
-body[data-style="off"] .equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="3"].selected::before {
+body[data-style="off"] .equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="3"].selected::before,
+body[data-style="off"] .equips-wrap > .equips > div.equip-card-selectable.layered-card[data-card-face="4"].selected::before {
 	opacity: 0;
 }

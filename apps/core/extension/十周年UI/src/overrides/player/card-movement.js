@@ -8,6 +8,23 @@ import { lib, game, ui, get, ai, _status } from "noname";
 import { applyCardSkin } from "../card/skin-applier.js";
 import { isLayeredMode } from "../card/layered-card.js";
 
+/**
+ * 是否为多牌转化出牌（与 card-utils 判定一致；本地实现避免循环依赖）
+ * @param {object} event
+ * @returns {boolean}
+ */
+function isMultiViewAsThrowEvent(event) {
+	if (!event?.card || lib.config.cardtempname === "off") return false;
+	if (!["useCard", "respond"].includes(event.name)) return false;
+	const materials = event.card.cards;
+	if (!Array.isArray(materials) || materials.length < 2) return false;
+	const skill = event.skill;
+	if (skill && typeof skill === "string" && get.info(skill)?.viewAs) return true;
+	const cardname = event.card.name;
+	const cardnature = get.nature(event.card);
+	return materials.some(m => m && (m.name !== cardname || !get.is.sameNature(cardnature, m.nature, true)));
+}
+
 /** @type {Function|null} 基础摸牌方法引用 */
 let basePlayerDraw = null;
 
@@ -495,6 +512,8 @@ export function playerThrow(cards, time, record, nosource) {
 			} else {
 				clone = card.copy("thrown");
 			}
+			// 清掉手牌选中残留的超高 z-index，避免多牌折叠盖住主牌/白闪
+			if (clone?.style) clone.style.zIndex = "";
 			if (duiMod && (card.throwWith == "h" || card.throwWith == "s")) {
 				clone.tx = Math.round(hand.x + card.tx);
 				clone.ty = Math.round(hand.y + 30 + card.ty);
@@ -586,7 +605,10 @@ export function playerThrowordered2(card, nosource) {
 
 	_dui.tryAddPlayerCardUseTag(card, this, _status.event);
 
-	_dui.queueNextFrameTick(_dui.layoutDiscard, _dui);
+	// 多牌转化：先在手牌坐标叠好再飞，不立刻排到临时区
+	if (!(isMultiViewAsThrowEvent(_status.event) && card.dataset?.virtual !== "1")) {
+		_dui.queueNextFrameTick(_dui.layoutDiscard, _dui);
+	}
 
 	return card;
 }

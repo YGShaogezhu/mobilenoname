@@ -3,13 +3,32 @@
  * @description 仅在 player2（newDecadeStyle=off）下，用 Spine 替换黑金卡金色选中边框
  */
 import { lib } from "noname";
+import { getSpineScaleSize } from "../../animation/utils.js";
 
-const SPINE_NAME = "cardFace/SS_heijinka";
-/** 相对素材 orig 180×240，黑金约 137×182 */
-const SELECT_SCALE = 0.8;
+/** 卡槽 DOM 尺寸（与 layout.css .card 一致） */
+const CARD_BOX = { w: 108, h: 150 };
+/** 黑金底框可视尺寸（素材 118×160，居中画出盒子） */
+const CARD_FACE = { w: 118, h: 160 };
 
-/** @type {string|null|undefined} */
-let cachedAction;
+/**
+ * 黑金卡面 → Spine 配置
+ * selectFrame：骨骼里对应牌面的区域（整图 orig 含光晕，不能拿来套牌）
+ * @type {Record<string, { spine: string, selectFrame: { w: number, h: number } }>}
+ */
+const HEIJINKA_FACES = {
+	"3": {
+		spine: "cardFace/heijinka1/SS_heijinka",
+		selectFrame: { w: 137, h: 182 },
+	},
+	"4": {
+		spine: "cardFace/heijinka2/SS_heijinka",
+		// atlas orig 160×230，光晕较薄，牌面区占比高于 heijinka1
+		selectFrame: { w: 137, h: 182 },
+	},
+};
+
+/** @type {Record<string, string|null|undefined>} */
+const cachedActions = Object.create(null);
 
 /**
  * 是否为手杀样式（player2）
@@ -20,25 +39,37 @@ function isPlayer2Style() {
 }
 
 /**
- * 是否为黑金分层卡
+ * 读取黑金卡面配置
+ * @param {HTMLElement} card
+ * @returns {{ spine: string, selectFrame: { w: number, h: number }, face: string }|null}
+ */
+function getHeijinkaFaceConfig(card) {
+	const face = card?.dataset?.cardFace;
+	const cfg = face ? HEIJINKA_FACES[face] : null;
+	return cfg ? { ...cfg, face } : null;
+}
+
+/**
+ * 是否为黑金分层卡（黑金卡 / 黑金卡2）
  * @param {HTMLElement} card
  * @returns {boolean}
  */
 export function isHeijinkaCard(card) {
-	return Boolean(card?.classList?.contains("layered-card") && card.dataset?.cardFace === "3");
+	return Boolean(card?.classList?.contains("layered-card") && getHeijinkaFaceConfig(card));
 }
 
 /**
  * 解析带边框的动作名（优先 2 / player2）
  * @param {import("../../animation/AnimationPlayer.js").AnimationPlayer} anim
+ * @param {string} spineName
  * @returns {string|undefined}
  */
-function resolveBorderAction(anim) {
-	if (cachedAction !== undefined) return cachedAction || undefined;
+function resolveBorderAction(anim, spineName) {
+	if (cachedActions[spineName] !== undefined) return cachedActions[spineName] || undefined;
 
-	if (!anim?.hasSpine?.(SPINE_NAME)) return undefined;
+	if (!anim?.hasSpine?.(spineName)) return undefined;
 
-	const actions = anim.getSpineActions?.(SPINE_NAME);
+	const actions = anim.getSpineActions?.(spineName);
 	if (!actions?.length) return undefined;
 
 	const preferred =
@@ -46,8 +77,8 @@ function resolveBorderAction(anim) {
 		actions.find(a => /(?:^|[^0-9])2(?:[^0-9]|$)/.test(a.name)) ||
 		(actions.length > 1 ? actions[1] : actions[0]);
 
-	cachedAction = preferred?.name || null;
-	return cachedAction || undefined;
+	cachedActions[spineName] = preferred?.name || null;
+	return cachedActions[spineName] || undefined;
 }
 
 /**
@@ -60,6 +91,26 @@ function ensureSelectId(card) {
 		card._heijinkaSelectId = `heijinka_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 	}
 	return card._heijinkaSelectId;
+}
+
+/**
+ * 按黑金底框（118×160）当前可视宽高计算 Spine 的非等比缩放
+ * 素材发光矩形比牌扁，scaleX/scaleY 分开才能四边贴住
+ * @param {HTMLElement} card
+ * @param {{ w: number, h: number }} selectFrame
+ * @returns {{ scaleX: number, scaleY: number }}
+ */
+function scaleSpineToCard(card, selectFrame) {
+	// 与转化白闪相同：按布局尺寸算 scale，保 PC、修手机 zoom
+	const r = getSpineScaleSize(card) || card?.getBoundingClientRect?.();
+	if (!r?.width || !r?.height) return { scaleX: 0.8, scaleY: 0.8 };
+	const visW = r.width * (CARD_FACE.w / CARD_BOX.w);
+	const visH = r.height * (CARD_FACE.h / CARD_BOX.h);
+	const clamp = v => Math.max(0.25, Math.min(v, 3.5));
+	return {
+		scaleX: clamp(visW / selectFrame.w),
+		scaleY: clamp(visH / selectFrame.h),
+	};
 }
 
 /**
@@ -86,19 +137,22 @@ export function stopHeijinkaSelect(card) {
 function startSelectSpine(card, id) {
 	if (card._heijinkaSelect !== id) return;
 	if (!card.isConnected || !card.classList.contains("selected")) return;
-	if (!isPlayer2Style() || !isHeijinkaCard(card)) return;
+	if (!isPlayer2Style()) return;
+
+	const cfg = getHeijinkaFaceConfig(card);
+	if (!cfg) return;
 
 	const anim = decadeUI?.animation;
-	if (!anim?.playSpine || !anim.hasSpine?.(SPINE_NAME)) return;
+	if (!anim?.playSpine || !anim.hasSpine?.(cfg.spine)) return;
 
-	const action = resolveBorderAction(anim);
-	const sprite = { name: SPINE_NAME, loop: true, id };
+	const action = resolveBorderAction(anim, cfg.spine);
+	const sprite = { name: cfg.spine, loop: true, id };
 	if (action) sprite.action = action;
 
 	anim.playSpine(sprite, {
 		parent: card,
 		follow: true,
-		scale: SELECT_SCALE,
+		...scaleSpineToCard(card, cfg.selectFrame),
 	});
 }
 
@@ -109,13 +163,16 @@ function startSelectSpine(card, id) {
 export function playHeijinkaSelect(card) {
 	if (!card || card._heijinkaSelect) return;
 
+	const cfg = getHeijinkaFaceConfig(card);
+	if (!cfg) return;
+
 	const anim = decadeUI?.animation;
 	if (!anim?.playSpine) return;
 
 	const id = ensureSelectId(card);
 	card._heijinkaSelect = id;
 
-	if (anim.hasSpine?.(SPINE_NAME)) {
+	if (anim.hasSpine?.(cfg.spine)) {
 		startSelectSpine(card, id);
 		return;
 	}
@@ -123,10 +180,10 @@ export function playHeijinkaSelect(card) {
 	if (typeof anim.loadSpine !== "function") return;
 
 	anim.loadSpine(
-		SPINE_NAME,
+		cfg.spine,
 		"skel",
 		() => {
-			anim.prepSpine?.(SPINE_NAME);
+			anim.prepSpine?.(cfg.spine);
 			startSelectSpine(card, id);
 		},
 		() => {

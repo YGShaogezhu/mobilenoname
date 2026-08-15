@@ -56,7 +56,7 @@ export function isLayeredMode() {
 
 /**
  * 读取当前分层底框编号
- * @returns {string|null} "1"|"2"|"3"
+ * @returns {string|null} "1"|"2"|"3"|"4"
  */
 export function getLayeredBase() {
 	const key = lib.config.extension_十周年UI_cardPrettify;
@@ -163,6 +163,7 @@ function ensureLayeredNodeRefs(card) {
 	card.$color ??= q(".color");
 	card.$guo ??= q(".guo-mark");
 	card.$hezong ??= q(".hezong-mark");
+	ensureCardFrame(card);
 
 	if (!card.$suitnum) {
 		const suitnum = q(".suit-num");
@@ -175,6 +176,30 @@ function ensureLayeredNodeRefs(card) {
 		card.$suitnum.$num ??= card.$suitnum.querySelector(".num") || card.$suitnum.querySelector("span:first-child");
 		card.$suitnum.$suit ??= card.$suitnum.querySelector(".suit") || card.$suitnum.querySelector("span:last-child");
 	}
+}
+
+/**
+ * 底框图（不用 ::after：全局 .card::after { display: none } 会把金/黑金底图关掉）
+ * @param {HTMLElement} card
+ * @returns {HTMLElement|null}
+ */
+function ensureCardFrame(card) {
+	if (!card) return null;
+	if (card.$frame?.parentNode === card) return card.$frame;
+	let frame = null;
+	for (const child of card.children) {
+		if (child.classList?.contains("lc-frame")) {
+			frame = child;
+			break;
+		}
+	}
+	if (!frame) {
+		frame = document.createElement("div");
+		frame.className = "lc-frame";
+	}
+	if (frame.parentNode !== card) card.insertBefore(frame, card.firstChild);
+	card.$frame = frame;
+	return frame;
 }
 
 /**
@@ -654,6 +679,8 @@ export function clearLayeredCard(cardElement, options = {}) {
 	cardElement.style.removeProperty("background");
 	cardElement.style.removeProperty("background-image");
 	cardElement.style.removeProperty("background-size");
+	cardElement.$frame?.remove();
+	delete cardElement.$frame;
 
 	emptyNode(cardElement.$cardType);
 	emptyNode(cardElement.$distance);

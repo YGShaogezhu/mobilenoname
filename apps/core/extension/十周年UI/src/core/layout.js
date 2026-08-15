@@ -57,9 +57,16 @@ export function createLayoutModule() {
 			const { width: pw, cardWidth: cw, cardHeight: ch, cardScale: cs, x: boundsX } = bounds;
 			const csw = cw * cs;
 			const y = Math.round((ch * cs - ch) / 2);
-			let xMargin = csw + 2;
+			// 仅金/黑金底框外扩需要间距；白卡仍用原来的紧贴
+			const framed = cards.some(
+				c =>
+					c.classList?.contains("layered-card") &&
+					(c.dataset?.cardFace === "2" || c.dataset?.cardFace === "3" || c.dataset?.cardFace === "4")
+			);
+			const gap = framed ? 12 : 2;
+			let xMargin = csw + gap;
 			let xStart = (csw - cw) / 2;
-			const totalW = cards.length * csw + (cards.length - 1) * 2;
+			const totalW = cards.length * csw + (cards.length - 1) * gap;
 			const limitW = pw;
 			let expand = false;
 

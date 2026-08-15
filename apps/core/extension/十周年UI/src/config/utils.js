@@ -105,6 +105,7 @@ export const cardSkinPresets = [
 	{ key: "face-card1", label: "标准白卡", mode: "layered", base: "1", extension: "png" },
 	{ key: "face-card2", label: "大将军金卡", mode: "layered", base: "2", extension: "png" },
 	{ key: "face-card3", label: "黑金卡", mode: "layered", base: "3", extension: "png" },
+	{ key: "face-card4", label: "黑金卡2", mode: "layered", base: "4", extension: "png" },
 ];
 
 /**
