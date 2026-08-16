@@ -1,9 +1,80 @@
 /**
- * @fileoverview 移动版 chooseNumbers 加减条
+ * @fileoverview 移动版 chooseNumbers / 数字类 chooseControl 加减条
  */
 import { lib, ui, get } from "noname";
 
 const UIBUTTON_PATH = "extension/十周年UI/ui/assets/lbtn/uibutton";
+
+/** @type {Map<string, number>|null} */
+let cnNumberMap = null;
+
+/**
+ * 中文数字 → 数值（含 ordinal / 非 ordinal）
+ * @returns {Map<string, number>}
+ */
+function getCnNumberMap() {
+	if (cnNumberMap) {
+		return cnNumberMap;
+	}
+	cnNumberMap = new Map();
+	for (let i = 0; i <= 99; i++) {
+		cnNumberMap.set(get.cnNumber(i, true), i);
+		const plain = get.cnNumber(i, false);
+		if (!cnNumberMap.has(plain)) {
+			cnNumberMap.set(plain, i);
+		}
+	}
+	return cnNumberMap;
+}
+
+/**
+ * 将 control 文案解析为数字；无法识别则返回 null
+ * @param {*} control
+ * @returns {number|null}
+ */
+export function parseControlAsNumber(control) {
+	if (typeof control === "number" && Number.isFinite(control)) {
+		return control;
+	}
+	if (typeof control !== "string") {
+		return null;
+	}
+	if (/^\d+$/.test(control)) {
+		return parseInt(control, 10);
+	}
+	return getCnNumberMap().get(control) ?? null;
+}
+
+/**
+ * 判断 chooseControl 的选项是否为「纯数字选择」（可含 cancel2）
+ * @param {any[]} controls
+ * @returns {{ numbers: number[], controlByNumber: Map<number, any>, hasCancel: boolean }|null}
+ */
+export function tryParseNumericControls(controls) {
+	if (!Array.isArray(controls) || !controls.length) {
+		return null;
+	}
+	const hasCancel = controls.includes("cancel2");
+	const options = controls.filter(c => c !== "cancel2");
+	if (options.length < 1) {
+		return null;
+	}
+
+	const controlByNumber = new Map();
+	const numbers = [];
+	for (const control of options) {
+		const num = parseControlAsNumber(control);
+		if (num == null) {
+			return null;
+		}
+		if (controlByNumber.has(num)) {
+			return null;
+		}
+		numbers.push(num);
+		controlByNumber.set(num, control);
+	}
+	return { numbers, controlByNumber, hasCancel };
+}
 
 /**
  * 获取某组可选数值列表
@@ -155,7 +226,7 @@ export function createChooseNumberBar(event, index, onChange) {
  * 创建多组加减条容器，并提供刷新 / 挂载 / 卸载
  * @param {GameEvent} event
  * @param {() => void} onChange
- * @returns {{ wrapper: HTMLElement, refreshAll: () => void, attachToConfirm: () => void, remove: () => void }}
+ * @returns {{ wrapper: HTMLElement, bars: HTMLElement[], refreshAll: () => void, attachToConfirm: () => void, remove: () => void }}
  */
 export function createChooseNumberBars(event, onChange) {
 	const wrapper = document.createElement("div");

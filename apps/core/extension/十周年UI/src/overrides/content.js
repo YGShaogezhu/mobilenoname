@@ -3,7 +3,7 @@
  */
 
 import { lib, game, ui, get, ai, _status } from "noname";
-import { createChooseNumberBars } from "../ui/chooseNumberBar.js";
+import { createChooseNumberBars, tryParseNumericControls, parseControlAsNumber } from "../ui/chooseNumberBar.js";
 
 /** @type {Object|null} 基础方法引用 */
 let baseContentMethods = null;
@@ -172,6 +172,182 @@ export function createContentChooseNumbers(baseChooseNumbers) {
 		}
 		event.result = result;
 	};
+}
+
+/**
+ * 规范化 chooseControl 的 controls（与核心 step1 开头一致）
+ * @param {GameEvent} event
+ * @returns {boolean} 是否应直接结束事件
+ */
+function normalizeChooseControlList(event) {
+	if (event.controls.length == 0) {
+		if (event.sortcard) {
+			let sortnum = 2;
+			if (event.sorttop) {
+				sortnum = 1;
+			}
+			for (let i = 0; i < event.sortcard.length + sortnum; i++) {
+				event.controls.push(get.cnNumber(i, true));
+			}
+		} else if (event.choiceList) {
+			for (const [i] of event.choiceList.entries()) {
+				event.controls.push(`选项${get.cnNumber(i + 1, true)}`);
+			}
+		} else {
+			return true;
+		}
+	} else if (event.choiceList && event.controls.length == 1 && event.controls[0] == "cancel2") {
+		event.controls.shift();
+		for (const [i] of event.choiceList.entries()) {
+			event.controls.push(`选项${get.cnNumber(i + 1, true)}`);
+		}
+		event.controls.push("cancel2");
+	}
+	return false;
+}
+
+/**
+ * 移动版：纯数字 chooseControl（如奇谋/义从）改用加减条
+ * @param {Function[]} baseChooseControl - 原始 chooseControl 步骤数组
+ * @returns {Function[]}
+ */
+export function createContentChooseControl(baseChooseControl) {
+	const baseSteps = Array.isArray(baseChooseControl) ? baseChooseControl : [baseChooseControl];
+	const baseStep1 = baseSteps[0];
+	const restSteps = baseSteps.slice(1);
+
+	const mobileStep1 = async (event, trigger, player) => {
+		if (!isMobileDecadeStyle()) {
+			return baseStep1.call(this, event, trigger, player);
+		}
+
+		if (normalizeChooseControlList(event)) {
+			event.finish();
+			return;
+		}
+
+		// 特殊形态仍走原逻辑（分离选项条不影响数字加减条）
+		if (event.sortcard || event.dialogcontrol || event.arrangeSkill || event.choiceList) {
+			return baseStep1.call(this, event, trigger, player);
+		}
+
+		const numeric = tryParseNumericControls(event.controls);
+		if (!numeric || numeric.numbers.length < 1) {
+			return baseStep1.call(this, event, trigger, player);
+		}
+
+		// 显式 seperate 的非确认场景：数字选择仍用加减条，跳过原分离按钮
+		const plainControls = event.controls.slice(0);
+		plainControls.remove("cancel2");
+		if ((event.direct && plainControls.length == 1) || event.forceDirect) {
+			event.result = {
+				control: event.controls[0],
+				links: get.links([event.controls[0]]),
+			};
+			return;
+		}
+
+		if (event.isMine()) {
+			if (event.hsskill && _status.prehidden_skills.includes(event.hsskill) && event.controls.includes("cancel2")) {
+				event.result = {
+					bool: true,
+					control: "cancel2",
+				};
+				return;
+			}
+
+			let initial = numeric.numbers[0];
+			if (typeof event.choice === "number" && event.controls[event.choice] != null) {
+				const fromChoice = parseControlAsNumber(event.controls[event.choice]);
+				if (fromChoice != null) {
+					initial = fromChoice;
+				}
+			}
+
+			event.list = [numeric.numbers];
+			event.numbers = [initial];
+			event.filterSelect = () => true;
+			event.filterOk = () => true;
+
+			if (event.dialog) {
+				if (Array.isArray(event.dialog)) {
+					event.dialog = ui.create.dialog.apply(this, event.dialog);
+				}
+				event.dialog.open();
+			} else if (event.prompt) {
+				event.dialog = ui.create.dialog(event.prompt);
+				if (event.prompt2) {
+					event.dialog.addText(event.prompt2, Boolean(event.prompt2.length <= 20 || event.centerprompt2));
+				}
+			}
+
+			/** @type {ReturnType<typeof createChooseNumberBars>|null} */
+			let numberBars = null;
+
+			const cleanupBars = () => {
+				numberBars?.remove();
+				numberBars = null;
+			};
+
+			const syncConfirm = () => {
+				if (numeric.hasCancel) {
+					ui.create.confirm("oc");
+				} else {
+					ui.create.confirm("o");
+				}
+				numberBars?.attachToConfirm();
+			};
+
+			numberBars = createChooseNumberBars(event, () => {
+				numberBars?.refreshAll();
+			});
+
+			event.switchToAuto = () => {
+				event.result = "ai";
+				cleanupBars();
+				if (ui.confirm) {
+					ui.confirm.close();
+				}
+				game.resume();
+			};
+
+			if (!event.custom) {
+				event.custom = { add: {}, replace: {}, temp: {}, close: {} };
+			} else if (!event.custom.replace) {
+				event.custom.replace = {};
+			}
+
+			event.custom.replace.confirm = bool => {
+				if (bool) {
+					const control = numeric.controlByNumber.get(event.numbers[0]);
+					event.result = {
+						control,
+						links: get.links([control]),
+					};
+				} else {
+					event.result = {
+						control: "cancel2",
+						links: get.links(["cancel2"]),
+					};
+				}
+				cleanupBars();
+				if (ui.confirm) {
+					ui.confirm.close();
+				}
+				game.resume();
+			};
+
+			syncConfirm();
+			game.pause();
+			game.countChoose();
+			event.choosing = true;
+			return;
+		}
+
+		return baseStep1.call(this, event, trigger, player);
+	};
+
+	return [mobileStep1, ...restSteps];
 }
 
 /**

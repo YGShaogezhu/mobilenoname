@@ -29,7 +29,7 @@ import { controlAdd, controlOpen, controlClose, controlReplace, controlUpdateLay
 import { dialogOpen, applyDialogOverrides } from "../overrides/dialog.js";
 import { eventAddMessageHook, eventTriggerMessage } from "../overrides/event.js";
 import { cardCopy, cardInit, cardUpdateTransform, cardMoveTo, cardMoveDelete } from "../overrides/card.js";
-import { createContentGain, contentJudge, createContentLose, createContentChooseNumbers } from "../overrides/content.js";
+import { createContentGain, contentJudge, createContentLose, createContentChooseNumbers, createContentChooseControl } from "../overrides/content.js";
 import { applyLibOverrides } from "../overrides/lib.js";
 import { getObjtype, applyGetOverrides } from "../overrides/get.js";
 import { gameLogv, applyGameOverrides } from "../overrides/game.js";
@@ -124,7 +124,7 @@ export const createDecadeUIObject = () => ({
 					tryJudgeAnimate: lib.element.player.tryJudgeAnimate,
 					popup: lib.element.player.popup,
 				},
-				content: { lose: lib.element.content.lose, gain: lib.element.content.gain, chooseNumbers: lib.element.content.chooseNumbers },
+				content: { lose: lib.element.content.lose, gain: lib.element.content.gain, chooseNumbers: lib.element.content.chooseNumbers, chooseControl: lib.element.content.chooseControl },
 				},
 			},
 		};
@@ -210,6 +210,7 @@ export const createDecadeUIObject = () => ({
 						judge: contentJudge(),
 						lose: createContentLose(base.lib.element.content.lose),
 						chooseNumbers: createContentChooseNumbers(base.lib.element.content.chooseNumbers),
+						chooseControl: createContentChooseControl(base.lib.element.content.chooseControl),
 					},
 				},
 			},
@@ -269,6 +270,10 @@ export const createDecadeUIObject = () => ({
 		override(ui, ride.ui);
 		override(game, ride.game);
 		override(get, ride.get);
+
+		// 数组型 content 步骤：递归 override 不一定整表替换，这里强制挂载
+		lib.element.content.chooseControl = createContentChooseControl(base.lib.element.content.chooseControl);
+		lib.element.content.chooseNumbers = createContentChooseNumbers(base.lib.element.content.chooseNumbers);
 
 		// 挂载动画模块
 		Object.assign(decadeUI, {
