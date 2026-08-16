@@ -2,7 +2,7 @@
  * @fileoverview 静态资源模块，管理卡牌皮肤等静态资源的加载和缓存
  */
 import { lib, game, ui, get, ai, _status } from "noname";
-import { cardSkinPresets, registerDynamicSkin, getAllCardSkinPresets } from "../config.js";
+import { cardSkinPresets, registerDynamicSkin, getAllCardSkinPresets, removedCardSkinDirs } from "../config.js";
 
 /**
  * 全局卡牌皮肤注册队列
@@ -134,24 +134,24 @@ export function createStaticsModule() {
 	 * 注册外部扩展的卡牌皮肤
 	 * @param {Object} options - 注册选项
 	 * @param {string} options.extensionName - 扩展名称
-	 * @param {string} [options.skinKey="online"] - 皮肤类型键名（online/caise/gold）
+	 * @param {string} [options.skinKey="caise"] - 皮肤类型键名（如 caise）
 	 * @param {string} [options.folder] - 皮肤文件夹名，默认与skinKey相同
 	 * @param {string} [options.extension="png"] - 图片扩展名
 	 * @param {string[]} [options.cardNames] - 卡牌名称列表，不提供则自动扫描目录
 	 * @example
 	 * registerDecadeCardSkin({
 	 *   extensionName: '我的扩展',
-	 *   skinKey: 'online',
+	 *   skinKey: 'caise',
 	 *   cardNames: ['mycard1', 'mycard2']
 	 * });
 	 * @example
 	 * registerDecadeCardSkin({
 	 *   extensionName: '我的扩展',
-	 *   skinKey: 'online'
+	 *   skinKey: 'caise'
 	 * });
 	 */
 	const registerCardSkin = options => {
-		const { extensionName, skinKey = "online", folder, extension = "png", cardNames } = options || {};
+		const { extensionName, skinKey = "caise", folder, extension = "png", cardNames } = options || {};
 
 		if (!extensionName) {
 			console.warn("[十周年UI] registerCardSkin: 缺少 extensionName");
@@ -209,7 +209,7 @@ export function createStaticsModule() {
 		const baseDir = `extension/${decadeUIName}/image/card-skins`;
 		const folders = await scanDirectoryFolders(baseDir);
 
-		const builtinKeys = new Set(cardSkinPresets.map(s => s.key));
+		const builtinKeys = new Set([...cardSkinPresets.map(s => s.key), ...removedCardSkinDirs]);
 
 		const tasks = folders
 			.filter(folder => !builtinKeys.has(folder))

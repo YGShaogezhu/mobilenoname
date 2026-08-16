@@ -7,12 +7,10 @@ import { lib, get } from "noname";
 import { cardSkinMeta } from "../../config/utils.js";
 
 /**
- * 皮肤回退映射表
+ * 皮肤回退映射表（整图缺图时回退）
  * @type {Object<string, string>}
  */
-const FALLBACK_MAP = {
-	gold: "caise",
-};
+const FALLBACK_MAP = {};
 
 /**
  * 获取卡牌资源缓存

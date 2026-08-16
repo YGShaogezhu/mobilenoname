@@ -4,7 +4,7 @@
  * @module overrides/card/layered-card
  */
 import { lib, get, _status } from "noname";
-import { cardSkinMeta } from "../../config/utils.js";
+import { cardSkinMeta, resolveCardPrettifyKey } from "../../config/utils.js";
 
 const RED_SUITS = ["heart", "diamond"];
 const BLACK_SUITS = ["spade", "club"];
@@ -62,7 +62,7 @@ function getMarkRoot() {
  * @returns {boolean}
  */
 export function isLayeredMode() {
-	const key = lib.config.extension_十周年UI_cardPrettify;
+	const key = resolveCardPrettifyKey(lib.config.extension_十周年UI_cardPrettify);
 	return cardSkinMeta[key]?.mode === "layered";
 }
 
@@ -71,7 +71,7 @@ export function isLayeredMode() {
  * @returns {string|null} "1"|"2"|"3"|"4"
  */
 export function getLayeredBase() {
-	const key = lib.config.extension_十周年UI_cardPrettify;
+	const key = resolveCardPrettifyKey(lib.config.extension_十周年UI_cardPrettify);
 	const skin = cardSkinMeta[key];
 	return skin?.mode === "layered" ? String(skin.base || "1") : null;
 }

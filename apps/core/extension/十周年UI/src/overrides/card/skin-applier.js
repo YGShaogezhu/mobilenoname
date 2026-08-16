@@ -4,7 +4,7 @@
  * @module overrides/card/skin-applier
  */
 import { lib, get, game } from "noname";
-import { cardSkinMeta } from "../../config/utils.js";
+import { cardSkinMeta, resolveCardPrettifyKey } from "../../config/utils.js";
 import {
 	getCardResources,
 	getSkinCache,
@@ -20,20 +20,14 @@ import {
 } from "./skin-loader.js";
 import { applyLayeredCard, clearLayeredCard } from "./layered-card.js";
 
-/** 已移除的皮肤键 → 迁移目标 */
-const REMOVED_SKIN_MAP = {
-	decade: "online",
-	bingkele: "online",
-};
-
 /**
  * 获取当前皮肤配置
  * @returns {{skinKey: string|null, isOff: boolean}} 皮肤配置
  */
 function getSkinConfig() {
-	let skinKey = lib.config.extension_十周年UI_cardPrettify;
-	if (REMOVED_SKIN_MAP[skinKey]) {
-		skinKey = REMOVED_SKIN_MAP[skinKey];
+	const raw = lib.config.extension_十周年UI_cardPrettify;
+	const skinKey = resolveCardPrettifyKey(raw);
+	if (skinKey !== raw) {
 		game.saveConfig("extension_十周年UI_cardPrettify", skinKey);
 	}
 	const isOff = !skinKey || skinKey === "off";

@@ -1,9 +1,9 @@
 /**
  * 手杀分层拼卡
  *
- * 卡槽 108×150。花色/牌名/插画三种底框共用一套内区刻度。
+ * 卡槽 108×150。花色/牌名/插画三种底框共用一套内区刻度（以内部为标准，不随外框放大）。
  *   白卡 card1：铺满盒子
- *   金卡 card2 / 黑金 card3 / 黑金卡2 card4：118×160 由 .lc-frame 画出盒子（约各边 5px）
+ *   金卡 card2 / 黑金 card3 / 黑金卡2 card4：118×160 仅外扩装饰底框，内容仍按 108×150 排
  */
 
 .card.layered-card {
@@ -14,22 +14,22 @@
 	--lc-frame-left: -5px;
 	--lc-frame-top: -8px;
 	/* 内区设计稿刻度（三种底框共用，改一处全生效） */
-    --lc-w: 127;
-    --lc-h: 173;
-    --suit-t: 8;
-    --suit-l: 4;
-    --suit-w: 21;
+	--lc-w: 127;
+	--lc-h: 173;
+	--suit-t: 8;
+	--suit-l: 4;
+	--suit-w: 21;
 	--name-t: 16;
-    --name-l: 28;
-    --name-w: 94;
-    --name-h: 28;
-    --type-t: 48;
-    --type-h: 19;
-    --art-t: 60;
-    --art-mx: 5px;
-    --art-mb: 1px;
-    --dist-r: 6;
-    --dist-b: 4;
+	--name-l: 28;
+	--name-w: 94;
+	--name-h: 28;
+	--type-t: 48;
+	--type-h: 19;
+	--art-t: 60;
+	--art-mx: 5px;
+	--art-mb: 1px;
+	--dist-r: 6;
+	--dist-b: 4;
 	container-type: size;
 	color: rgb(77, 60, 51);
 	text-shadow: none;
@@ -484,9 +484,9 @@
 .card.layered-card > .virtual-mark {
 	position: absolute;
 	top: calc(70% * var(--suit-t) / var(--lc-h));
-    left: calc(110% * var(--suit-l) / var(--lc-w));
-    width: calc(120% * var(--suit-w) / var(--lc-w));
-    height: calc(120% * 40 / var(--lc-h));
+	left: calc(110% * var(--suit-l) / var(--lc-w));
+	width: calc(120% * var(--suit-w) / var(--lc-w));
+	height: calc(120% * 40 / var(--lc-h));
 	z-index: 10;
 }
 
@@ -523,8 +523,8 @@
 .card.layered-card > .color > img,
 .card.layered-card > .guo-mark > img,
 .card.layered-card > .hezong-mark > img {
-	width: 115%;
-	height: 115%;
+	width: 100%;
+	height: 95%;
 	object-fit: contain;
 	display: block;
 }

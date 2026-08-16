@@ -7,7 +7,7 @@ import { appearanceConfigs } from "./definitions/appearance.js";
 import { cardConfigs } from "./definitions/card.js";
 import { componentConfigs } from "./definitions/component.js";
 import { miscConfigs } from "./definitions/misc.js";
-import { cardSkinPresets, cardSkinMeta, registerDynamicSkin, getAllCardSkinPresets } from "./utils.js";
+import { cardSkinPresets, cardSkinMeta, registerDynamicSkin, getAllCardSkinPresets, removedCardSkinDirs } from "./utils.js";
 
 /**
  * 扩展配置项
@@ -21,5 +21,5 @@ export const config = {
 	...miscConfigs,
 };
 
-export { cardSkinPresets, cardSkinMeta, registerDynamicSkin, getAllCardSkinPresets };
+export { cardSkinPresets, cardSkinMeta, registerDynamicSkin, getAllCardSkinPresets, removedCardSkinDirs };
 export { appearanceConfigs, cardConfigs, componentConfigs, miscConfigs };

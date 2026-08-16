@@ -95,18 +95,44 @@ export function parseInputValue(element, defaultVal, min, max, decimals = 0) {
 }
 
 /**
- * 内置卡牌皮肤预设列表
- * @type {Array<{key: string, dir: string, label: string, extension: string}>}
+ * 内置卡牌皮肤预设列表（整图仅保留彩色；分层白/金/黑金×2）
+ * @type {Array<{key: string, dir?: string, label: string, extension: string, mode?: string, base?: string}>}
  */
 export const cardSkinPresets = [
-	{ key: "online", dir: "online", label: "OL卡牌", extension: "jpg" },
 	{ key: "caise", dir: "caise", label: "彩色卡牌", extension: "webp" },
-	{ key: "gold", dir: "gold", label: "手杀金卡", extension: "webp" },
 	{ key: "face-card1", label: "标准白卡", mode: "layered", base: "1", extension: "png" },
 	{ key: "face-card2", label: "大将军金卡", mode: "layered", base: "2", extension: "png" },
 	{ key: "face-card3", label: "黑金卡", mode: "layered", base: "3", extension: "png" },
 	{ key: "face-card4", label: "黑金卡2", mode: "layered", base: "4", extension: "png" },
 ];
+
+/**
+ * 已下架的内置整图皮肤目录（不再出现在美化选项，扫描时也跳过以免回潮）
+ * @type {ReadonlySet<string>}
+ */
+export const removedCardSkinDirs = new Set(["online", "gold"]);
+
+/**
+ * 已移除的皮肤键 → 迁移目标
+ * @type {Readonly<Record<string, string>>}
+ */
+export const removedCardSkinMap = Object.freeze({
+	decade: "caise",
+	bingkele: "caise",
+	online: "caise",
+	gold: "caise",
+});
+
+/**
+ * 解析当前卡牌美化键（含旧键迁移）
+ * @param {string|null|undefined} rawKey
+ * @returns {string|null|undefined}
+ */
+export function resolveCardPrettifyKey(rawKey) {
+	if (removedCardSkinMap[rawKey]) return removedCardSkinMap[rawKey];
+	if (rawKey && rawKey !== "off" && !cardSkinMeta[rawKey]) return "caise";
+	return rawKey;
+}
 
 /**
  * 运行时动态发现的卡牌皮肤列表
@@ -128,7 +154,7 @@ export const cardSkinMeta = cardSkinPresets.reduce((map, skin) => {
  * @param {{key: string, dir: string, label: string, extension: string}} skin - 皮肤信息
  */
 export function registerDynamicSkin(skin) {
-	if (cardSkinMeta[skin.key]) return;
+	if (!skin?.key || cardSkinMeta[skin.key] || removedCardSkinDirs.has(skin.key)) return;
 	dynamicCardSkinPresets.push(skin);
 	cardSkinMeta[skin.key] = skin;
 }

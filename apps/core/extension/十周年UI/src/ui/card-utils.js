@@ -1,7 +1,7 @@
 /**
  * @fileoverview 卡牌工具函数，提供卡牌临时花色点数显示、特效播放等功能
  */
-import { lib, ui, get, _status } from "noname";
+import { lib, ui, get } from "noname";
 import {
 	updateLayeredMarks,
 	applyLayeredCard,
@@ -743,8 +743,13 @@ export function prepareThrownViewAsMerge() {
 	return null;
 }
 
+/** 琉璃/手杀风格：黄色动作词 */
+function usedInfoAction(text) {
+	return `<br><font color="#FFFF00;">${text}</font>`;
+}
+
 /**
- * 尝试添加玩家卡牌使用标签
+ * 尝试添加玩家卡牌使用标签（文案对齐琉璃版）
  * @param {HTMLElement} card - 卡牌元素
  * @param {HTMLElement} player - 玩家元素
  * @param {object} event - 事件对象
@@ -769,26 +774,134 @@ export function tryAddPlayerCardUseTag(card, player, event, decadeUI) {
 
 	if (event.blameEvent) event = event.blameEvent;
 
-	let tagText;
+	let tagText = "";
+	let omitPlayerName = false;
+	const eventName = String(event.name || "").toLowerCase();
 
-	if (event.name === "judge") {
-		tagText = handleJudgeTag(card, event, decadeUI);
-	} else {
-		tagText = handleDefaultTag(card, player, event, decadeUI);
+	switch (eventName) {
+		case "usecard": {
+			const targets = event.targets || [];
+			if (targets.length === 1) {
+				const target = targets[0];
+				tagText = usedInfoAction("对") + get.translation(target === player ? player : target);
+			} else {
+				tagText = usedInfoAction("使用");
+			}
+			handleUseCardRespondSideEffects(card, event, decadeUI);
+			break;
+		}
+		case "respond":
+			tagText = usedInfoAction("打出");
+			handleUseCardRespondSideEffects(card, event, decadeUI);
+			break;
+		case "useskill":
+			tagText = "";
+			break;
+		case "die":
+			tagText = usedInfoAction("弃牌");
+			card.classList.add("invalided");
+			decadeUI.layout?.delayClear?.();
+			break;
+		case "lose": {
+			const discardEvt = event.parent?.name === "discard" ? event.parent : null;
+			const skillEvent = discardEvt?.parent?.parent;
+			if (skillEvent) {
+				const skillKey = skillEvent.name !== "useSkill" ? skillEvent.name : skillEvent.skill;
+				const skillName = lib.translate[skillKey];
+				// 弃牌阶段等系统事件只显示「弃牌」，技能弃置才带技能名
+				const isPhaseLike = typeof skillKey === "string" && (skillKey === "phaseDiscard" || skillKey.startsWith("phase"));
+				if (skillName === "过河拆桥") {
+					tagText = usedInfoAction("被拆");
+				} else if (skillName && lib.skill[skillKey] && !isPhaseLike) {
+					tagText = usedInfoAction(skillName) + usedInfoAction("弃牌").replace(/^<br>/, "");
+				} else {
+					tagText = usedInfoAction("弃牌");
+				}
+				break;
+			}
+			tagText = usedInfoAction("弃牌");
+			break;
+		}
+		case "discard":
+			tagText = usedInfoAction("弃牌");
+			break;
+		case "phasejudge":
+			tagText = usedInfoAction("即将生效");
+			break;
+		case "judge":
+			omitPlayerName = true;
+			tagText = handleJudgeTag(card, event, decadeUI);
+			break;
+		case "showcards":
+			tagText = usedInfoAction(`${get.translation(event.getParent())}展示`);
+			break;
+		case "loseasync":
+			if (event.parent) {
+				if (player === event.parent.target) {
+					tagText = usedInfoAction("被拆");
+				} else {
+					const parentName = get.translation(event.parent.name);
+					tagText = usedInfoAction(parentName ? `${parentName}弃牌` : "弃牌");
+				}
+			}
+			break;
+		default: {
+			const translated = get.translation(event.name);
+			if (translated && translated !== event.name) {
+				tagText = usedInfoAction(translated);
+			}
+			break;
+		}
 	}
 
-	tagNode.innerHTML = tagText;
+	if (omitPlayerName) {
+		tagNode.innerHTML = tagText;
+	} else {
+		tagNode.innerHTML = `<span>${get.translation(player)}${tagText}</span>`;
+	}
 }
 
 /**
- * 处理判定标签
+ * useCard / respond 的转化与花色点数副作用（保留本项目转化动画）
+ * @param {HTMLElement} card
+ * @param {object} event
+ * @param {object} decadeUI
+ */
+function handleUseCardRespondSideEffects(card, event, decadeUI) {
+	if (!event.card) return;
+
+	const isConvert = isViewAsThrowEvent(card, event);
+	if (isConvert) {
+		clearViewAsLabel(card);
+		if (card._tempName) {
+			card._tempName.delete?.();
+			delete card._tempName;
+		}
+		card.querySelectorAll?.(".temp-name")?.forEach(el => el.remove());
+		scheduleThrownViewAsMorph(event, card);
+	}
+
+	const cardnumber = get.number(event.card);
+	const cardsuit = get.suit(event.card);
+	if (
+		!isConvert &&
+		card.dataset.views !== "1" &&
+		event.card.cards?.length === 1 &&
+		(card.number !== cardnumber || card.suit !== cardsuit)
+	) {
+		cardTempSuitNum(card, cardsuit, cardnumber, decadeUI.element);
+	}
+}
+
+/**
+ * 处理判定标签（亮出 / 结算文案对齐琉璃）
  * @param {HTMLElement} card - 卡牌元素
  * @param {object} event - 事件对象
  * @param {object} decadeUI - DecadeUI实例
  * @returns {string} 初始标签文本
  */
 function handleJudgeTag(card, event, decadeUI) {
-	const initialText = event.judgestr + "的判定牌";
+	const initialText = `${event.judgestr || ""}的${usedInfoAction("判定牌")}`;
 
 	// 亮出时：红颜等已将花色视为红桃，直接换图（不等到结算）
 	const revealSuit = get.suit(event.player?.judging?.[0] || card, event.player);
@@ -835,56 +948,15 @@ function handleJudgeTag(card, event, decadeUI) {
 			judgeValue = evt.result.judge;
 		}
 
-		const tagText = judgeValue >= 0 ? "判定生效" : "判定失效";
+		const resultAction =
+			judgeValue >= 0
+				? `<br><font color="#33FF00;">判定生效</font>`
+				: `<br><font color="#FF0000;">判定失效</font>`;
 		if (evt.apcard?._ap) evt.apcard._ap.stopSpineAll();
 		evt.apcard = undefined;
-		tagNode.innerHTML = (get.translation(evt.judgestr) || "") + tagText;
+		tagNode.innerHTML = (get.translation(evt.judgestr) || "") + resultAction;
 	});
 
 	event.apcard = card;
 	return initialText;
-}
-
-/**
- * 处理默认标签
- * @param {HTMLElement} card - 卡牌元素
- * @param {HTMLElement} player - 玩家元素
- * @param {object} event - 事件对象
- * @param {object} decadeUI - DecadeUI实例
- * @returns {string} 标签文本
- */
-function handleDefaultTag(card, player, event, decadeUI) {
-	const evt = _status.event;
-	_status.event = event;
-	let text = get.cardsetion?.(player) || "";
-	_status.event = evt;
-
-	if (["useCard", "respond"].includes(event.name)) {
-		// 转化：多牌离手先叠再飞，落地后白闪再出结果
-		// viewAs 技能（丈八等）即使材料牌名已是杀也要调度，变形落在材料第一张
-		const isConvert = isViewAsThrowEvent(card, event);
-		if (isConvert) {
-			clearViewAsLabel(card);
-			if (card._tempName) {
-				card._tempName.delete?.();
-				delete card._tempName;
-			}
-			card.querySelectorAll?.(".temp-name")?.forEach(el => el.remove());
-			scheduleThrownViewAsMorph(event, card);
-		}
-
-		// 单牌转化：保留材料牌自身花色点数，不用结算牌覆盖
-		const cardnumber = get.number(event.card);
-		const cardsuit = get.suit(event.card);
-		if (
-			!isConvert &&
-			card.dataset.views !== "1" &&
-			event.card.cards?.length === 1 &&
-			(card.number !== cardnumber || card.suit !== cardsuit)
-		) {
-			cardTempSuitNum(card, cardsuit, cardnumber, decadeUI.element);
-		}
-	}
-
-	return text;
 }

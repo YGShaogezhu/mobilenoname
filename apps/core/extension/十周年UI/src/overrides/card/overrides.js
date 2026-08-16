@@ -4,7 +4,7 @@
  * @module overrides/card/overrides
  */
 import { lib, game, ui, get, _status } from "noname";
-import { cardSkinMeta } from "../../config/utils.js";
+import { cardSkinMeta, resolveCardPrettifyKey } from "../../config/utils.js";
 import { applyCardSkin, handleSkinFallback } from "./skin-applier.js";
 import { getSkinCache, isSkinPreloaded, getFallbackKey, getFallbackSkinUrl, generateSkinFilename } from "./skin-loader.js";
 import { isLayeredMode, refreshGuozhanMarks } from "./layered-card.js";
@@ -59,7 +59,7 @@ export function cardCopy() {
 	const clone = baseCardCopy.apply(this, arguments);
 	clone.nature = this.nature;
 
-	const skinKey = lib.config.extension_十周年UI_cardPrettify;
+	const skinKey = resolveCardPrettifyKey(lib.config.extension_十周年UI_cardPrettify);
 	if (!skinKey || skinKey === "off") return clone;
 
 	// 分层模式：复制后重跑拼装（不依赖 card-skins 预读）
