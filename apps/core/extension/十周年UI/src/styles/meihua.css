@@ -58,6 +58,117 @@
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+/** PC/移动端技能提示（手杀官方风格，宽高随内容） */
+.skill-button-tooltip {
+	box-sizing: border-box !important;
+	display: block !important;
+	position: fixed !important;
+	min-width: 220px;
+	max-width: 420px;
+	max-height: none !important;
+	padding: 10px 12px !important;
+	overflow: visible !important;
+	font-family: yuanli, "HYZLSJ", sans-serif;
+	font-size: 14px;
+	line-height: 1.75 !important;
+	text-align: left;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	white-space: normal !important;
+	border-radius: 10px;
+	border: 1px solid #6b4e31;
+	background: #221918 !important;
+	background-image: none !important;
+	box-shadow:
+		0 0 0 1px rgba(107, 78, 49, 0.85),
+		0 6px 18px rgba(0, 0, 0, 0.55),
+		inset 0 0 14px rgba(0, 0, 0, 0.28);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+	transition: opacity 0.2s ease;
+	zoom: 1 !important;
+	transform: none !important;
+}
+
+.skill-button-tooltip .skill-title {
+	display: block !important;
+	position: relative !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 0 8px;
+	padding: 0;
+	font-size: 20px;
+	font-weight: 700;
+	font-family: "HYZLSJ", yuanli, sans-serif;
+	line-height: 1.4 !important;
+	color: #f0d775;
+	text-shadow:
+		0 0 1px #2a2209,
+		0 1px 2px rgba(0, 0, 0, 0.85),
+		0 0 6px rgba(0, 0, 0, 0.45);
+}
+
+.skill-button-tooltip .skill-desc {
+	display: block !important;
+	position: relative !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	font-family:  "FZLBJW";
+	line-height: 1.2 !important;
+	color: #b49d5e;
+	text-shadow:
+		0 0 1px #2a2209,
+		0 1px 2px rgba(0, 0, 0, 0.8);
+	white-space: normal !important;
+}
+
+.skill-button-tooltip .skill-derivation-sep {
+	display: block;
+	margin: 12px 0 8px;
+	font-size: 13px;
+	color: #c4a36a;
+	text-align: center;
+	opacity: 0.9;
+}
+
+.skill-button-tooltip .skill-derivation-title {
+	margin-top: 4px;
+}
+
+/** 本体 poptip 弹层兜底（未拦截到的情况） */
+#window > .dialog.popped#poptip {
+	box-sizing: border-box;
+	width: max-content !important;
+	max-width: min(420px, calc(100vw - 24px)) !important;
+	height: auto !important;
+	padding: 16px 20px !important;
+	border-radius: 10px !important;
+	border: 1px solid #6b4e31 !important;
+	background: #261d1a !important;
+	background-image: none !important;
+	box-shadow:
+		0 0 0 1px rgba(107, 78, 49, 0.85),
+		0 6px 18px rgba(0, 0, 0, 0.55),
+		inset 0 0 14px rgba(0, 0, 0, 0.28) !important;
+	color: #f1d37e !important;
+	text-shadow:
+		0 0 1px #2a2209,
+		0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+#window > .dialog.popped#poptip .text,
+#window > .dialog.popped#poptip .content,
+#window > .dialog.popped#poptip .content * {
+	color: #f1d37e !important;
+	text-shadow:
+		0 0 1px #2a2209,
+		0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
 /* 技能描述弹窗 */
 .baby_skill_popup {
 	position: fixed;
