@@ -60,9 +60,16 @@ export function uiUpdatej(player) {
 		if (judges[i].classList.contains("removing")) continue;
 		judges[i].classList.remove("drawinghidden");
 
+		// 联机：仅在尚无判定图标底图时回退到文字标记，避免盖掉乐/兵粮/闪电等图标
 		if (_status.connectMode) {
-			const bgMark = lib.translate[judges[i].name + "_bg"] || get.translation(judges[i].name)[0];
-			judges[i].node.judgeMark.node.judge.innerHTML = bgMark;
+			const judgeNode = judges[i].node?.judgeMark?.node?.judge;
+			if (!judgeNode) continue;
+			const hasIcon = Boolean(judgeNode.style.backgroundImage);
+			if (!hasIcon) {
+				const markName = judges[i].viewAs || judges[i].name;
+				const bgMark = lib.translate[markName + "_bg"] || get.translation(markName)[0];
+				judgeNode.innerHTML = bgMark;
+			}
 		}
 	}
 }

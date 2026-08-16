@@ -115,31 +115,37 @@
 	background-image: url("../../image/ui/cardtexture/card4.png");
 }
 
-/* 判定区 / 他人装备栏是小格子：铺满即可，不要外扩底框 */
-.player > .judges > .card.layered-card[data-card-face="2"],
+/* 他人装备栏是小格子：铺满即可，不要外扩底框 */
 .player > .equips > .card.layered-card[data-card-face="2"] {
 	background-image: url("../../image/ui/cardtexture/card2.png") !important;
 	background-size: 100% 100% !important;
 	overflow: hidden;
 }
 
-.player > .judges > .card.layered-card[data-card-face="3"],
 .player > .equips > .card.layered-card[data-card-face="3"] {
 	background-image: url("../../image/ui/cardtexture/card3.png") !important;
 	background-size: 100% 100% !important;
 	overflow: hidden;
 }
 
-.player > .judges > .card.layered-card[data-card-face="4"],
 .player > .equips > .card.layered-card[data-card-face="4"] {
 	background-image: url("../../image/ui/cardtexture/card4.png") !important;
 	background-size: 100% 100% !important;
 	overflow: hidden;
 }
 
-.player > .judges > .card.layered-card[data-card-face="2"]::after,
-.player > .judges > .card.layered-card[data-card-face="3"]::after,
-.player > .judges > .card.layered-card[data-card-face="4"]::after,
+/* 判定区：只显示判定图标，禁止牌面底图与裁切（图标会溢出 16×16 格子） */
+.player > .judges > .card.layered-card,
+.player > .judges > .card.layered-card[data-card-face="1"],
+.player > .judges > .card.layered-card[data-card-face="2"],
+.player > .judges > .card.layered-card[data-card-face="3"],
+.player > .judges > .card.layered-card[data-card-face="4"] {
+	background: none !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	overflow: visible !important;
+}
+
 .player > .equips > .card.layered-card[data-card-face="2"]::after,
 .player > .equips > .card.layered-card[data-card-face="3"]::after,
 .player > .equips > .card.layered-card[data-card-face="4"]::after,

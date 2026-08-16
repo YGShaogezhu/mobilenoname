@@ -760,12 +760,13 @@ export function playerAddVirtualJudge(VCard, cards) {
 
 			player.node.judges.insertBefore(cardx, player.node.judges.firstChild);
 
-			// 判定标记美化
+			// 判定标记美化（转化判定用 viewAs）
 			const judgeMarkMap = ["bingliang", "lebu", "shandian", "fulei", "hongshui", "huoshan", "caomu", "jlsgqs_shuiyanqijun", "jydiy_zouhuorumo", "jydiy_yungongliaoshang", "xwjh_biguanqingxiu", "xwjh_wushisanke", "xumou_jsrg", "dczixi_bingliang", "dczixi_lebu", "dczixi_shandian"];
+			const markName = cardx.viewAs || cardx.name;
 
-			if (judgeMarkMap.includes(cardx.name)) {
-				let imageName = cardx.name;
-				const judgeText = lib.translate[cardx.name + "_bg"] || get.translation(cardx.name) || "";
+			if (judgeMarkMap.includes(markName)) {
+				let imageName = markName;
+				const judgeText = lib.translate[markName + "_bg"] || get.translation(markName) || "";
 				cardx.node.judgeMark.node.judge.innerText = "";
 				cardx.node.judgeMark.node.judge.style.fontSize = "";
 
