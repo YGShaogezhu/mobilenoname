@@ -18,7 +18,7 @@ export const stuff_title = createCollapseTitle("stuff_title", "小小玩楞");
 export const bettersound = {
 	name: "更多音效",
 	intro: "开启后，点击卡牌或按钮和出牌弃牌会有音效播放",
-	init: true,
+	init: false,
 };
 
 /**
@@ -28,7 +28,7 @@ export const bettersound = {
 export const skillDieAudio = {
 	name: "中二模式",
 	intro: "众所周知，使用技能前需要吟唱。",
-	init: true,
+	init: false,
 };
 
 /**
@@ -38,7 +38,7 @@ export const skillDieAudio = {
 export const showDistanceDisplay = {
 	name: "手杀距离显示",
 	intro: "开启后，将在游戏中实时显示你与其他角色的距离",
-	init: true,
+	init: false,
 };
 
 /**
@@ -79,16 +79,6 @@ export const shiliyouhua = {
 	name: "官方势力",
 	init: true,
 	intro: "开启后，非魏蜀吴群晋势力的角色将会重新选择势力",
-};
-
-/**
- * 重铸交互配置
- * @type {Object}
- */
-export const enableRecastInteraction = {
-	name: "重铸交互（Beta）",
-	init: false,
-	intro: "开启后，可重铸卡牌可以通过不选目标直接重铸，无需额外操作，重启生效",
 };
 
 /**
@@ -146,7 +136,6 @@ export const miscConfigs = {
 	wujiangbeijing,
 	shiliyouhua,
 	mx_decade_characterDialog,
-	enableRecastInteraction,
 	enableEquipCopy,
 	replace_dialog_shousha,
 	stuff_title_end,

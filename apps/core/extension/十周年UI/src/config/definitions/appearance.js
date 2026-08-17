@@ -4,7 +4,7 @@
  * @module config/definitions/appearance
  */
 import { createCollapseTitle, createCollapseEnd } from "../utils.js";
-import { onExtensionToggleClick, onExtensionToggleUpdate, onNewDecadeStyleClick, onNewDecadeStyleUpdate, onOutcropSkinClick, onOutcropSkinUpdate, onBorderLevelUpdate, onMeanPrettifyClick, onDynamicSkinClick, onDynamicSkinOutcropUpdate } from "../handlers/appearance-handlers.js";
+import { onExtensionToggleClick, onExtensionToggleUpdate, onOutcropSkinClick, onOutcropSkinUpdate, onBorderLevelUpdate, onMeanPrettifyClick, onDynamicSkinClick, onDynamicSkinOutcropUpdate } from "../handlers/appearance-handlers.js";
 
 /**
  * 扩展开关配置
@@ -14,21 +14,6 @@ export const extensionToggle = {
 	clear: true,
 	onclick: onExtensionToggleClick,
 	update: onExtensionToggleUpdate,
-};
-
-/**
- * 新版配置菜单配置
- * @type {Object}
- */
-export const newConfigWindow = {
-	name: "打开新版菜单",
-	intro: "在独立窗口中打开现代化的配置界面",
-	clear: true,
-	onclick() {
-		if (window.decadeUI?.showConfigWindow) {
-			window.decadeUI.showConfigWindow();
-		}
-	},
 };
 
 /**
@@ -47,24 +32,24 @@ export const eruda = {
 export const outward_title = createCollapseTitle("outward_title", "整体外观");
 
 /**
- * 切换样式配置
+ * 切换样式配置（已固定为移动版，配置项从菜单移除）
  * @type {Object}
  */
-export const newDecadeStyle = {
-	name: "切换样式",
-	intro: "切换武将边框样式和界面布局，选择不同设置后游戏会自动重启，电脑端支持alt+123456快捷切换",
-	init: "on",
-	item: {
-		on: "十周年",
-		off: "移动版",
-		othersOff: "一将成名",
-		onlineUI: "online",
-		babysha: "欢乐三国杀",
-		codename: "名将杀",
-	},
-	onclick: onNewDecadeStyleClick,
-	update: onNewDecadeStyleUpdate,
-};
+// export const newDecadeStyle = {
+// 	name: "切换样式",
+// 	intro: "切换武将边框样式和界面布局，选择不同设置后游戏会自动重启，电脑端支持alt+123456快捷切换",
+// 	init: "off",
+// 	item: {
+// 		on: "十周年",
+// 		off: "移动版",
+// 		othersOff: "一将成名",
+// 		onlineUI: "online",
+// 		babysha: "欢乐三国杀",
+// 		codename: "名将杀",
+// 	},
+// 	onclick: onNewDecadeStyleClick,
+// 	update: onNewDecadeStyleUpdate,
+// };
 
 /**
  * 露头样式配置
@@ -141,8 +126,8 @@ export const kaizhan = {
 	init: "shousha|play",
 	item: {
 		off: "关闭",
-		"shousha|play": "手杀|游戏开始",
 		"shousha|-1": "手杀|随机",
+		"shousha|play": "手杀|游戏开始",
 		"shousha|play1": "手杀|双刀动画",
 		"shousha|play2": "手杀|双剑动画",
 		"shousha|play3": "手杀|双斧动画",
@@ -161,10 +146,9 @@ export const outward_title_end = createCollapseEnd("outward_title");
  */
 export const appearanceConfigs = {
 	extensionToggle,
-	newConfigWindow,
 	eruda,
 	outward_title,
-	newDecadeStyle,
+	// newDecadeStyle,
 	outcropSkin,
 	borderLevel,
 	meanPrettify,

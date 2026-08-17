@@ -53,6 +53,7 @@ function shouldSkipMark(item) {
 	if (typeof item !== "string") return false;
 	if (style !== "on" && style !== "othersOff") return false;
 
+	// 以下为十周年/一将成名专用标记过滤
 	if (SKIP_PREFIXES.some(p => item.startsWith(p)) && !SKIP_EXCEPTIONS.has(item)) {
 		return true;
 	}
@@ -117,12 +118,13 @@ export function playerMark(item, info, skill) {
 	}
 
 	if (item && typeof item === "string") {
-		if (item.startsWith("xinfu_falu_") && (style === "on" || style === "othersOff")) {
-			return;
-		}
-		if (STARCANXI_MAIN_FACTIONS.has(item) && (style === "on" || style === "othersOff")) {
-			return;
-		}
+		// 十周年/一将成名专用标记过滤
+		// if (item.startsWith("xinfu_falu_") && (style === "on" || style === "othersOff")) {
+		// 	return;
+		// }
+		// if (STARCANXI_MAIN_FACTIONS.has(item) && (style === "on" || style === "othersOff")) {
+		// 	return;
+		// }
 	}
 
 	if (get.itemtype(item) === "cards") {

@@ -770,7 +770,8 @@ export function playerAddVirtualJudge(VCard, cards) {
 				cardx.node.judgeMark.node.judge.innerText = "";
 				cardx.node.judgeMark.node.judge.style.fontSize = "";
 
-				const isDecadeStyle = lib.config.extension_十周年UI_newDecadeStyle === "on" || lib.config.extension_十周年UI_newDecadeStyle === "othersOff";
+				const isDecadeStyle = false;
+				// const isDecadeStyle = lib.config.extension_十周年UI_newDecadeStyle === "on" || lib.config.extension_十周年UI_newDecadeStyle === "othersOff";
 				const ext = isDecadeStyle && ["bingliang", "lebu", "shandian"].includes(imageName) ? "1.png" : ".png";
 				const basePath = `${lib.assetURL}extension/十周年UI/image/ui/judge-mark/`;
 

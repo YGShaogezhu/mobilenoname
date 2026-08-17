@@ -8,7 +8,6 @@ import { setupConnectMode, setupLayoutVisualMenu } from "./core/connectMode.js";
 import { initApp } from "./core/app.js";
 import { applyMoveAnimFix } from "./overrides/moveAnimFix.js";
 import { initPrecontentUI } from "./ui/progress-bar.js";
-import { initCardAlternateNameVisible } from "./ui/cardAlternateName.js";
 
 /**
  * Precontent主入口 - 游戏初始化前执行
@@ -32,5 +31,4 @@ export async function precontent() {
 
 	applyMoveAnimFix();
 	initPrecontentUI();
-	initCardAlternateNameVisible();
 }

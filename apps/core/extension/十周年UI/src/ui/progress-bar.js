@@ -52,6 +52,7 @@ const removeElementById = id => document.getElementById(id)?.remove();
  */
 const isShoushaSyle = () => {
 	const style = lib.config.extension_十周年UI_newDecadeStyle;
+	// 十周年/一将成名走其它进度条样式；移动版及其余均视为手杀样式
 	return style !== "on" && style !== "othersOff";
 };
 

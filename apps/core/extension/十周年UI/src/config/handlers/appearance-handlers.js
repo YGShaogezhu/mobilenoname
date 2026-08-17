@@ -4,7 +4,7 @@
  * @module config/handlers/appearance-handlers
  */
 import { lib, game, ui, _status } from "noname";
-import { UI_ANIMATION } from "../../constants.js";
+// import { UI_ANIMATION } from "../../constants.js";
 
 /**
  * 扩展开关点击处理
@@ -28,27 +28,32 @@ export function onExtensionToggleUpdate() {
 }
 
 /**
- * 切换样式点击处理
+ * 切换样式点击处理（已固定为移动版，不再响应切换）
  * @param {string} control - 选择的样式值
  */
-export function onNewDecadeStyleClick(control) {
-	const origin = lib.config.extension_十周年UI_newDecadeStyle;
-	game.saveConfig("extension_十周年UI_newDecadeStyle", control);
-	if (origin !== control) {
-		setTimeout(() => game.reload(), UI_ANIMATION.RELOAD_DELAY);
-	}
-}
+// export function onNewDecadeStyleClick(control) {
+// 	const origin = lib.config.extension_十周年UI_newDecadeStyle;
+// 	game.saveConfig("extension_十周年UI_newDecadeStyle", control);
+// 	if (origin !== control) {
+// 		setTimeout(() => game.reload(), UI_ANIMATION.RELOAD_DELAY);
+// 	}
+// }
 
 /**
  * 切换样式更新处理
- * @description 更新arena的dataset属性
+ * @description 固定写入移动版 arena dataset，供 CSS 选择器使用
  */
 export function onNewDecadeStyleUpdate() {
-	if (!window.decadeUI) return;
-	const style = lib.config.extension_十周年UI_newDecadeStyle;
-	ui.arena.dataset.newDecadeStyle = style;
-	const decadeLayoutStyles = ["on", "othersOff", "onlineUI", "babysha", "codename"];
-	ui.arena.dataset.decadeLayout = decadeLayoutStyles.includes(style) ? "on" : "off";
+	if (!window.decadeUI || !ui.arena) return;
+	if (lib.config.extension_十周年UI_newDecadeStyle !== "off") {
+		game.saveConfig("extension_十周年UI_newDecadeStyle", "off");
+	}
+	ui.arena.dataset.newDecadeStyle = "off";
+	ui.arena.dataset.decadeLayout = "off";
+	// const style = lib.config.extension_十周年UI_newDecadeStyle;
+	// ui.arena.dataset.newDecadeStyle = style;
+	// const decadeLayoutStyles = ["on", "othersOff", "onlineUI", "babysha", "codename"];
+	// ui.arena.dataset.decadeLayout = decadeLayoutStyles.includes(style) ? "on" : "off";
 }
 
 /**

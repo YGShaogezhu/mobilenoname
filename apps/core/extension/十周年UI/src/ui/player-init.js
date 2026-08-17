@@ -36,11 +36,11 @@ export function createPlayerInit(base) {
 			this.node.name.dataset.nature = get.groupnature(this.group);
 		}
 
-		// othersOff样式下检查武将原画
-		if (lib.config.extension_十周年UI_newDecadeStyle === "othersOff") {
-			this.checkAndAddExperienceSuffix(character);
-			if (character2) this.checkAndAddExperienceSuffix(character2, true);
-		}
+		// othersOff样式下检查武将原画（已停用）
+		// if (lib.config.extension_十周年UI_newDecadeStyle === "othersOff") {
+		// 	this.checkAndAddExperienceSuffix(character);
+		// 	if (character2) this.checkAndAddExperienceSuffix(character2, true);
+		// }
 
 		// 边框等级
 		const borderLevel = lib.config.extension_十周年UI_borderLevel;
@@ -119,8 +119,9 @@ export function createPlayerInit(base) {
 			const showCards = player.node.showCards;
 			/** @type {number} */
 			const offset = 10;
-			const isBabysha = lib.config.extension_十周年UI_newDecadeStyle === "babysha";
-			if ((isBabysha && rect.left < winWidth / 2) || (!isBabysha && rect.left >= winWidth / 2)) {
+			// const isBabysha = lib.config.extension_十周年UI_newDecadeStyle === "babysha";
+			// babysha 专用左右镜像已停用，移动版按右侧玩家显示在左侧
+			if (rect.left >= winWidth / 2) {
 				showCards.style.left = "";
 				showCards.style.right = player.offsetWidth + offset + "px";
 			} else {
@@ -156,13 +157,13 @@ export function createPlayerInit(base) {
 			});
 		}
 
-		// 十周年角标
-		if (window.decadeModule?.prefixMark) {
-			window.decadeModule.prefixMark.showPrefixMark(character, this);
-			if (character2 && this.doubleAvatar) {
-				window.decadeModule.prefixMark.showPrefixMark(character2, this);
-			}
-		}
+		// 十周年角标（仅十周年样式启用，移动版跳过）
+		// if (window.decadeModule?.prefixMark) {
+		// 	window.decadeModule.prefixMark.showPrefixMark(character, this);
+		// 	if (character2 && this.doubleAvatar) {
+		// 		window.decadeModule.prefixMark.showPrefixMark(character2, this);
+		// 	}
+		// }
 
 		// 座位号节点
 		if (!this.node.seat) {

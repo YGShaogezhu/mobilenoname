@@ -363,11 +363,11 @@ function getDeathImageUrl(style, identity, player) {
 	const basePath = window.decadeUIPath + "image/styles/";
 
 	const styleMap = {
-		onlineUI: `online/dead4_${identity}.png`,
-		babysha: `baby/dead3_${identity}.png`,
-		codename: `codename/dead_${identity}.png`,
-		on: `decade/dead_${identity}.png`,
-		othersOff: `decade/dead_${identity}.png`,
+		// onlineUI: `online/dead4_${identity}.png`,
+		// babysha: `baby/dead3_${identity}.png`,
+		// codename: `codename/dead_${identity}.png`,
+		// on: `decade/dead_${identity}.png`,
+		// othersOff: `decade/dead_${identity}.png`,
 	};
 
 	if (styleMap[style]) {

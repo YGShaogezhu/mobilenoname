@@ -10,11 +10,10 @@ export function isShoushaStyle() {
 
 /**
  * 重铸特性是否启用
- * 手杀风格始终启用（CZ 选牌后重铸）；其它风格依赖 Beta 开关
+ * 仅手杀风格启用（CZ 选牌后重铸）
  */
 export function isRecastFeatureActive() {
-	if (isShoushaStyle()) return true;
-	return lib.config.extension_十周年UI_enableRecastInteraction !== false;
+	return isShoushaStyle();
 }
 
 export function canRecastCard(card, player) {

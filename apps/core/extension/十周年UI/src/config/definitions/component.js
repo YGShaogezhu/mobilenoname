@@ -19,7 +19,7 @@ export const component_title = createCollapseTitle("component_title", "部件管
  */
 export const jindutiaoYangshi = {
 	name: "进度条",
-	init: "2",
+	init: "1",
 	intro: "切换进度条样式",
 	item: {
 		0: "关闭",
@@ -57,8 +57,8 @@ export const jindutiaoST = {
  */
 export const jindutiaoSet = {
 	name: "进度条高度",
-	init: "22",
-	intro: "输入0~100的数值，设置玩家进度条的高度百分比（默认值为22）",
+	init: "25",
+	intro: "输入0~100的数值，设置玩家进度条的高度百分比（默认值为25）",
 	input: true,
 	onblur: onJindutiaoSetBlur,
 	update: onJindutiaoSetUpdate,
@@ -70,7 +70,7 @@ export const jindutiaoSet = {
  */
 export const JDTSYangshi = {
 	name: "阶段提示",
-	init: "0",
+	init: "1",
 	intro: "切换阶段提示样式",
 	item: {
 		0: "关闭",
@@ -88,7 +88,7 @@ export const JDTSYangshi = {
  */
 export const GTBBYangshi = {
 	name: "狗托播报",
-	init: "0",
+	init: "1",
 	intro: "开启后，顶部会出现滚动播报栏",
 	item: { 0: "关闭", 1: "手杀", 2: "十周年" },
 	onclick: onGTBBYangshiClick,

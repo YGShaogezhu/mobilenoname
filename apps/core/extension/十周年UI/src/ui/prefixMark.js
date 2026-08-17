@@ -268,7 +268,7 @@ export const prefixMarkModule = {
 	 * 检查是否启用前缀标记功能
 	 * @returns {boolean} 是否启用
 	 */
-	shouldShowPrefixMark: () => lib.config?.[CONFIG_KEY] === "on",
+	shouldShowPrefixMark: () => false, // 仅十周年样式启用：lib.config?.[CONFIG_KEY] === "on"
 
 	/**
 	 * 获取武将对应的前缀配置

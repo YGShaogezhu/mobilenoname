@@ -313,7 +313,7 @@
 	border-width: 46px 59px 28px 59px;
 	border-style: solid;
 	border-color: transparent;
-	border-image-source: url("../../image/styles/decade/dialog.png");
+	border-image-source: url("../../image/styles/shousha/dialog.png");
 	border-image-slice: 46 59 28 59 fill;
 	transition:
 		opacity 0.5s,
@@ -396,7 +396,7 @@
 	border-width: 6px 36px;
 	border-style: solid;
 	border-color: transparent;
-	border-image-source: url("../../image/styles/decade/button.png");
+	border-image-source: url("../../image/styles/shousha/button.png");
 	border-image-slice: 6 36 6 36 fill;
 	border-radius: 0;
 	box-shadow: none;
@@ -488,7 +488,7 @@
 	width: 70px;
 	height: 70px;
 	margin: 0;
-	background: url("../../image/styles/decade/vs.png");
+	background: url("../../image/styles/shousha/vs.png");
 }
 
 /* 拼点卡牌 */
@@ -573,7 +573,7 @@
 	border-width: 46px 59px 28px 59px;
 	border-style: solid;
 	border-color: transparent;
-	border-image-source: url("../../image/styles/decade/dialog.png");
+	border-image-source: url("../../image/styles/shousha/dialog.png");
 	border-image-slice: 46 61 28 59 fill;
 	pointer-events: auto;
 	animation: player-died 0.5s linear forwards;
@@ -629,7 +629,7 @@
 	border-width: 6px 36px;
 	border-style: solid;
 	border-color: transparent;
-	border-image-source: url("../../image/styles/decade/button.png");
+	border-image-source: url("../../image/styles/shousha/button.png");
 	border-image-slice: 6 36 6 36 fill;
 	border-radius: 0;
 	box-shadow: none;

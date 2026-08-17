@@ -162,6 +162,7 @@ body > .background {
 	bottom: 0;
 }
 
+/* 非移动版手牌区
 #arena[data-new-decade-style="onlineUI"][data-right-layout="on"] > .hand-wrap,
 #arena[data-new-decade-style="onlineUI"][data-right-layout="on"] > .hand-back {
 	left: 230px;
@@ -171,6 +172,7 @@ body > .background {
 
 #arena[data-new-decade-style="codename"][data-right-layout="on"] > .hand-wrap,
 #arena[data-new-decade-style="codename"][data-right-layout="on"] > .hand-back,
+*/
 #arena[data-phonelayout="off"][data-right-layout="on"] > .hand-wrap,
 #arena[data-phonelayout="off"][data-right-layout="on"] > .hand-back {
 	left: 220px;
@@ -184,10 +186,12 @@ body > .background {
 	bottom: 0;
 }
 
+/* 非移动版
 #arena[data-new-decade-style="onlineUI"][data-alone-equip="off"][data-right-layout="on"] > .hand-wrap,
 #arena[data-new-decade-style="onlineUI"][data-alone-equip="off"][data-right-layout="on"] > .hand-back {
 	right: 390px !important;
 }
+*/
 
 .discard-zone {
 	width: 100%;
@@ -736,9 +740,10 @@ body > .background {
 	zoom: 0.7;
 }
 
-/** babysha 样式 */
+/* 以下为非移动版 babysha/onlineUI 样式，已停用
+** babysha 样式 *
 
-/* 龙框尺寸 */
+* 龙框尺寸 *
 body[data-style="babysha"] .player > .long {
 	--w: 60px;
 	--h: calc(var(--w) * 110 / 60);
@@ -758,7 +763,7 @@ body[data-style="babysha"] .player > .wei {
 	bottom: -10px;
 }
 
-/* 手牌区位置 */
+* 手牌区位置 *
 body[data-style="babysha"] #arena[data-right-layout="on"] > .hand-wrap,
 body[data-style="babysha"] #arena[data-right-layout="on"] > .hand-back {
 	left: 230px;
@@ -773,7 +778,7 @@ body[data-style="babysha"] #arena[data-alone-equip="off"][data-right-layout="on"
 	bottom: 0;
 }
 
-/* 信息位置 */
+* 信息位置 *
 body[data-style="babysha"] .touchinfo {
 	top: 1%;
 }
@@ -787,12 +792,12 @@ body[data-style="babysha"] .touchinfo.right {
 	right: 2%;
 }
 
-/* 手牌样式 */
+* 手牌样式 *
 body[data-style="babysha"] .hand-cards > .handcards > .card {
 	left: 20px;
 }
 
-/* 龙尾背景图 */
+* 龙尾背景图 *
 body[data-style="onlineUI"] #arena[data-long-level="three"] > .player > .wei,
 body[data-style="babysha"] #arena[data-long-level="three"] > .player > .wei {
 	background-image: url("../../image/ui/frame/long_yu2.png");
@@ -802,3 +807,5 @@ body[data-style="onlineUI"] #arena[data-long-level="five"] > .player > .wei,
 body[data-style="babysha"] #arena[data-long-level="five"] > .player > .wei {
 	background-image: url("../../image/ui/frame/long_yan2.png");
 }
+
+*/

@@ -2,18 +2,18 @@
  * UI模块公共常量
  */
 
-/** 样式配置映射 */
+/** 样式配置映射（已固定为移动版） */
 export const STYLE_TO_SKIN = {
 	off: "shousha",
-	on: "shizhounian",
-	othersOff: "xinsha",
-	onlineUI: "online",
-	babysha: "baby",
-	codename: "codename",
+	// on: "shizhounian",
+	// othersOff: "xinsha",
+	// onlineUI: "online",
+	// babysha: "baby",
+	// codename: "codename",
 };
 
 /** 默认样式 */
-export const DEFAULT_SKIN = "shizhounian";
+export const DEFAULT_SKIN = "shousha";
 
 /** 手杀风格常量 */
 export const SHOUSHA_CONSTANTS = {

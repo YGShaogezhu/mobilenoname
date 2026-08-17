@@ -87,7 +87,7 @@
 		0 0 1.5px #ffded4,
 		0 0 1.5px #ffded4,
 		0 0 1.5px #ffded4 !important;
-	background: url("../../image/styles/decade/shield.png") no-repeat;
+	background: url("../../image/styles/shousha/shield.png") no-repeat;
 	background-size: 100% 100%;
 	z-index: 100;
 }
@@ -1146,7 +1146,7 @@
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
-	background: url("../../image/styles/decade/card_count7.png") no-repeat;
+	background: url("../../image/styles/shousha/card_count7.png") no-repeat;
 	background-size: 100% 100%;
 	background-position: 0 -1px;
 	transition: transform, opacity;

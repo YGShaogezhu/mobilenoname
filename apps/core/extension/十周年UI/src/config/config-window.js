@@ -277,7 +277,7 @@ function getConfigsByTab(tabId) {
 	const configMap = {
 		appearance: [
 			{ isTitle: true, name: "样式设置" },
-			{ key: "newDecadeStyle", name: "切换样式", type: "select" },
+			// { key: "newDecadeStyle", name: "切换样式", type: "select" },
 			{ key: "outcropSkin", name: "露头样式", type: "select" },
 			{ key: "borderLevel", name: "等阶边框", type: "select" },
 			{ isTitle: true, name: "功能开关" },
@@ -294,7 +294,6 @@ function getConfigsByTab(tabId) {
 			{ key: "shoushatexiao", name: "手杀特效", type: "toggle" },
 			{ key: "autoSelect", name: "自动选择", type: "toggle" },
 			{ key: "cardPrompt", name: "出牌信息提示", type: "toggle" },
-			{ key: "cardAlternateName", name: "牌名辅助", type: "toggle" },
 			{ isTitle: true, name: "卡牌样式" },
 			{ key: "cardPrettify", name: "卡牌美化", type: "select" },
 			{ key: "chupaizhishi", name: "出牌指示", type: "select" },
@@ -330,7 +329,6 @@ function getConfigsByTab(tabId) {
 			{ key: "wujiangbeijing", name: "武将背景", type: "toggle" },
 			{ key: "shiliyouhua", name: "官方势力", type: "toggle" },
 			{ isTitle: true, name: "游戏功能" },
-			{ key: "enableRecastInteraction", name: "重铸交互", type: "toggle" },
 			{ key: "enableEquipCopy", name: "装备入手", type: "toggle" },
 			{ key: "replace_dialog_shousha", name: "转化卡牌类界面手杀样式", type: "toggle" },
 			{ key: "mx_decade_characterDialog", name: "自由选将筛选框", type: "select" },

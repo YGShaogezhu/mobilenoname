@@ -39,12 +39,13 @@ export function playerSay(str) {
 			this.$chatImage.style.pointerEvents = "none";
 
 			const style = decadeUI.config.newDecadeStyle;
-			if (style === "off" || style === "on" || style === "othersOff") {
+			if (style === "off" /* || style === "on" || style === "othersOff" */) {
 				this.$chatImage.style.left = "50%";
 				this.$chatImage.style.top = "50%";
 				this.$chatImage.style.transform = "translate(-50%, -50%)";
 				this.$chatImage.style.zIndex = "90";
 			} else {
+				// 非移动版气泡位置
 				this.$chatImage.style.left = "-40%";
 				this.$chatImage.style.top = "-50px";
 				this.$chatImage.style.transform = "translateX(-50%)";

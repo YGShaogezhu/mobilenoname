@@ -167,12 +167,13 @@ export function playerReinit(from, to, maxHp, online) {
 
 	if (window.decadeModule?.prefixMark) {
 		window.decadeModule.prefixMark.clearPrefixMarks(this);
-		if (character1) {
-			window.decadeModule.prefixMark.showPrefixMark(character1, this);
-		}
-		if (this.doubleAvatar && this.name2) {
-			window.decadeModule.prefixMark.showPrefixMark(this.name2, this);
-		}
+		// 前缀标记仅十周年样式启用
+		// if (character1) {
+		// 	window.decadeModule.prefixMark.showPrefixMark(character1, this);
+		// }
+		// if (this.doubleAvatar && this.name2) {
+		// 	window.decadeModule.prefixMark.showPrefixMark(this.name2, this);
+		// }
 	}
 
 	if (this.node.name && character1) {
@@ -281,8 +282,9 @@ function updateHandcardCount(player) {
 	const count = player.countCards("h");
 
 	if (player === game.me) {
-		const style = lib.config.extension_十周年UI_newDecadeStyle;
-		const showLimit = ["onlineUI", "babysha", "codename"].includes(style);
+		const showLimit = false;
+		// const style = lib.config.extension_十周年UI_newDecadeStyle;
+		// const showLimit = ["onlineUI", "babysha", "codename"].includes(style);
 
 		player.node.count.innerHTML = showLimit ? `${count}/${player.getHandcardLimit()}` : count;
 	} else if (count >= 10) {

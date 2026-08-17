@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => ({
 				{ src: "src/libs", dest: "src" },
 				{ src: "src/styles", dest: "src" },
 				{ src: "src/config/*.css", dest: "src/config" },
-				{ src: "src/features/*.css", dest: "src/features" },
 				{ src: "src/features/*.txt", dest: "src/features" },
 				{ src: "src/skins/dynamicSkin.js", dest: "src/skins" },
 				{ src: "assets", dest: "" },

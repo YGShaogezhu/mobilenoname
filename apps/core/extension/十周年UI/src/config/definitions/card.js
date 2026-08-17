@@ -4,7 +4,7 @@
  * @module config/definitions/card
  */
 import { createCollapseTitle, createCollapseEnd, getAllCardSkinPresets } from "../utils.js";
-import { onCardGhostEffectClick, onAutoSelectClick, onAutoSelectUpdate, onHandTipHeightBlur, onHandTipHeightUpdate, onCardScaleBlur, onCardScaleUpdate, onDiscardScaleBlur, onDiscardScaleUpdate, onHandFoldMinBlur, onHandFoldMinUpdate, onCardPrettifyClick, onChupaizhishiUpdate, onCardAlternateNameClick } from "../handlers/card-handlers.js";
+import { onCardGhostEffectClick, onAutoSelectClick, onAutoSelectUpdate, onHandTipHeightBlur, onHandTipHeightUpdate, onCardScaleBlur, onCardScaleUpdate, onDiscardScaleBlur, onDiscardScaleUpdate, onHandFoldMinBlur, onHandFoldMinUpdate, onCardPrettifyClick, onChupaizhishiUpdate } from "../handlers/card-handlers.js";
 
 /**
  * 卡牌相关折叠标题
@@ -19,7 +19,7 @@ export const card_title = createCollapseTitle("card_title", "卡牌相关");
 export const cardGhostEffect = {
 	name: "幻影出牌",
 	intro: "开启后，卡牌打出或摸牌时会产生幻影拖尾效果，性能杀手请注意",
-	init: true,
+	init: false,
 	onclick: onCardGhostEffectClick,
 };
 
@@ -50,7 +50,7 @@ export const shoushatexiao = {
 export const autoSelect = {
 	name: "自动选择",
 	intro: "开启后会关闭自动确认，自动选择单个合法目标和手牌，重启生效",
-	init: true,
+	init: false,
 	onclick: onAutoSelectClick,
 	update: onAutoSelectUpdate,
 };
@@ -84,7 +84,7 @@ export const handTipHeight = {
 export const cardScale = {
 	name: "手牌大小",
 	intro: "输入0.10~1.00的小数，回车保存并生效",
-	init: "0.18",
+	init: "0.25",
 	input: true,
 	onblur: onCardScaleBlur,
 	update: onCardScaleUpdate,
@@ -97,7 +97,7 @@ export const cardScale = {
 export const discardScale = {
 	name: "弃牌堆卡牌大小",
 	intro: "输入0.10~1.00的小数，回车保存并生效",
-	init: "0.14",
+	init: "0.2",
 	input: true,
 	onblur: onDiscardScaleBlur,
 	update: onDiscardScaleUpdate,
@@ -151,17 +151,6 @@ export const chupaizhishi = {
 };
 
 /**
- * 牌名辅助配置
- * @type {Object}
- */
-export const cardAlternateName = {
-	name: "牌名辅助",
-	intro: "在卡牌底部显示醒目的牌名标签，帮助快速识别手牌",
-	init: false,
-	onclick: onCardAlternateNameClick,
-};
-
-/**
  * 卡牌相关折叠结束标记
  * @type {Object}
  */
@@ -184,6 +173,5 @@ export const cardConfigs = {
 	handFoldMin,
 	cardPrettify,
 	chupaizhishi,
-	cardAlternateName,
 	card_title_end,
 };

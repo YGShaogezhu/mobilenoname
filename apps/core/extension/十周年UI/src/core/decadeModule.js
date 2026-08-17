@@ -8,28 +8,32 @@ import { prefixMarkModule } from "../ui/prefixMark.js";
 /** @type {Array<string>} 排除的游戏模式 */
 const EXCLUDED_MODES = ["chess", "tafang", "hs_hearthstone"];
 
-/** @type {Array<string>} 样式配置选项 */
-const STYLE_OPTIONS = ["on", "off", "othersOff", "onlineUI", "babysha", "codename"];
+/** @type {Array<string>} 样式配置选项（已固定为移动版） */
+// const STYLE_OPTIONS = ["on", "off", "othersOff", "onlineUI", "babysha", "codename"];
 
 /** @type {Object<string, string>} 样式到皮肤的映射 */
 const STYLE_TO_SKIN = {
-	on: "shizhounian",
+	// on: "shizhounian",
 	off: "shousha",
-	othersOff: "xinsha",
-	onlineUI: "online",
-	babysha: "baby",
-	codename: "codename",
+	// othersOff: "xinsha",
+	// onlineUI: "online",
+	// babysha: "baby",
+	// codename: "codename",
 };
 
 /** @type {Object<string, number>} 样式到索引的映射 */
-const STYLE_TO_INDEX = {
-	on: 2,
-	off: 1,
-	othersOff: 3,
-	onlineUI: 4,
-	babysha: 5,
-	codename: 6,
-};
+// const STYLE_TO_INDEX = {
+// 	on: 2,
+// 	off: 1,
+// 	othersOff: 3,
+// 	onlineUI: 4,
+// 	babysha: 5,
+// 	codename: 6,
+// };
+
+const MOBILE_STYLE = "off";
+const MOBILE_SKIN = "shousha";
+const MOBILE_PLAYER_CSS = "player2.css";
 
 /**
  * 获取配置项值
@@ -92,9 +96,11 @@ export function initDecadeModule() {
 		const cssFiles = ["src/styles/extension.css", "src/styles/decadeLayout.css", "src/styles/card.css", "src/styles/meihua.css"];
 		cssFiles.forEach(path => this.css(`${decadeUIPath}${path}`));
 
-		const style = getConfigValue("newDecadeStyle", "on");
-		const styleIndex = STYLE_OPTIONS.indexOf(style);
-		this.css(`${decadeUIPath}src/styles/player${styleIndex !== -1 ? styleIndex + 1 : 2}.css`);
+		if (getConfigValue("newDecadeStyle", MOBILE_STYLE) !== MOBILE_STYLE) {
+			game.saveConfig("extension_十周年UI_newDecadeStyle", MOBILE_STYLE);
+		}
+		const style = MOBILE_STYLE;
+		this.css(`${decadeUIPath}src/styles/${MOBILE_PLAYER_CSS}`);
 		this.css(`${decadeUIPath}src/styles/equip.css`);
 		this.css(`${decadeUIPath}src/styles/layout.css`);
 		// 分层拼卡需覆盖 layout 中对 .top-name / .image 的规则
@@ -112,7 +118,7 @@ export function initDecadeModule() {
 		const isPhoneLayout = lib.config.phonelayout;
 
 		if (!EXCLUDED_MODES.includes(currentMode)) {
-			const skinName = STYLE_TO_SKIN[style] || "shizhounian";
+			const skinName = STYLE_TO_SKIN[style] || MOBILE_SKIN;
 			const uiPath = `${decadeUIPath}ui/`;
 
 			this.css(`${uiPath}styles/fonts.css`);
@@ -127,8 +133,8 @@ export function initDecadeModule() {
 			}
 		}
 
-		// 初始化亮将钩子
-		this.prefixMark.setupShowCharacterHook();
+		// 前缀标记仅十周年样式启用，移动版跳过
+		// this.prefixMark.setupShowCharacterHook();
 
 		return this;
 	};

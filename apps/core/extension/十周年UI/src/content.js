@@ -20,9 +20,7 @@ import { setupCardDragSort } from "./features/cardDragSort.js";
 import { setupEquipHand } from "./features/equipHand.js";
 import { setupLuckyCard } from "./features/luckyCard.js";
 import { setupExtensionToggle } from "./features/extensionToggle.js";
-import { setupStyleHotkeys } from "./features/styleHotkeys.js";
 import { setupDisableBrowserShortcuts } from "./features/disableBrowserShortcuts.js";
-import { setupWelcomeDialog } from "./features/welcomeDialog.js";
 import { setupConfigWindow } from "./features/configWindow.js";
 import { setupSsJiaobiao } from "./features/ssJiaobiao.js";
 import { setupSsEquipments } from "./features/ssEquipments.js";
@@ -39,7 +37,6 @@ import { initCardPrompt } from "./ui/cardPrompt.js";
 import { initComponent } from "./ui/component.js";
 import { setupCharacterBackground } from "./ui/characterBackground.js";
 import { setupCharacterNamePrefix } from "./ui/characterNamePrefix.js";
-import { setupSkillDisplay } from "./ui/skillDisplay.js";
 import { setupOutcropAvatar } from "./ui/outcropAvatar.js";
 
 // 技能模块
@@ -50,6 +47,7 @@ import { createLbtnPlugin } from "../ui/lbtn/plugin.js";
 import { createSkillPlugin } from "../ui/skill/plugin.js";
 import { createCharacterPlugin } from "../ui/character/plugin.js";
 import { setupGuozhanBiaojiCards } from "./overrides/card/guozhan-biaoji.js";
+import { onNewDecadeStyleUpdate } from "./config/handlers/appearance-handlers.js";
 
 /**
  * 完成核心初始化
@@ -63,6 +61,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	decadeUI.config.campIdentityImageMode ??= true;
 
 	decadeUI.config.update = () => {
+		onNewDecadeStyleUpdate();
 		const menu = lib.extensionMenu[`extension_${decadeUIName}`];
 		for (const key in menu) {
 			if (menu[key]?.update) menu[key].update();
@@ -70,6 +69,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	};
 
 	decadeUI.init();
+	onNewDecadeStyleUpdate();
 
 	setupGuozhanBiaojiCards();
 	setupGameAnimation(lib, game, ui, get, ai, _status);
@@ -82,7 +82,6 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupEquipHand();
 	setupLuckyCard();
 	setupExtensionToggle();
-	setupStyleHotkeys();
 	setupDisableBrowserShortcuts();
 	setupConfigWindow();
 	setupSsJiaobiao();
@@ -90,12 +89,10 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupEnhancedAudio();
 	setupCharacterBackground();
 	setupCharacterNamePrefix();
-	setupSkillDisplay();
 	setupOutcropAvatar();
 	setupSkillDieAudio();
 	setupCharacterAudio();
 	setupDynamicSkin();
-	setupWelcomeDialog(lib.extensionPack.十周年UI);
 
 	console.timeEnd(decadeUIName);
 	return decadeUI;
@@ -152,7 +149,7 @@ export async function content(config) {
 	decadeUI.config = {
 		...config,
 		dynamicSkin: lib.config.extension_十周年UI_dynamicSkin ?? false,
-		newDecadeStyle: lib.config.extension_十周年UI_newDecadeStyle ?? "on",
+		newDecadeStyle: "off",
 		dynamicSkinOutcrop: lib.config.extension_十周年UI_dynamicSkinOutcrop ?? false,
 		rightLayout: true,
 	};

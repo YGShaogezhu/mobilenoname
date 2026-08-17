@@ -103,6 +103,7 @@ function applyYinYangStyle(player, mark, skill) {
 	const style = lib.config.extension_十周年UI_newDecadeStyle;
 
 	if (style !== "off") {
+		// 非移动版：用 CSS 类切换阴阳
 		toggleYinYangClass(mark);
 	} else {
 		toggleYinYangImage(player, mark, skill);

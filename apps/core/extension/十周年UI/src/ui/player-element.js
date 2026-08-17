@@ -52,13 +52,14 @@ function setupIdentityDisplay(realIdentity, player) {
 					return;
 				}
 
-				const currentStyle = lib.config.extension_十周年UI_newDecadeStyle;
-				if (currentStyle === "codename" && value === "猜") {
-					this.innerText = "";
-					this.style.visibility = "";
-					this.parentNode.style.backgroundImage = "";
-					return;
-				}
+				// const currentStyle = lib.config.extension_十周年UI_newDecadeStyle;
+				// 名将杀专用：猜身份时清空文字
+				// if (currentStyle === "codename" && value === "猜") {
+				// 	this.innerText = "";
+				// 	this.style.visibility = "";
+				// 	this.parentNode.style.backgroundImage = "";
+				// 	return;
+				// }
 
 				const identity = this.parentNode.dataset.color;
 				/** @type {Record<string, Function>} */
@@ -124,11 +125,11 @@ function setupIdentityDisplay(realIdentity, player) {
 				const style = lib.config.extension_十周年UI_newDecadeStyle;
 				/** @type {Record<string, string>} */
 				const srcMap = {
-					onlineUI: "image/styles/online/identity2_",
-					babysha: "image/styles/baby/identity3_",
-					on: "image/styles/decade/identity_",
-					othersOff: "image/styles/decade/identity_",
-					codename: "image/styles/codename/identity5_",
+					// onlineUI: "image/styles/online/identity2_",
+					// babysha: "image/styles/baby/identity3_",
+					// on: "image/styles/decade/identity_",
+					// othersOff: "image/styles/decade/identity_",
+					// codename: "image/styles/codename/identity5_",
 				};
 				const srcPrefix = srcMap[style] || "image/styles/shousha/identity2_";
 				const src = decadeUIPath + srcPrefix + filename + ".png";

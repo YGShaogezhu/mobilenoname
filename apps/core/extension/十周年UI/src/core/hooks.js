@@ -72,9 +72,10 @@ export function initHooks() {
 	lib.hooks["checkEnd"].push(function decadeUI_UIconfirm() {
 		if (_status.event?.name !== "chooseToUse" || _status.event.type !== "phase" || ui.confirm?.lastChild.link !== "cancel") return;
 		const UIconfig = lib.config.extension_十周年UI_newDecadeStyle;
-		let innerHTML = UIconfig !== "othersOff" || UIconfig === "on" ? "回合结束" : "结束出牌";
-		if (UIconfig === "onlineUI") innerHTML = "取消";
-		else if (_status.event.skill || (ui.selected?.cards ?? []).length > 0) {
+		let innerHTML = "结束出牌";
+		// let innerHTML = UIconfig !== "othersOff" || UIconfig === "on" ? "回合结束" : "结束出牌";
+		// if (UIconfig === "onlineUI") innerHTML = "取消";
+		if (_status.event.skill || (ui.selected?.cards ?? []).length > 0) {
 			innerHTML = UIconfig === "off" ? `<img draggable='false' src=${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/QX.png>` : "取消";
 		} else if (UIconfig === "off") {
 			innerHTML = `<img draggable='false' src=${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/jscp.png>`;

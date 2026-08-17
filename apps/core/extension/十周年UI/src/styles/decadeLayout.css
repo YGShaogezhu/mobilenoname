@@ -69,29 +69,27 @@
 
 /** 玩家宽度变量 */
 
-#arena[data-new-decade-style="on"] > .player {
-	--w: 120px !important;
-}
-
 #arena[data-new-decade-style="off"] > .player {
 	--w: 128px !important;
 }
 
+/* 非移动版宽度
+#arena[data-new-decade-style="on"] > .player {
+	--w: 120px !important;
+}
 #arena[data-new-decade-style="othersOff"] > .player {
 	--w: 128px !important;
 }
-
 #arena[data-new-decade-style="onlineUI"] > .player {
 	--w: 128px !important;
 }
-
 #arena[data-new-decade-style="babysha"] > .player {
 	--w: 128px !important;
 }
-
 #arena[data-new-decade-style="codename"] > .player {
 	--w: 120px !important;
 }
+*/
 
 /** 默认布局 (mobile) */
 
@@ -570,9 +568,10 @@
 	top: 9px;
 }
 
-/** nova布局 - 特殊样式 (onlineUI/babysha/othersOff) */
+/* 以下为非移动版 nova 布局，已停用
+** nova布局 - 特殊样式 (onlineUI/babysha/othersOff) *
 
-/* 8人座 */
+* 8人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="8"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="8"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="8"] > .player[data-position="1"] {
@@ -625,7 +624,7 @@
 	top: 23%;
 }
 
-/* 7人座 */
+* 7人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="7"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="7"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="7"] > .player[data-position="1"] {
@@ -671,7 +670,7 @@
 	top: 23%;
 }
 
-/* 6人座 */
+* 6人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="6"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="6"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="6"] > .player[data-position="1"] {
@@ -709,7 +708,7 @@
 	top: 23%;
 }
 
-/* 5人座 */
+* 5人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="5"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="5"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="5"] > .player[data-position="1"] {
@@ -740,7 +739,7 @@
 	top: 23%;
 }
 
-/* 4人座 */
+* 4人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="4"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="4"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="4"] > .player[data-position="1"] {
@@ -763,7 +762,7 @@
 	top: 23%;
 }
 
-/* 3人座 */
+* 3人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="3"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="3"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="3"] > .player[data-position="1"] {
@@ -779,10 +778,12 @@
 	top: 9px;
 }
 
-/* 2人座 */
+* 2人座 *
 #arena[data-layout="nova"][data-new-decade-style="onlineUI"][data-number="2"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="babysha"][data-number="2"] > .player[data-position="1"],
 #arena[data-layout="nova"][data-new-decade-style="othersOff"][data-number="2"] > .player[data-position="1"] {
 	left: calc(50% - (var(--w) / 2));
 	top: 9px;
 }
+
+*/

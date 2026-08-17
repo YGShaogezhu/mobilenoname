@@ -11,10 +11,11 @@
 	--player-equips-left: 10%;
 	--player-equips-right: 16%;
 
-	/* babysha 样式 */
+	/* babysha 样式（已停用）
 	--equip-right-baby: 66px;
 	--equip-right-layout-left-baby: 108px;
 	--player-equips-left-baby: 12%;
+	*/
 
 	/* new 样式 */
 	--equip-right-new: 86px;
@@ -28,11 +29,12 @@
 	--player-equips-left-new-new: 15%;
 	--player-equips-right-new-new: 16%;
 
-	/* onlineUI 样式 */
+	/* onlineUI 样式（已停用）
 	--equip-right-ol: 160px;
 	--equip-right-layout-left-ol: 90px;
 	--player-equips-left-ol: 17%;
 	--player-equips-right-ol: 5%;
+	*/
 }
 
 /** 装备栏容器 */
@@ -58,23 +60,22 @@
 	opacity: 0;
 }
 
-/* 十周年样式 - 关闭触屏布局 */
+/* 十周年/一将样式 - 关闭触屏布局（已停用）
 #arena[data-new-decade-style="on"][data-phonelayout="off"][data-right-layout="on"] > .equips-wrap {
 	left: 1%;
 	right: auto;
 }
 
-/* othersOff 样式 - 关闭触屏布局 */
 #arena[data-new-decade-style="othersOff"][data-phonelayout="off"][data-right-layout="on"] > .equips-wrap {
 	left: 1%;
 	right: auto;
 }
 
-/* othersOff 样式 - 其他玩家装备右移 */
 #arena[data-new-decade-style="othersOff"] .player > .equips,
 #arena[data-new-decade-style="othersOff"] > .player:not(.minskin) > .equips {
 	left: calc(var(--player-equips-left) + 5%);
 }
+*/
 
 /** 装备栏背景 */
 
@@ -100,23 +101,23 @@
 
 /* 装备槽背景图 */
 .equips-wrap > .equips-back > div[data-type="0"] {
-	background-image: url("../../image/styles/decade/equip1.png");
+	background-image: url("../../image/styles/shousha/equip1.png");
 }
 
 .equips-wrap > .equips-back > div[data-type="1"] {
-	background-image: url("../../image/styles/decade/equip2.png");
+	background-image: url("../../image/styles/shousha/equip2.png");
 }
 
 .equips-wrap > .equips-back > div[data-type="2"] {
-	background-image: url("../../image/styles/decade/equip3.png");
+	background-image: url("../../image/styles/shousha/equip3.png");
 }
 
 .equips-wrap > .equips-back > div[data-type="3"] {
-	background-image: url("../../image/styles/decade/equip4.png");
+	background-image: url("../../image/styles/shousha/equip4.png");
 }
 
 .equips-wrap > .equips-back > div[data-type="4"] {
-	background-image: url("../../image/styles/decade/equip5.png");
+	background-image: url("../../image/styles/shousha/equip5.png");
 }
 
 /** 装备栏内容 */
@@ -393,6 +394,7 @@
 
 /** 样式变量覆盖 */
 
+/* 非移动版变量覆盖（已停用）
 body[data-style="babysha"] {
 	--equip-right: var(--equip-right-baby);
 	--equip-right-layout-left: var(--equip-right-layout-left-baby);
@@ -406,6 +408,7 @@ body[data-style="onlineUI"] {
 	--player-equips-left: var(--player-equips-left-ol);
 	--player-equips-right: var(--player-equips-right-ol);
 }
+*/
 
 body[data-style="off"] {
 	--equip-right: var(--equip-right-new);
@@ -414,9 +417,9 @@ body[data-style="off"] {
 	--player-equips-right: var(--player-equips-right-new);
 }
 
-body[data-style="codename"] .equips-wrap > .equips-back > div {
+/* body[data-style="codename"] .equips-wrap > .equips-back > div {
 	opacity: 0.5;
-}
+} */
 
 /** 技能选择装备牌 */
 

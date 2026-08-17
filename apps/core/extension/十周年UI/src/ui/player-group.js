@@ -26,7 +26,8 @@ function handleGroupStyleV2(group) {
 			this._finalGroup = group;
 
 			const create = () => {
-				if (decadeUI.config.newDecadeStyle === "codename" || !this._finalGroup) {
+				// if (decadeUI.config.newDecadeStyle === "codename" || !this._finalGroup) {
+				if (!this._finalGroup) {
 					this.node.campWrap.node.campName.innerHTML = "";
 				} else {
 					const name = get.translation(this._finalGroup);
@@ -48,18 +49,14 @@ function handleGroupStyleV2(group) {
 					img.src = url;
 				});
 
-			if (decadeUI.config.newDecadeStyle === "onlineUI") {
-				create();
-				return;
-			}
+			// if (decadeUI.config.newDecadeStyle === "onlineUI") {
+			// 	create();
+			// 	return;
+			// }
 
 			try {
-				const prefix =
-					decadeUI.config.newDecadeStyle === "off"
-						? "image/styles/shousha/name2_"
-						: decadeUI.config.newDecadeStyle === "babysha"
-							? "image/styles/baby/hs_"
-							: "image/styles/decade/name_";
+				const prefix = "image/styles/shousha/name2_";
+				// 原多样式：off→shousha/name2_，babysha→baby/hs_，其余→decade/name_
 				const url = decadeUIPath + prefix + group + ".png";
 				await loadImage(url);
 				this.node.campWrap.node.campName.style.backgroundImage = `url("${url}")`;

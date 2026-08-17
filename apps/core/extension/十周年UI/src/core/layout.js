@@ -7,7 +7,7 @@ import { lib, game, ui, get, ai, _status } from "noname";
  * 获取当前样式配置
  * @returns {string} 样式名称
  */
-const getStyle = () => decadeUI?.config?.newDecadeStyle ?? lib.config.extension_十周年UI_newDecadeStyle;
+// const getStyle = () => decadeUI?.config?.newDecadeStyle ?? lib.config.extension_十周年UI_newDecadeStyle;
 
 /**
  * 获取弃牌缩放比例
@@ -81,8 +81,9 @@ export function createLayoutModule() {
 					}
 				}
 			} else {
-				const style = getStyle();
-				const shouldCenter = style === "codename" || ((style === "on" || style === "othersOff") && !lib.config.phonelayout);
+				// const style = getStyle();
+				const shouldCenter = false;
+				// const shouldCenter = style === "codename" || ((style === "on" || style === "othersOff") && !lib.config.phonelayout);
 				if (shouldCenter) {
 					xStart = (ui.arena.offsetWidth - totalW) / 2 - boundsX;
 				}
