@@ -543,9 +543,11 @@
 	background-image: url("../../../assets/skill/shousha/suo.png");
 	background-size: 100% 100%;
 	position: absolute;
-	left: 7px;
+	left: 50%;
+	transform: translateX(-50%);
 	z-index: 6;
 	bottom: 5.5px;
+	top: auto;
 	filter: grayscale(100%);
 	-webkit-filter: grayscale(100%);
 }

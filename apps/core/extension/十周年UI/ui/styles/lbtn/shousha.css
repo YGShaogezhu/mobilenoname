@@ -178,7 +178,7 @@
 	/* 选项文字：字色 + 描边 */
 	color: #d8d891;
 	font-family: "FZLBJW";
-	font-size: 30px;
+	font-size: 25px;
 	font-weight: 500;
 	-webkit-text-stroke: 1px #4a5320;
 	paint-order: stroke fill;

@@ -394,6 +394,14 @@
 	-webkit-filter: grayscale(100%);
 }
 
+/* 被动技 width:auto，不能用主动技的 left:20px，改为相对文字区水平居中 */
+.trigger .suo1 {
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 5.5px;
+	top: auto;
+}
+
 /* 阴阳标记 */
 .skillitem .yang {
 	width: 90px;
