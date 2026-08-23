@@ -117,6 +117,16 @@ export const killEffect = {
 };
 
 /**
+ * 副将边框配置
+ * @type {Object}
+ */
+export const shuangjiang = {
+	name: "副将边框",
+	intro: "开启后，双将模式显示手杀样式副将边框。",
+	init: true,
+};
+
+/**
  * 开战动画配置
  * @type {Object}
  */
@@ -155,6 +165,7 @@ export const appearanceConfigs = {
 	dynamicSkin,
 	dynamicSkinOutcrop,
 	killEffect,
+	shuangjiang,
 	kaizhan,
 	outward_title_end,
 };

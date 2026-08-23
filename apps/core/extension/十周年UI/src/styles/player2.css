@@ -393,12 +393,12 @@
 .player > .camp-wrap > .avatar-name,
 .player > .camp-wrap > .avatar-name-default,
 #arena > .player:not(.minskin) > .name.name {
-	top: 29px;
-	left: 29.3px;
+	top: 30px;
+	left: 29px;
 	transform: translateX(-50%);
 	line-height: -3px;
 	font-family: "shousha" !important;
-	font-size: 15px;
+	font-size: 18px;
 	letter-spacing: -2px;
 	white-space: nowrap;
 	writing-mode: vertical-rl;
@@ -498,17 +498,18 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
-	left: 65% !important;
+	left: 56% !important;
 	right: auto;
 	top: 0;
 	width: 18px;
-	height: 96px;
-	font-size: 15px;
+	height: 80px;
+	font-size: 18px;
+	letter-spacing: -2px;
 	line-height: 15px;
 	font-family: "shousha" !important;
-	text-shadow: none;
-	background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.4) 80%, transparent 100%);
-	z-index: 89;
+	text-shadow: 0 0 3px #000;
+	background: none;
+	z-index: 63;
 }
 
 .player > .name.name2:empty,

@@ -178,6 +178,10 @@ export function createPlayerInit(base) {
 			updatePlayerOutcropAvatar(this, outcropStyle);
 		}
 
+		if (character2 && decadeUI.applyDeputyFrame && get.mode() !== "guozhan") {
+			decadeUI.applyDeputyFrame(this);
+		}
+
 		return this;
 	};
 }

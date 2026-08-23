@@ -333,3 +333,16 @@
 	pointer-events: none;
 	z-index: 88;
 }
+
+/** 双将副将竖框 */
+
+.player > .decadeUI-deputy-frame {
+	position: absolute;
+	display: block;
+	top: -1.5px;
+	left: 62.6px;
+	width: 22px;
+	height: 173.5px;
+	z-index: 62;
+	pointer-events: none;
+}
