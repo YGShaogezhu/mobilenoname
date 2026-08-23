@@ -31,6 +31,19 @@
 	opacity: 1;
 }
 
+/** 统一卡背：覆盖本体 cardback_style / --cardback-url */
+.card:empty,
+.card.infohidden,
+.card.infohidden:not(.infoflip),
+.card.blank,
+.card.fullimage.infohidden,
+.handcards.yao_yaoyi > .card.yao_yaoyi {
+	background-image: url("../../image/ui/cardtexture/cardstyle_back.png") !important;
+	background-size: 100% 100% !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+}
+
 /* 金/黑金底框 118×160 外扩：选中框跟可视底框对齐（白卡仍用上方 108×150） */
 .card.layered-card[data-card-face="2"]::before,
 .card.layered-card[data-card-face="3"]::before,
@@ -51,6 +64,13 @@ body[data-style="off"] .card.layered-card[data-card-face="4"].selected::before {
 
 #arena > .card.thrown {
 	z-index: 5;
+}
+
+/* 判定框亮牌时弱化场上抛出的同步牌，主展示在 #judgeBox 内 */
+#arena.decadeUI > .card.thrown#judgeCard,
+#arena.decadeUI > .card.thrown.judge-highlight {
+	opacity: 0.15;
+	pointer-events: none;
 }
 
 #arena > .card.thrown.gainingcard,

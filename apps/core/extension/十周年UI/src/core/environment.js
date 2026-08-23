@@ -66,6 +66,12 @@ export const initializeDecadeUIEnvironment = ctx => {
 	const handTipHeight = lib.config["extension_十周年UI_handTipHeight"] || "20";
 	document.documentElement.style.setProperty("--hand-tip-bottom", `calc(${handTipHeight}% + 10px)`);
 
+	const extName = ctx.extensionName || window.decadeUIName || "十周年UI";
+	document.documentElement.style.setProperty(
+		"--cardback-url",
+		`url("${lib.assetURL}extension/${extName}/image/ui/cardtexture/cardstyle_back.png")`
+	);
+
 	patchGlobalMethods(ctx);
 	return bodySensor;
 };

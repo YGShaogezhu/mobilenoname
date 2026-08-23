@@ -4,6 +4,14 @@
 
 import { lib, game, ui, get, ai, _status } from "noname";
 import { createChooseNumberBars, tryParseNumericControls, parseControlAsNumber } from "../ui/chooseNumberBar.js";
+import { enhanceChoiceListDialog } from "./player-card-dialog.js";
+import {
+	setupJudgeBox,
+	appendJudgeCardToBox,
+	playOverJudge,
+	playJudgeResultFx,
+	handleJudgeBoxCleanup,
+} from "../ui/judge-box.js";
 
 /** @type {Object|null} 基础方法引用 */
 let baseContentMethods = null;
@@ -216,9 +224,19 @@ export function createContentChooseControl(baseChooseControl) {
 	const baseStep1 = baseSteps[0];
 	const restSteps = baseSteps.slice(1);
 
+	const finishChoiceListEnhance = event => {
+		try {
+			if (event.choiceList || event.dialogcontrol) {
+				enhanceChoiceListDialog(event);
+			}
+		} catch (e) {}
+	};
+
 	const mobileStep1 = async (event, trigger, player) => {
 		if (!isMobileDecadeStyle()) {
-			return baseStep1.call(this, event, trigger, player);
+			await baseStep1.call(this, event, trigger, player);
+			finishChoiceListEnhance(event);
+			return;
 		}
 
 		if (normalizeChooseControlList(event)) {
@@ -228,12 +246,16 @@ export function createContentChooseControl(baseChooseControl) {
 
 		// 特殊形态仍走原逻辑（分离选项条不影响数字加减条）
 		if (event.sortcard || event.dialogcontrol || event.arrangeSkill || event.choiceList) {
-			return baseStep1.call(this, event, trigger, player);
+			await baseStep1.call(this, event, trigger, player);
+			finishChoiceListEnhance(event);
+			return;
 		}
 
 		const numeric = tryParseNumericControls(event.controls);
 		if (!numeric || numeric.numbers.length < 1) {
-			return baseStep1.call(this, event, trigger, player);
+			await baseStep1.call(this, event, trigger, player);
+			finishChoiceListEnhance(event);
+			return;
 		}
 
 		// 显式 seperate 的非确认场景：数字选择仍用加减条，跳过原分离按钮
@@ -499,13 +521,30 @@ export function contentJudge() {
 			}
 			player.judging.unshift(cardj);
 			game.addVideo("judge1", player, [get.cardInfo(player.judging[0]), judgestr, event.videoId]);
+
+			setupJudgeBox(event, player);
+			await game.delay(0.5);
+			appendJudgeCardToBox(event);
+
+			game.log(player, "进行" + event.judgestr + "判定，亮出的判定牌为", player.judging[0]);
+			if (!event.noJudgeTrigger) {
+				await event.trigger("judge");
+			}
+			await game.delay(2);
+
 			game.broadcastAll(
 				function (player, card, id, cardid) {
 					const event = game.online ? {} : _status.event;
 					if (game.chess) {
 						event.node = card.copy("thrown", "center", ui.arena).addTempClass("start");
 					} else {
-						event.node = player.$throwordered2(card.copy(), true);
+						const c = card.copy();
+						c.judge = true;
+						event.node = player.$throwordered2(c, true);
+						if (ui.thrown && ui.thrown.length > 6) {
+							ui.clear.delay = false;
+							ui.clear();
+						}
 					}
 					if (lib.cardOL) {
 						lib.cardOL[cardid] = event.node;
@@ -514,6 +553,8 @@ export function contentJudge() {
 					if (!window.decadeUI) {
 						ui.arena.classList.add("thrownhighlight");
 						event.node.classList.add("thrownhighlight");
+					} else if (game.online && event.dialog) {
+						ui.dialogs.push(event.dialog);
 					}
 				},
 				player,
@@ -522,11 +563,6 @@ export function contentJudge() {
 				get.id()
 			);
 
-			game.log(player, "进行" + event.judgestr + "判定，亮出的判定牌为", player.judging[0]);
-			await game.delay(2);
-			if (!event.noJudgeTrigger) {
-				await event.trigger("judge");
-			}
 			return waiting.forResult();
 		},
 		async (event, trigger, player) => {
@@ -536,6 +572,8 @@ export function contentJudge() {
 				number: get.number(player.judging[0]),
 				suit: get.suit(player.judging[0]),
 				color: get.color(player.judging[0]),
+				id: player.judging[0].cardid,
+				overjudge: false,
 				node: event.node,
 			};
 			if (event.fixedResult) {
@@ -569,6 +607,12 @@ export function contentJudge() {
 			});
 			game.addVideo("judge2", null, event.videoId);
 			game.log(player, "的判定结果为", event.result.card);
+
+			if (event.judgeCard?.card && event.result.card && event.judgeCard.card.cardid !== event.result.card.cardid) {
+				await playOverJudge(event);
+			}
+			await playJudgeResultFx(event);
+
 			const triggerFixing = event.trigger("judgeFixing");
 			event.triggerMessage("judgeresult");
 			let callback = null;
@@ -579,6 +623,7 @@ export function contentJudge() {
 				next.judgeResult = get.copy(event.result);
 				next.setContent(event.callback);
 				callback = next;
+				event.next1 = next;
 			} else {
 				if (!get.owner(event.result.card)) {
 					if (event.position != ui.discardPile) {
@@ -587,9 +632,10 @@ export function contentJudge() {
 				}
 			}
 			await triggerFixing;
-			if (event.next.includes(callback)) {
+			if (callback && event.next.includes(callback)) {
 				await callback;
 			}
+			await handleJudgeBoxCleanup(event, callback);
 		},
 	];
 }

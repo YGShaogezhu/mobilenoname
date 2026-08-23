@@ -152,14 +152,18 @@
 .player > .judges > .card.layered-card > .lc-frame,
 .player > .equips > .card.layered-card > .lc-frame,
 .card.layered-card:empty > .lc-frame,
-.card.layered-card.infohidden > .lc-frame {
+.card.layered-card.infohidden > .lc-frame,
+.card.layered-card.blank > .lc-frame {
 	display: none;
 }
 
 .card.layered-card:empty,
-.card.layered-card.infohidden {
-	background-image: url("../../image/ui/cardtexture/card1.png");
+.card.layered-card.infohidden,
+.card.layered-card.blank {
+	background-image: url("../../image/ui/cardtexture/cardstyle_back.png") !important;
 	background-size: 100% 100% !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
 	box-shadow: none;
 }
 

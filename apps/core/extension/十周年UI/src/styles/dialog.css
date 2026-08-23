@@ -96,72 +96,17 @@
 	background-image: url("../../image/ui/tnode/tnode-C2.png") !important;
 }
 
-/** 选项框背景 */
+/** 局内选牌/选项小窗统一底图（五谷、技能选牌等；顺拆框单独处理，排除 dui-player-card-dialog） */
 
-#arena.decadeUI[data-loading-style="On"] > .dialog.scroll1:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="On"] > .dialog.scroll2:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="On"] > .dialog.addNewRow:not(.dclieqiong) {
-	background-image: url("../../image/ui/dialog/dialog1.png") !important;
+#arena.decadeUI > .dialog.scroll1:not(.dclieqiong):not(.prompt):not(.dui-player-card-dialog),
+#arena.decadeUI > .dialog.scroll2:not(.dclieqiong):not(.prompt):not(.dui-player-card-dialog),
+#arena.decadeUI > .dialog.forcebutton:not(.dclieqiong):not(.prompt):not(.dui-player-card-dialog),
+#arena.decadeUI > .dialog.addNewRow:not(.dclieqiong):not(.prompt):not(.dui-player-card-dialog) {
+	background: none !important;
+	background-image: url("../../image/ui/dialog/dialog.png") !important;
 	background-size: 100% 100% !important;
-	background-position: center;
+	background-position: center !important;
 	background-repeat: no-repeat !important;
-	background: none;
-	box-shadow: none !important;
-}
-
-#arena.decadeUI[data-loading-style="on"] > .dialog.scroll1:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="on"] > .dialog.scroll2:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="on"] > .dialog.addNewRow:not(.dclieqiong) {
-	background-image: url("../../image/ui/dialog/dialog2.png") !important;
-	background-size: 100% 100% !important;
-	background-position: center;
-	background-repeat: no-repeat !important;
-	background: none;
-	box-shadow: none !important;
-}
-
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog.scroll1:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog.scroll2:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog.addNewRow:not(.dclieqiong) {
-	width: 900px !important;
-	height: 200px;
-	left: calc(50% - 450px) !important;
-	white-space: normal;
-	background-image: url("../../image/ui/dialog/dialog3.png") !important;
-	background-size: 102% 100% !important;
-	background-position: center;
-	background-repeat: no-repeat !important;
-	background: none;
-	box-shadow: none !important;
-}
-
-#arena.decadeUI[data-loading-style="othersOff"] > .dialog.scroll1:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="othersOff"] > .dialog.scroll2:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="othersOff"] > .dialog.addNewRow:not(.dclieqiong) {
-	width: 900px !important;
-	height: 200px;
-	left: calc(50% - 450px) !important;
-	white-space: normal;
-	background-image: url("../../image/ui/dialog/dialog4.png") !important;
-	background-size: 100% 100% !important;
-	background-position: center;
-	background-repeat: no-repeat !important;
-	background: none;
-	box-shadow: none !important;
-}
-
-#arena.decadeUI[data-loading-style="onlineUI"] > .dialog.scroll1:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="onlineUI"] > .dialog.scroll2:not(.dclieqiong),
-#arena.decadeUI[data-loading-style="onlineUI"] > .dialog.addNewRow:not(.dclieqiong) {
-	width: 900px !important;
-	height: 200px;
-	left: calc(50% - 450px) !important;
-	white-space: normal;
-	background-image: url("../../image/ui/dialog/dialog5.png") !important;
-	background-size: 100% 100% !important;
-	background-position: center;
-	background-repeat: no-repeat !important;
-	background: none;
 	box-shadow: none !important;
 }
 
@@ -169,7 +114,1717 @@
 	height: 100%;
 }
 
+/**
+ * 通用金色标题（顺拆窗 / 技能触发标题等可复用）
+ * 对齐琉璃 .shunshouTitle 与手杀 .game_skill_title.ssTitle
+ */
+.dui-gold-title-wrap {
+	position: absolute;
+	left: 50%;
+	top: -36px;
+	transform: translateX(-50%);
+	width: min(420px, 80%);
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	pointer-events: none;
+	z-index: 8;
+	overflow: visible;
+}
+
+.dui-gold-title {
+	overflow: visible !important;
+	width: 100%;
+	height: 100%;
+	line-height: 48px;
+	text-align: center;
+	letter-spacing: 3px !important;
+	background-image: linear-gradient(
+		to bottom,
+		#fffdda,
+		#fff7c5,
+		#fff7bd,
+		#fff7b5,
+		#fff7ac,
+		#fff7a2,
+		#fff799,
+		#fff78f,
+		#fff786,
+		#fff67e,
+		#fff177,
+		#fceb71,
+		#f7e46b,
+		#f1dc65,
+		#ead25f,
+		#e3c759,
+		#dbbc53,
+		#d3b14e,
+		#cba649,
+		#c49b44,
+		#bd9241,
+		#b8893e,
+		#b3833c,
+		#af7e3b,
+		#b3833c,
+		#af7e3b,
+		#b8893e,
+		#b3833c,
+		#ae7c3f,
+		#ae7c45,
+		#af804c,
+		#b68b5d,
+		#ba9165,
+		#be976e
+	);
+	background-size: 100% 1em;
+	background-position: center;
+	background-repeat: no-repeat;
+	font-family: "HYZLSJ", "shousha", serif;
+	font-size: 40px !important;
+	font-weight: normal;
+	-webkit-background-clip: text;
+	background-clip: text;
+	text-shadow: none;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	filter: drop-shadow(2px 0 0.5px #241815) drop-shadow(-2px 0 1.5px #241815) drop-shadow(0 2px 1px #241815)
+		drop-shadow(0 -2px 1.5px #241815);
+}
+
+/**
+ * 选牌 / 选项框：整窗只用 tittle_bg.png（1334×125，中段镂空）
+ * 顶花边 49 + 上圆角 13 = 顶固定 62；可拉中段 18；底（含下圆角）45
+ * 左右 16 保住圆角弧；禁止再垫实底（镂空会透出假背景）
+ */
+#arena.decadeUI > .dialog.dui-player-card-dialog {
+	--dui-pcd-img-w: 1334;
+	--dui-pcd-img-h: 125px;
+	--dui-pcd-lace: 49px;
+	--dui-pcd-slice-t: 62px; /* 49 花边 + 13 上圆角 */
+	--dui-pcd-slice-b: 45px;
+	--dui-pcd-slice-side: 16px;
+	--dui-pcd-collapsed-h: var(--dui-pcd-img-h);
+	--dui-pcd-row-h: 150px;
+	--dui-pcd-gap: 12px;
+	/* 双行框总高（顺拆 / 魄袭 / 让节双行 / 观星） */
+	--dui-pcd-frame-h-2row: calc(
+		var(--dui-pcd-slice-t) + var(--dui-pcd-gap) + var(--dui-pcd-row-h) + var(--dui-pcd-gap) + var(--dui-pcd-row-h) +
+			var(--dui-pcd-gap) + var(--dui-pcd-slice-b)
+	);
+	/* 单行框总高（观看 / 只选手牌 / 仅 e+j） */
+	--dui-pcd-frame-h-1row: calc(
+		var(--dui-pcd-slice-t) + var(--dui-pcd-gap) + var(--dui-pcd-row-h) + var(--dui-pcd-gap) + var(--dui-pcd-slice-b)
+	);
+	/* 牌槽 / 竖签原始比例；左右边距随屏宽收紧，不缩小内部槽 */
+	--dui-pcd-card-w: calc(var(--dui-pcd-row-h) * 129 / 181);
+	--dui-pcd-tab-w: calc(var(--dui-pcd-row-h) * 45 / 164);
+	--dui-pcd-side-min: clamp(10px, 3.2vw, 64px);
+	--dui-pcd-tab-gap: 8px;
+	--dui-pcd-e-w: calc(4 * var(--dui-pcd-card-w) + 12px);
+	--dui-pcd-j-w: calc(3 * var(--dui-pcd-card-w) + 8px);
+	/* 装备区末格（-1马）与延时锦囊竖签间距；非国战更紧 */
+	--dui-pcd-ej-gap: clamp(4px, 0.6vw, 10px);
+	/* 整行内容宽（竖签 + 装备 + 延时），居中后上下两行左右对齐 */
+	--dui-pcd-block-w: calc(
+		var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap) + var(--dui-pcd-e-w) + var(--dui-pcd-ej-gap) + var(--dui-pcd-tab-w) +
+			var(--dui-pcd-tab-gap) + var(--dui-pcd-j-w)
+	);
+	--dui-pcd-content-left: max(var(--dui-pcd-side-min), calc((100% - var(--dui-pcd-block-w)) / 2));
+	--dui-pcd-content-right: calc(var(--dui-pcd-content-left) + var(--dui-pcd-block-w));
+	--dui-pcd-j-anchor: calc(
+		var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap) + var(--dui-pcd-e-w) + var(--dui-pcd-ej-gap)
+	);
+	/* 底部栈：确认 / 进度（由 JS 写入 --dui-pcd-footer-h） */
+	--dui-pcd-footer-h: 0px;
+	--dui-pcd-footer-confirm: 0px;
+	--dui-pcd-footer-progress: 0px;
+	--dui-pcd-footer-stack-gap: 6px;
+	overflow: visible !important;
+	width: 100% !important;
+	max-width: none !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: 6% !important;
+	bottom: auto !important;
+	margin: 0 !important;
+	transform: none !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	position: absolute !important;
+	aspect-ratio: auto;
+	height: var(--dui-pcd-frame-h-2row) !important;
+	max-height: none !important;
+	background: transparent !important;
+	background-image: none !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-pcd-slice-t) var(--dui-pcd-slice-side) var(--dui-pcd-slice-b) var(--dui-pcd-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+/* 隐藏时连 visibility 一起关掉，避免半透明 border-image 圆角抗锯齿仍画出浅色缝 */
+#arena.decadeUI > .dialog.dui-player-card-dialog.hidden {
+	opacity: 0 !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+/* 开场隐藏：等布局钉死后才淡入，避免默认定位闪到屏幕下方 */
+.dialog.dui-pcd-opening,
+#arena > .dialog.dui-pcd-opening,
+#arena.decadeUI > .dialog.dui-pcd-opening {
+	opacity: 0 !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+/* 国战 5 槽（含宝物）：加宽装备区，延时区仍紧跟其后 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-equip-slots="5"] {
+	--dui-pcd-e-w: calc(5 * var(--dui-pcd-card-w) + 16px);
+	--dui-pcd-ej-gap: clamp(8px, 1vw, 16px);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .content-container {
+	overflow: hidden !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .content-container > .content {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .content-container > .content > .caption.dui-prompt-caption,
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-prompt-caption {
+	display: none !important;
+}
+
+/* 标题落在顶花边区（上圆角留给边框，不叠字） */
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-gold-title-wrap {
+	left: 0;
+	right: 0;
+	width: 100%;
+	min-width: 0;
+	transform: none;
+	top: calc(0px - var(--dui-pcd-slice-t));
+	height: var(--dui-pcd-lace);
+	box-sizing: border-box;
+	aspect-ratio: auto;
+	justify-content: center;
+	overflow: visible;
+	z-index: 10;
+	border: none;
+	border-image: none;
+	background: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-gold-title-wrap > .dui-gold-title {
+	line-height: normal;
+	width: auto !important;
+	flex: 0 0 auto;
+	font-size: 36px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-arrow {
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	width: 39px;
+	height: 31px;
+	margin: 0;
+	transform: translate(12px, -50%);
+	background: url("../../image/ui/dialog/arrow.png") center / contain no-repeat;
+	pointer-events: auto;
+	cursor: pointer;
+	z-index: 9;
+	transition: transform 0.2s ease;
+}
+
+/**
+ * 折叠：与展开共用同一套 border-image 九宫，高度收成原图高（125）
+ * 全宽 + 垂直居中；不再改用 background-size（避免与展开拉伸方式不一致）
+ */
+#arena.decadeUI > .dialog.scroll1.dui-player-card-dialog.dui-pcd-collapsed:not(.dclieqiong):not(.prompt),
+#arena.decadeUI > .dialog.scroll2.dui-player-card-dialog.dui-pcd-collapsed:not(.dclieqiong):not(.prompt),
+#arena.decadeUI > .dialog.forcebutton.dui-player-card-dialog.dui-pcd-collapsed:not(.dclieqiong):not(.prompt),
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed {
+	width: 100% !important;
+	max-width: none !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	bottom: auto !important;
+	margin: 0 !important;
+	transform: none !important;
+	aspect-ratio: auto !important;
+	height: var(--dui-pcd-img-h) !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+	/* 标题落在顶边框花边内（top 为负），不能 clip */
+	overflow: visible !important;
+	border-radius: 0 !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-pcd-slice-t) var(--dui-pcd-slice-side) var(--dui-pcd-slice-b) var(--dui-pcd-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+}
+
+/* 折叠只留标题条：藏掉其余直接子节点（各 layout 专属区一并清掉） */
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed > :not(.dui-gold-title-wrap) {
+	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed > .dui-gold-title-wrap {
+	left: 0;
+	right: 0;
+	width: 100%;
+	top: calc(0px - var(--dui-pcd-slice-t));
+	height: var(--dui-pcd-lace);
+	border: none;
+	border-image: none;
+	background: none;
+	display: flex !important;
+	visibility: visible !important;
+	pointer-events: auto !important;
+	z-index: 20;
+	opacity: 1 !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed .dui-pcd-arrow {
+	left: 55%;
+	transform: translate(12px, -50%) rotate(180deg);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .jTitle {
+	position: absolute !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	width: auto !important;
+	height: var(--dui-pcd-row-h) !important;
+	aspect-ratio: 45 / 164;
+	writing-mode: tb-rl;
+	font-size: clamp(16px, 1.85vw, 24px);
+	font-family: shousha, "HYZLSJ", serif;
+	/* color: #eddac3; */
+	color: #ffffff;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325;
+	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat !important;
+	z-index: 8;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .hTitle {
+	left: var(--dui-pcd-content-left);
+	top: var(--dui-pcd-gap);
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .eTitle {
+	left: var(--dui-pcd-content-left);
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .jTitle {
+	left: var(--dui-pcd-j-anchor);
+	right: auto;
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .jArea {
+	position: absolute !important;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	flex-direction: row !important;
+	align-items: center;
+	justify-content: flex-start;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	scrollbar-width: none;
+	/* 圆角抗锯齿会在半透明底上扫出浅色线；改为直角贴合框体 */
+	border-radius: 0;
+	z-index: 8;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .hArea::-webkit-scrollbar,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .eArea::-webkit-scrollbar,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .jArea::-webkit-scrollbar {
+	display: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .hArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: calc(100% - var(--dui-pcd-content-right));
+	/* 上移 1px 盖住与框体底图的亚像素缝 */
+	top: calc(var(--dui-pcd-gap) - 1px);
+	width: auto;
+	height: calc(var(--dui-pcd-row-h) + 1px);
+	background-color: transparent;
+	background-image: url("../../image/ui/dialog/area.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .eArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	width: var(--dui-pcd-e-w);
+	height: var(--dui-pcd-row-h);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .jArea {
+	/* 紧跟装备区，-1马 与延时锦囊相邻；槽位仍保持原尺寸 */
+	left: calc(var(--dui-pcd-j-anchor) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: auto;
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	width: var(--dui-pcd-j-w);
+	height: var(--dui-pcd-row-h);
+}
+
+/** 纯观看 / 只选手牌：矮框，一行牌，屏幕垂直居中（top 由 JS calc 钉死，不用 translateY） */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] {
+	aspect-ratio: auto;
+	top: calc(40% - 140.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-1row) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .hTitle {
+	left: var(--dui-pcd-content-left);
+	top: var(--dui-pcd-gap);
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="hand"] > .hArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: calc(100% - var(--dui-pcd-content-right));
+	top: var(--dui-pcd-gap);
+	width: auto;
+	height: var(--dui-pcd-row-h);
+}
+
+/** 魄袭：双行手牌（上行 h，下行复用 e 槽） */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] > .eArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: calc(100% - var(--dui-pcd-content-right));
+	top: auto;
+	bottom: var(--dui-pcd-gap);
+	width: auto;
+	height: var(--dui-pcd-row-h);
+	background-color: transparent;
+	background-image: url("../../image/ui/dialog/area.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] .eArea > .buttons,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] .hArea > .buttons {
+	overflow-x: auto;
+	overflow-y: hidden;
+	flex-wrap: nowrap;
+	display: flex !important;
+	height: 100% !important;
+	align-items: stretch;
+	gap: clamp(6px, 0.65vw, 10px);
+	padding: 0 6px;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] .hArea .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-row"] .eArea .card {
+	height: 100% !important;
+	width: auto !important;
+	aspect-ratio: 129 / 181;
+	zoom: 1 !important;
+	flex: 0 0 auto;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+}
+
+/** 让节：仅装备 + 判定单行 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] {
+	top: calc(40% - 140.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-1row) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .hArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .eTitle {
+	left: var(--dui-pcd-content-left);
+	top: var(--dui-pcd-gap);
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .eArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	width: var(--dui-pcd-e-w);
+	height: var(--dui-pcd-row-h);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .jTitle {
+	left: var(--dui-pcd-j-anchor);
+	top: var(--dui-pcd-gap);
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="ej"] > .jArea {
+	left: calc(var(--dui-pcd-j-anchor) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	bottom: var(--dui-pcd-gap);
+	top: auto;
+	width: var(--dui-pcd-j-w);
+	height: var(--dui-pcd-row-h);
+}
+
+/** 让节 moveCard：双行角色名 + e/j 分区（对齐观星/魄袭双行定位） */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] {
+	/* 每行只有一个竖签 + 装备 + 判定（无第二竖签） */
+	--dui-pcd-block-w: calc(
+		var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap) + var(--dui-pcd-e-w) + var(--dui-pcd-ej-gap) + var(--dui-pcd-j-w)
+	);
+	top: calc(40% - 221.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-2row) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .hTitle {
+	left: var(--dui-pcd-content-left);
+	top: var(--dui-pcd-gap) !important;
+	bottom: auto !important;
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .eTitle {
+	left: var(--dui-pcd-content-left);
+	top: auto !important;
+	bottom: var(--dui-pcd-gap) !important;
+	height: var(--dui-pcd-row-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .hArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: calc(100% - var(--dui-pcd-content-right));
+	top: var(--dui-pcd-gap) !important;
+	bottom: auto !important;
+	width: auto;
+	height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	min-height: 0 !important;
+	padding: 0 !important;
+	background: none !important;
+	overflow: hidden !important;
+	display: block !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .eArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: calc(100% - var(--dui-pcd-content-right));
+	top: auto !important;
+	bottom: var(--dui-pcd-gap) !important;
+	width: auto;
+	height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	min-height: 0 !important;
+	padding: 0 !important;
+	background: none !important;
+	overflow: hidden !important;
+	display: block !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] > .content-container {
+	display: none !important;
+	height: 0 !important;
+	overflow: hidden !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-ej-row {
+	position: relative !important;
+	display: block !important;
+	width: calc(var(--dui-pcd-e-w) + var(--dui-pcd-ej-gap) + var(--dui-pcd-j-w)) !important;
+	height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	min-height: 0 !important;
+	overflow: visible !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-ej-equip {
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: flex-start !important;
+	flex-wrap: nowrap !important;
+	width: var(--dui-pcd-e-w) !important;
+	height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	gap: 4px;
+	overflow: hidden;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-ej-judge {
+	position: absolute !important;
+	left: calc(var(--dui-pcd-e-w) + var(--dui-pcd-ej-gap)) !important;
+	top: 0 !important;
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: flex-start !important;
+	flex-wrap: nowrap !important;
+	width: var(--dui-pcd-j-w) !important;
+	height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	gap: 4px;
+	overflow: hidden;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard {
+	position: relative !important;
+	display: block !important;
+	height: var(--dui-pcd-row-h) !important;
+	width: var(--dui-pcd-card-w) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	max-width: var(--dui-pcd-card-w) !important;
+	min-width: var(--dui-pcd-card-w) !important;
+	min-height: 0 !important;
+	flex: 0 0 var(--dui-pcd-card-w) !important;
+	flex-shrink: 0 !important;
+	aspect-ratio: auto !important;
+	margin-left: 0 !important;
+	overflow: hidden !important;
+	box-sizing: border-box !important;
+	background: none !important;
+	isolation: isolate;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard::before,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	border-radius: 5px;
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard-label,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard-label {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: shousha, "HYZLSJ", serif;
+	font-size: clamp(14px, 1.2vw, 18px);
+	color: #605f5d;
+	text-align: center;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard.dui-pcd-filled::before,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard.dui-pcd-filled::before {
+	z-index: 0;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-readonly {
+	pointer-events: none;
+	opacity: 0.92;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed .dui-pcd-ej-row,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed .dui-pcd-ej-equip,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"].dui-pcd-collapsed .dui-pcd-ej-judge {
+	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard > .buttons,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard > .buttons {
+	position: absolute !important;
+	inset: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	overflow: hidden !important;
+	z-index: 2 !important;
+	display: block !important;
+	pointer-events: auto;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .eAreaCard .button,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .jAreaCard .button {
+	position: absolute !important;
+	inset: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	z-index: 3 !important;
+	zoom: 1 !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+	pointer-events: auto;
+}
+
+/** 观星：双行竖签 + cardbg 槽位；整块宽按牌数居中 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] {
+	--dui-pcd-gx-gap: clamp(6px, 0.65vw, 10px);
+	--dui-pcd-gx-pad: 12px;
+	--dui-pcd-gx-row-w: calc(
+		var(--dui-pcd-gx-slots, 5) * var(--dui-pcd-card-w) + (var(--dui-pcd-gx-slots, 5) - 1) * var(--dui-pcd-gx-gap) +
+			var(--dui-pcd-gx-pad)
+	);
+	--dui-pcd-block-w: calc(var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap) + var(--dui-pcd-gx-row-w));
+	top: calc(40% - 221.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-2row) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hTitle {
+	left: var(--dui-pcd-content-left);
+	top: var(--dui-pcd-gap) !important;
+	bottom: auto !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eTitle {
+	left: var(--dui-pcd-content-left);
+	top: auto !important;
+	bottom: var(--dui-pcd-gap) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea {
+	left: calc(var(--dui-pcd-content-left) + var(--dui-pcd-tab-w) + var(--dui-pcd-tab-gap));
+	right: auto;
+	width: var(--dui-pcd-gx-row-w);
+	max-width: var(--dui-pcd-gx-row-w);
+	height: var(--dui-pcd-row-h);
+	display: block !important;
+	position: absolute !important;
+	background: none !important;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	scrollbar-width: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea {
+	top: var(--dui-pcd-gap);
+	bottom: auto;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea {
+	top: auto;
+	bottom: var(--dui-pcd-gap);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea::-webkit-scrollbar,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea::-webkit-scrollbar {
+	display: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .content-container {
+	pointer-events: none;
+	overflow: hidden !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .content-container > .content {
+	display: block !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] .dui-pcd-gx-slots {
+	position: relative !important;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	align-items: stretch !important;
+	width: max-content !important;
+	min-width: 100% !important;
+	height: 100% !important;
+	gap: var(--dui-pcd-gx-gap);
+	padding: 0 6px;
+	box-sizing: border-box;
+	pointer-events: none;
+	z-index: 0;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] .dui-pcd-gx-slot {
+	position: relative !important;
+	flex: 0 0 var(--dui-pcd-card-w) !important;
+	width: var(--dui-pcd-card-w) !important;
+	height: var(--dui-pcd-row-h) !important;
+	max-width: var(--dui-pcd-card-w) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	border-radius: 5px;
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+	box-sizing: border-box;
+}
+
+/* 覆盖通用 .hArea > .buttons { width:auto }，否则牌堆顶条会缩成 ~12px */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea > .buttons.dui-pcd-guanxing-strip,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea > .buttons.dui-pcd-guanxing-strip {
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	right: auto !important;
+	bottom: auto !important;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	align-items: stretch !important;
+	width: max-content !important;
+	min-width: 100% !important;
+	max-width: none !important;
+	height: 100% !important;
+	overflow: visible !important;
+	gap: var(--dui-pcd-gx-gap);
+	padding: 0 6px;
+	box-sizing: border-box;
+	pointer-events: auto;
+	background: none !important;
+	z-index: 1;
+	scrollbar-width: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea > .buttons.dui-pcd-guanxing-strip::-webkit-scrollbar,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea > .buttons.dui-pcd-guanxing-strip::-webkit-scrollbar {
+	display: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] .dui-pcd-guanxing-strip .card {
+	position: relative !important;
+	height: var(--dui-pcd-row-h) !important;
+	width: var(--dui-pcd-card-w) !important;
+	max-width: var(--dui-pcd-card-w) !important;
+	aspect-ratio: auto !important;
+	flex: 0 0 var(--dui-pcd-card-w) !important;
+	margin: 0 !important;
+	zoom: 1 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+	z-index: 2;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"].dui-pcd-collapsed > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"].dui-pcd-collapsed > .eArea {
+	display: none !important;
+}
+
+/** 攻心：竖签 + area 底图，保留 addNewRow 点选 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] {
+	--dui-pcd-bin-card-h: calc(var(--dui-pcd-row-h) - 12px);
+	--dui-pcd-bin-card-w: calc(var(--dui-pcd-bin-card-h) * 129 / 181);
+	--dui-pcd-bin-slot-w: calc(var(--dui-pcd-bin-card-w) + 12px);
+	/* 用 top 算居中，避免依赖 transform（开场动画会冲掉 translateY） */
+	top: calc(40% - var(--dui-pcd-frame-h-2row) / 2) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-2row) !important;
+	max-height: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .content-container,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .content-container {
+	position: absolute !important;
+	left: max(25%, calc(var(--dui-pcd-side-min) + 72px));
+	right: max(25%, calc(var(--dui-pcd-side-min) + 72px));
+	top: var(--dui-pcd-gap);
+	bottom: var(--dui-pcd-gap);
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+	pointer-events: auto;
+	background: transparent !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .content-container > .content,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .content-container > .content {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: space-between !important;
+	height: 100% !important;
+	overflow: hidden !important;
+	gap: var(--dui-pcd-gap);
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-prompt-row,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .row-container:has(> .item-container > .dui-prompt-caption):not(:has(.card)),
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .content-container > .content > .row-container:first-child:not(:has(.card)):not(:has(.button.card)),
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .content-container > .content > .row-container:first-child:not(:has(.card)):not(:has(.button.card)),
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] .dui-pcd-prompt-row {
+	display: none !important;
+	height: 0 !important;
+	min-height: 0 !important;
+	max-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden !important;
+	flex: 0 0 0 !important;
+	border: 0 !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] > .content-container > .content > .row-container:first-child:not(:has(.card)):not(:has(.button.card)) > .item-container,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .content-container > .content > .row-container:first-child:not(:has(.card)):not(:has(.button.card)) > .item-container {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-row {
+	display: grid !important;
+	grid-template-columns: var(--dui-pcd-tab-w) 1fr !important;
+	align-items: center !important;
+	gap: var(--dui-pcd-tab-gap);
+	width: 100% !important;
+	margin: 0 !important;
+	height: var(--dui-pcd-row-h) !important;
+	min-height: var(--dui-pcd-row-h) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	flex: 0 0 var(--dui-pcd-row-h);
+	box-sizing: border-box;
+}
+
+/* 弃置 + 牌堆顶：两列单牌槽，居中不拉满 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-row.dui-pcd-ops-row {
+	grid-template-columns: var(--dui-pcd-tab-w) var(--dui-pcd-bin-slot-w) var(--dui-pcd-tab-w) var(--dui-pcd-bin-slot-w) !important;
+	justify-content: center !important;
+	justify-items: stretch;
+	column-gap: clamp(16px, 3vw, 40px);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-row:has(> .dui-pcd-bin-label + .dui-pcd-bin-area + .dui-pcd-bin-label):not(.dui-pcd-ops-row) {
+	grid-template-columns: var(--dui-pcd-tab-w) 1fr var(--dui-pcd-tab-w) 1fr !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-label {
+	display: flex !important;
+	align-items: stretch !important;
+	justify-content: center !important;
+	width: var(--dui-pcd-tab-w) !important;
+	min-width: var(--dui-pcd-tab-w) !important;
+	max-width: var(--dui-pcd-tab-w) !important;
+	height: var(--dui-pcd-row-h) !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	background: none !important;
+	overflow: visible !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-caption,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-label > .caption {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: var(--dui-pcd-tab-w) !important;
+	min-width: var(--dui-pcd-tab-w) !important;
+	max-width: var(--dui-pcd-tab-w) !important;
+	height: 100% !important;
+	aspect-ratio: 45 / 164;
+	writing-mode: vertical-rl;
+	writing-mode: tb-rl;
+	font-size: clamp(16px, 1.85vw, 24px) !important;
+	font-family: shousha, "HYZLSJ", serif !important;
+	color: #ffffff !important;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325 !important;
+	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat !important;
+	box-sizing: border-box;
+	padding: 0 !important;
+	margin: 0 !important;
+	pointer-events: none;
+	flex-wrap: nowrap !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-area,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .item-container.popup {
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: clamp(6px, 0.65vw, 10px);
+	width: auto !important;
+	max-width: none !important;
+	height: var(--dui-pcd-row-h) !important;
+	min-height: var(--dui-pcd-row-h) !important;
+	padding: 0 6px !important;
+	margin: 0 !important;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	border-radius: 5px;
+	background-color: transparent !important;
+	background-image: url("../../image/ui/dialog/area.png") !important;
+	background-repeat: no-repeat !important;
+	background-size: 100% 100% !important;
+	background-position: center !important;
+	box-sizing: border-box !important;
+	scrollbar-width: none;
+}
+
+/* 弃置 / 牌堆顶：仅一张牌大小的 cardbg 槽 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-slot {
+	width: var(--dui-pcd-bin-slot-w) !important;
+	min-width: var(--dui-pcd-bin-slot-w) !important;
+	max-width: var(--dui-pcd-bin-slot-w) !important;
+	height: var(--dui-pcd-row-h) !important;
+	min-height: var(--dui-pcd-row-h) !important;
+	padding: 0 !important;
+	justify-content: center !important;
+	overflow: hidden !important;
+	background-image: url("../../image/ui/dialog/cardbg.png") !important;
+	background-size: var(--dui-pcd-bin-card-w) var(--dui-pcd-bin-card-h) !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .dui-pcd-bin-area::-webkit-scrollbar,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .item-container.popup::-webkit-scrollbar {
+	display: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"].dui-pcd-collapsed > .content-container,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"].dui-pcd-collapsed > .content-container {
+	display: none !important;
+}
+
+/* 折叠态：压过各 layout 的 height / top / transform，统一为原图高标题条 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout].dui-pcd-collapsed {
+	width: 100% !important;
+	max-width: none !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	aspect-ratio: auto !important;
+	height: var(--dui-pcd-img-h) !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+	overflow: visible !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-pcd-slice-t) var(--dui-pcd-slice-side) var(--dui-pcd-slice-b) var(--dui-pcd-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	background: transparent !important;
+	background-image: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .button.card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .item.card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] .button.card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] .card {
+	height: var(--dui-pcd-bin-card-h) !important;
+	width: var(--dui-pcd-bin-card-w) !important;
+	max-height: var(--dui-pcd-bin-card-h) !important;
+	max-width: var(--dui-pcd-bin-card-w) !important;
+	aspect-ratio: 129 / 181;
+	zoom: 1 !important;
+	flex: 0 0 var(--dui-pcd-bin-card-w) !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+}
+
+/* 不可选牌灰遮罩（对齐手牌区不可用） */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .card.dui-pcd-masked > .card-mask {
+	opacity: 1 !important;
+	display: block !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="move-bins"] .card.dui-pcd-dragging {
+	opacity: 0.35;
+}
+
+/** 观星两堆：与攻心同高，垂直居中 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] {
+	top: calc(40% - 221.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-frame-h-2row) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-pile"] > .jArea {
+	display: none !important;
+}
+
+/** 清正 / 诫节：分花色 2×2（对齐手杀曹髦清正 dlg_select_bg） */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] {
+	--dui-pcd-suit-w: 315px;
+	--dui-pcd-suit-h: 182px;
+	--dui-pcd-suit-card-w: 108px;
+	--dui-pcd-suit-card-h: 150px;
+	--dui-pcd-suit-seal-h: 53px;
+	--dui-pcd-suit-frame-h: 547px;
+	top: calc(40% - 273.5px) !important;
+	bottom: auto !important;
+	transform: none !important;
+	height: var(--dui-pcd-suit-frame-h) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .content-container {
+	position: absolute !important;
+	left: max(12%, calc(var(--dui-pcd-side-min) + 40px));
+	right: max(12%, calc(var(--dui-pcd-side-min) + 40px));
+	top: var(--dui-pcd-gap);
+	bottom: var(--dui-pcd-gap);
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+	pointer-events: auto;
+	background: transparent !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .content-container > .content {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+	height: 100% !important;
+	overflow: hidden !important;
+	gap: 16px;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] > .content-container > .content > .row-container:first-child:not(:has(.card)):not(:has(.button.card)):not(:has(.dui-pcd-suit-slot)),
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-prompt-row {
+	display: none !important;
+	height: 0 !important;
+	min-height: 0 !important;
+	max-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden !important;
+	flex: 0 0 0 !important;
+	border: 0 !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-row,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .row-container:has(.dui-pcd-suit-slot) {
+	display: flex !important;
+	flex-direction: row !important;
+	justify-content: center !important;
+	align-items: stretch !important;
+	flex-wrap: nowrap !important;
+	gap: 20px;
+	width: 100% !important;
+	height: auto !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot {
+	position: relative !important;
+	display: block !important;
+	flex: 0 0 var(--dui-pcd-suit-w) !important;
+	width: var(--dui-pcd-suit-w) !important;
+	height: var(--dui-pcd-suit-h) !important;
+	min-width: var(--dui-pcd-suit-w) !important;
+	max-width: var(--dui-pcd-suit-w) !important;
+	min-height: var(--dui-pcd-suit-h) !important;
+	max-height: var(--dui-pcd-suit-h) !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-sizing: border-box !important;
+	overflow: hidden !important;
+	background-color: transparent !important;
+	background-image: url("../../image/ui/dialog/dlg_select_bg1.png") !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	background-size: 100% 100% !important;
+	box-shadow: none !important;
+	outline: none !important;
+	-webkit-box-shadow: none !important;
+	cursor: pointer;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.dui-pcd-suit-empty {
+	background-image: url("../../image/ui/dialog/dlg_select_bg3.png") !important;
+}
+
+/* 选中只用 dlg_select_bg2，去掉引擎默认红光边框 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.selected,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.selectedx,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.glow {
+	background-image: url("../../image/ui/dialog/dlg_select_bg2.png") !important;
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	outline: none !important;
+	border: none !important;
+	filter: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.selected::after,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.selectedx::after,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.glow::after,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.selected::before,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot.glow::before {
+	display: none !important;
+	content: none !important;
+	box-shadow: none !important;
+	opacity: 0 !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-cards {
+	--dui-pcd-suit-ml: -30px;
+	position: absolute !important;
+	left: 16px !important;
+	top: 16px !important;
+	right: 28px !important;
+	bottom: 16px !important;
+	z-index: 1;
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: nowrap !important;
+	align-items: flex-start !important;
+	justify-content: flex-start !important;
+	width: auto !important;
+	height: auto !important;
+	min-height: 0 !important;
+	overflow: hidden !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-slot .button.card,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-card {
+	position: relative !important;
+	left: auto !important;
+	top: auto !important;
+	right: auto !important;
+	bottom: auto !important;
+	width: 108px !important;
+	height: 150px !important;
+	max-width: 108px !important;
+	max-height: 150px !important;
+	aspect-ratio: auto;
+	margin: 0 0 0 var(--dui-pcd-suit-ml) !important;
+	flex: 0 0 108px !important;
+	zoom: 1 !important;
+	transform: none !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-cards > .card:first-child,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-cards > .button.card:first-child,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-cards > .dui-pcd-suit-card:first-child {
+	margin-left: 0 !important;
+}
+
+/* 封条压在牌下半，宽度落在底图内沿内，避免超出框 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-seal {
+	position: absolute !important;
+	left: 10px !important;
+	right: 10px !important;
+	top: auto !important;
+	bottom: 12px !important;
+	width: auto !important;
+	max-width: calc(100% - 28px) !important;
+	height: var(--dui-pcd-suit-seal-h) !important;
+	display: flex !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 4px;
+	padding: 0 8px !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-color: transparent !important;
+	background-image: url("../../image/ui/dialog/dlg_select_bg.png") !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	background-size: 100% 100% !important;
+	color: #caaf6a !important;
+	font-size: 30px !important;
+	font-family: shousha, "HYZLSJ", serif !important;
+	text-shadow: 0 0 2px #2a1a0c, 0 1px 2px #2a1a0c !important;
+	z-index: 3;
+	pointer-events: none;
+	transform: none !important;
+}
+
+/* 空花色：不显示封条底图 dlg_select_bg，仅保留居中文案 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-empty > .dui-pcd-suit-seal {
+	top: 50% !important;
+	bottom: auto !important;
+	transform: translateY(-50%) !important;
+	background: none !important;
+	background-image: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-icon {
+	width: 53px !important;
+	height: 53px !important;
+	object-fit: contain;
+	flex: 0 0 auto;
+	pointer-events: none;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"] .dui-pcd-suit-text {
+	line-height: 1.2;
+	white-space: nowrap;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="suit-select"].dui-pcd-collapsed > .content-container {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .eAreaCard,
+#arena.decadeUI > .dialog.dui-player-card-dialog .jAreaCard {
+	position: relative;
+	flex: 0 0 auto;
+	height: 100%;
+	width: auto;
+	aspect-ratio: 129 / 181;
+	margin-left: 4px;
+	overflow: hidden;
+	border-radius: 5px;
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: shousha, "HYZLSJ", serif;
+	font-size: clamp(20px, 1vw, 15px);
+	color: #605f5d;
+	text-align: center;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .eAreaCard:first-child,
+#arena.decadeUI > .dialog.dui-player-card-dialog .jAreaCard:first-child {
+	margin-left: 0;
+}
+
+/** 让节双行：全局 eAreaCard 的 height:100%+aspect-ratio 会撑到 300px+，此处强制行高 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-ej-equip .eAreaCard,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="two-ej-row"] .dui-pcd-ej-judge .jAreaCard {
+	height: var(--dui-pcd-row-h) !important;
+	width: var(--dui-pcd-card-w) !important;
+	max-height: var(--dui-pcd-row-h) !important;
+	max-width: var(--dui-pcd-card-w) !important;
+	aspect-ratio: auto !important;
+	flex: 0 0 var(--dui-pcd-card-w) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .hArea > .buttons,
+#arena.decadeUI > .dialog.dui-player-card-dialog .eAreaCard > .buttons,
+#arena.decadeUI > .dialog.dui-player-card-dialog .jAreaCard > .buttons {
+	margin: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	flex-direction: row !important;
+	align-items: stretch;
+	justify-content: flex-start;
+	overflow: visible !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .hArea > .buttons:not(.dui-pcd-guanxing-strip) {
+	width: auto !important;
+	display: flex !important;
+	height: 100% !important;
+	align-items: stretch;
+	gap: clamp(0px, 0.65vw, 3px);
+	padding: 0 2px;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .hArea > .buttons.dui-pcd-guanxing-strip,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] > .eArea > .buttons.dui-pcd-guanxing-strip {
+	width: max-content !important;
+	min-width: 100% !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="guanxing"] .dui-pcd-guanxing-strip .card {
+	height: var(--dui-pcd-row-h) !important;
+	width: var(--dui-pcd-card-w) !important;
+	max-width: var(--dui-pcd-card-w) !important;
+	aspect-ratio: auto !important;
+	flex: 0 0 var(--dui-pcd-card-w) !important;
+}
+
+/** 谮构等：chooseControl + choiceList 长选项 */
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] {
+	aspect-ratio: auto;
+	top: 36% !important;
+	bottom: auto !important;
+	transform: translateY(-50%) !important;
+	height: auto !important;
+	min-height: var(--dui-pcd-frame-h-1row);
+	max-height: 72% !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .hTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .hArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .jArea {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .content-container {
+	position: relative !important;
+	display: block !important;
+	left: auto !important;
+	right: auto !important;
+	top: auto !important;
+	bottom: auto !important;
+	width: auto !important;
+	height: auto !important;
+	max-height: min(52vh, 420px);
+	margin: 10px clamp(24px, 8vw, 96px) 14px;
+	overflow-x: hidden !important;
+	overflow-y: auto !important;
+	pointer-events: auto !important;
+	scrollbar-width: thin;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] > .content-container > .content {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+	gap: 12px;
+	width: 100%;
+	height: auto !important;
+	padding: 4px 4px 8px;
+	box-sizing: border-box;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] .caption:has(> .popup.text) {
+	display: block !important;
+	width: 100%;
+	height: auto !important;
+	margin: 0;
+	padding: 0;
+	background: none !important;
+	border: none !important;
+	box-shadow: none !important;
+	text-align: center;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] .popup.text,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] .popup.text.dui-choice-option {
+	width: 100% !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box !important;
+	min-height: 52px;
+	padding: 12px 36px !important;
+	margin: 0 !important;
+	font-family: shousha, xinwei, serif;
+	font-size: clamp(18px, 2.4vw, 24px);
+	line-height: 1.4;
+	color: rgb(45, 32, 18);
+	text-align: center;
+	text-shadow: none;
+	white-space: normal;
+	word-break: break-word;
+	background: url("../../image/ui/dialog/confirm.png") center / 100% 100% no-repeat !important;
+	border: none !important;
+	border-radius: 0;
+	box-shadow: none !important;
+	cursor: pointer;
+	pointer-events: auto !important;
+	transition: filter 0.15s ease, transform 0.12s ease;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] .popup.text:active,
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"] .popup.text.dui-choice-option:active {
+	filter: brightness(0.92);
+	transform: scale(0.985);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog[data-layout="choice-list"].dui-pcd-collapsed > .content-container {
+	display: none !important;
+}
+
+#arena > #dui-controls > .control.dui-choice-controlbar > .dui-choice-option-btn,
+#arena > #dui-controls > .control.dui-choice-controlbar-empty {
+	display: none !important;
+}
+
+/** 选牌框塌模确定/取消：隐藏底部 lbtn-confirm，按钮贴在框底随折叠收起 */
+#arena.decadeUI.dui-pcd-confirm-ui > #dui-controls > .control.lbtn-confirm {
+	display: none !important;
+}
+
+/** 底部栈：内容在上固定，确认 → 进度 自上而下，框只向下增高 */
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--dui-pcd-footer-stack-gap);
+	padding: 0 16px calc(var(--dui-pcd-slice-b) * 0.28) 16px;
+	box-sizing: border-box;
+	pointer-events: none;
+	z-index: 30;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .dui-pcd-footer {
+	display: flex !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer > .dui-pcd-confirm-bar {
+	position: relative !important;
+	left: auto !important;
+	bottom: auto !important;
+	transform: none !important;
+	display: grid !important;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	align-items: end;
+	justify-content: center;
+	column-gap: 24px;
+	width: max-content;
+	min-width: 0;
+	height: auto;
+	pointer-events: none;
+	box-sizing: border-box;
+	flex: 0 0 auto;
+	order: 1;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer > #jindutiaopl.dui-pcd-progress-bar {
+	position: relative !important;
+	left: auto !important;
+	bottom: auto !important;
+	transform: none !important;
+	width: min(480px, calc(100% - 32px)) !important;
+	max-width: calc(100% - 32px) !important;
+	flex: 0 0 auto;
+	order: 2;
+	z-index: 24;
+	pointer-events: none;
+	box-sizing: border-box !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn {
+	position: relative !important;
+	display: block !important;
+	flex: none !important;
+	float: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100% 100%;
+	cursor: pointer;
+	pointer-events: auto;
+	box-sizing: border-box;
+	overflow: hidden;
+	transition: filter 0.12s ease;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.dui-pcd-btn-ok {
+	width: 133px !important;
+	height: 50px !important;
+	min-width: 133px !important;
+	max-width: 133px !important;
+	background-image: url("../../image/ui/dialog/confirmButton.png");
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.dui-pcd-btn-cancel {
+	width: 143px !important;
+	height: 50px !important;
+	min-width: 143px !important;
+	max-width: 143px !important;
+	background-image: url("../../image/ui/dialog/cancel.png");
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn:not(.disabled):active {
+	filter: brightness(0.92);
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.hidden {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.disabled {
+	filter: grayscale(100%);
+	opacity: 0.55;
+	pointer-events: none;
+	cursor: default;
+}
+
+/* 折叠时与内容区一起收起（只留标题条） */
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed > .dui-pcd-confirm-bar,
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed > .dui-pcd-footer {
+	display: none !important;
+}
+
+/** 有 footer 时：底部内容区上移，避免与确认/进度重叠 */
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .eTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .jTitle,
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .eArea,
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .jArea {
+	bottom: calc(var(--dui-pcd-gap) + var(--dui-pcd-footer-h)) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-has-footer > .content-container {
+	bottom: calc(var(--dui-pcd-gap) + var(--dui-pcd-footer-h)) !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog.dui-pcd-collapsed > #jindutiaopl.dui-pcd-progress-bar {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > #jindutiaopl.dui-pcd-progress-bar > div:first-child,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer > #jindutiaopl.dui-pcd-progress-bar > div:first-child {
+	max-width: 100% !important;
+	box-sizing: border-box !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog .buttons,
+#arena.decadeUI > .dialog.dui-player-card-dialog .buttons.smallzoom {
+	zoom: 1 !important;
+}
+
+/* 手牌区：牌高贴合行高，宽按 cardbg 129×181 */
+#arena.decadeUI > .dialog.dui-player-card-dialog .hArea .card {
+	height: 100% !important;
+	width: auto !important;
+	aspect-ratio: 129 / 181;
+	zoom: 1 !important;
+	flex: 0 0 auto;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+}
+
+/* 装备 / 判定槽：牌铺满槽位 */
+#arena.decadeUI > .dialog.dui-player-card-dialog .eAreaCard .card,
+#arena.decadeUI > .dialog.dui-player-card-dialog .jAreaCard .card {
+	position: absolute !important;
+	inset: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	zoom: 1 !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+}
+
 /** 选将界面 */
+
+#arena.decadeUI.choose-character > .dialog.dui-pcd-opening {
+	opacity: 1 !important;
+	visibility: visible !important;
+	pointer-events: auto !important;
+}
 
 #arena.decadeUI.choose-character > .dialog,
 #arena.decadeUI.choose-character.dui-mobile > .dialog {
@@ -423,140 +2078,569 @@
 	-webkit-filter: brightness(0.8);
 }
 
-/** 拼点框 */
+/** 拼点框（顺手 tittle_bg + cardbg + name） */
+
+#arena.decadeUI > .skill-dialog.compare {
+	--dui-pcd-img-h: 125px;
+	--dui-pcd-lace: 49px;
+	--dui-pcd-slice-t: 62px;
+	--dui-pcd-slice-b: 45px;
+	--dui-pcd-slice-side: 16px;
+	--dui-pcd-row-h: 150px;
+	--dui-pcd-card-w: calc(var(--dui-pcd-row-h) * 129 / 181);
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	width: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 40% !important;
+	top: auto !important;
+	min-height: 0 !important;
+	max-height: 250px !important;
+	padding: 0 !important;
+	overflow: visible !important;
+	border-radius: 0 !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-pcd-slice-t) var(--dui-pcd-slice-side) var(--dui-pcd-slice-b) var(--dui-pcd-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	z-index: 6;
+}
+
+#arena.decadeUI > .skill-dialog.compare > .caption {
+	display: none !important;
+}
+
+/* 标题落在顶花边区（与顺手选牌框一致） */
+#arena.decadeUI > .skill-dialog.compare > .dui-gold-title-wrap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: 100%;
+	min-width: 0;
+	top: calc(0px - var(--dui-pcd-slice-t));
+	height: var(--dui-pcd-lace);
+	box-sizing: border-box;
+	transform: none;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+	pointer-events: none;
+	z-index: 10;
+	border: none;
+	border-image: none;
+	background: none;
+}
+
+#arena.decadeUI > .skill-dialog.compare > .dui-gold-title-wrap > .dui-gold-title {
+	line-height: normal;
+	width: auto !important;
+	flex: 0 0 auto;
+	font-size: 36px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+#arena.decadeUI > .skill-dialog.compare .dui-pcd-arrow,
+.compareDialog .dui-pcd-arrow,
+.compareDialogMultiple .dui-pcd-arrow {
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	width: 39px;
+	height: 31px;
+	margin: 0;
+	transform: translate(12px, -50%);
+	background: url("../../image/ui/dialog/arrow.png") center / contain no-repeat;
+	pointer-events: auto;
+	cursor: pointer;
+	z-index: 9;
+	transition: transform 0.2s ease;
+}
+
+#arena.decadeUI > .skill-dialog.compare.dui-pcd-collapsed {
+	width: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	bottom: auto !important;
+	margin: 0 !important;
+	transform: none !important;
+	height: var(--dui-pcd-img-h) !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+	overflow: visible !important;
+}
+
+#arena.decadeUI > .skill-dialog.compare.dui-pcd-collapsed > :not(.dui-gold-title-wrap) {
+	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .skill-dialog.compare.dui-pcd-collapsed > .dui-gold-title-wrap {
+	pointer-events: auto !important;
+}
+
+#arena.decadeUI > .skill-dialog.compare.dui-pcd-collapsed .dui-pcd-arrow {
+	transform: translate(12px, -50%) rotate(180deg);
+}
 
 .skill-dialog.compare > .content {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: clamp(32px, 8vw, 96px);
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	padding: 0 calc(var(--dui-pcd-slice-side) + 28px);
+	bottom: 0px;
+	flex-grow: 1;
+	min-width: 0;
 }
 
 .skill-dialog.compare > .content > div {
 	position: relative;
-	margin: 0 4px;
-}
-
-/* 玩家头像 */
-.skill-dialog.compare > .content > .player-character {
-	width: 120px;
-	height: 180px;
-	background: rgba(0, 0, 0, 0.4);
-	border-radius: 8px;
-	box-shadow:
-		0px -1px 5px black,
-		0px 3px 15px black;
-}
-
-.skill-dialog.compare > .content > .player-character.player1 {
-	order: 1;
-	margin-left: 6px;
-}
-
-.skill-dialog.compare > .content > .player-character.player2 {
-	order: 5;
-	margin-right: 6px;
-}
-
-.skill-dialog.compare > .content > .player-character > .image {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 100%;
-	background-size: cover;
-	background-position: top;
-	background-repeat: no-repeat;
-	border-radius: 8px;
-}
-
-/* 露头高度 */
-#arena[data-outcrop-skin="shizhounian"] > .skill-dialog.compare > .content > .player-character > .image {
-	height: 192px;
-	clip-path: url(#solo-clip);
-	-webkit-clip-path: url(#solo-clip);
-}
-
-#arena[data-outcrop-skin="shousha"] > .skill-dialog.compare > .content > .player-character > .image {
-	height: 207px;
-	clip-path: url(#soloss-clip);
-	-webkit-clip-path: url(#soloss-clip);
-}
-
-/* VS图标 */
-.skill-dialog.compare > .content > .vs {
-	order: 3;
-	width: 70px;
-	height: 70px;
 	margin: 0;
-	background: url("../../image/styles/shousha/vs.png");
-}
-
-/* 拼点卡牌 */
-.skill-dialog.compare > .content > .player-card {
-	order: 2;
-}
-
-.skill-dialog.compare > .content > .target-card {
-	order: 4;
+	flex: 0 0 auto;
 }
 
 .skill-dialog.compare > .content > .player-card,
 .skill-dialog.compare > .content > .target-card {
-	width: 108px;
-	height: 150px;
-	background: rgb(141, 125, 103);
-	box-shadow: 1px 1px 4px rgb(66, 66, 66) inset;
+	width: var(--dui-pcd-card-w);
+	height: var(--dui-pcd-row-h);
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+	box-shadow: none;
+	overflow: visible;
+	isolation: isolate;
 }
 
 .skill-dialog.compare > .content > .player-card > div,
 .skill-dialog.compare > .content > .target-card > div {
-	margin: 0;
+	margin: 0 !important;
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	transform: none !important;
+	zoom: 1;
+	z-index: 1 !important;
 }
 
 .skill-dialog.compare > .content > .player-card::before,
 .skill-dialog.compare > .content > .target-card::before {
 	content: attr(data-text);
 	position: absolute;
-	left: 0;
-	top: calc(50% + 80px);
-	width: 100%;
-	height: auto;
-	font-size: 20px;
-	font-family: xingkai;
-	color: red;
+	top: 0;
+	display: flex;
+	writing-mode: vertical-lr;
+	width: 1.8em;
+	word-break: break-word;
+	height: 100%;
 	text-align: center;
-	text-shadow: none;
+	left: 0;
+	transform: translateX(-100%);
+	margin-left: -4px;
+	color: #ffffff;
+	font-family: shousha, "HYZLSJ", serif;
+	font-size: 24px;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325;
+	justify-content: center;
+	align-items: center;
+	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat;
+	pointer-events: none;
+	z-index: 2;
 }
 
-.skill-dialog.compare > .content > .player-card::after {
+.skill-dialog.compare > .content > .player-card::after,
+.skill-dialog.compare > .content > .target-card::after {
 	content: attr(data-result);
 	position: absolute;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	top: 50%;
+	width: 80%;
+	height: 80%;
+	left: 30%;
+	background-size: 100% 100%;
+	color: transparent;
+	font-size: 0;
+	font-family: xingkai;
+	text-align: center;
+	z-index: 100;
+	pointer-events: none;
+}
+
+.skill-dialog.compare > .content > .player-card[data-result="赢"]::after,
+.skill-dialog.compare > .content > .target-card[data-result="赢"]::after {
+	background-image: url("../../image/ui/dialog/win.png");
+	width: 100%;
+	height: 60%;
+	animation: open 0.2s;
+}
+
+.skill-dialog.compare > .content > .player-card[data-result="没赢"]::after,
+.skill-dialog.compare > .content > .target-card[data-result="没赢"]::after {
+	background-image: url("../../image/ui/dialog/lose.png");
+	width: 100%;
+	height: 60%;
+	animation: open 0.2s;
+}
+
+/** 共同拼点框 */
+
+.compareDialog {
+	position: absolute;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
+	width: 100%;
+	left: 0;
+	right: 0;
+	bottom: 38%;
+	min-height: 280px;
+	padding: 0;
+	overflow: visible;
+	z-index: 7;
+	--dui-pcd-img-h: 125px;
+	--dui-pcd-lace: 49px;
+	--dui-pcd-slice-t: 62px;
+	--dui-pcd-slice-b: 45px;
+	--dui-pcd-slice-side: 16px;
+	border-style: solid;
+	border-color: transparent;
+	border-width: 62px 16px 45px 16px;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png");
+	border-image-slice: 62 16 45 16 fill;
+	border-image-repeat: stretch;
+	background: transparent;
+	box-shadow: none;
+}
+
+.compareDialog.dui-pcd-collapsed {
+	width: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	bottom: auto !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+	overflow: visible !important;
+}
+
+.compareDialog.dui-pcd-collapsed > :not(.dui-gold-title-wrap) {
+	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+.compareDialog.dui-pcd-collapsed > .dui-gold-title-wrap {
+	pointer-events: auto !important;
+}
+
+.compareDialog.dui-pcd-collapsed .dui-pcd-arrow {
+	transform: translate(12px, -50%) rotate(180deg);
+}
+
+.compareDialog > .dui-gold-title-wrap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -62px;
+	height: 49px;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	transform: none;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+	pointer-events: none;
+	z-index: 10;
+	border: none;
+	background: none;
+}
+
+.compareDialog > .dui-gold-title-wrap > .dui-gold-title {
+	line-height: normal;
+	width: auto !important;
+	flex: 0 0 auto;
+	font-size: 36px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+.compareDialogTitle {
+	display: none;
+}
+
+.playerAreaDialog,
+.targetAreaDialog {
+	width: 115px;
+	height: 180px;
+	margin: 8px 12px;
+	display: inline-block;
+	position: relative;
+	white-space: nowrap;
+	vertical-align: top;
+}
+
+.playerAreaName,
+.targetAreaName {
+	position: absolute;
 	left: 0;
 	top: 0;
+	width: 35px;
+	height: 140px;
+	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat;
+	font-family: shousha, "HYZLSJ", serif;
+	font-size: 20px;
+	writing-mode: vertical-lr;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325;
+}
+
+.playerArea,
+.targetArea {
+	position: absolute;
+	left: 40px;
+	top: 2px;
+	width: calc(150px * 129 / 181);
+	height: 150px;
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+}
+
+.playerArea > div,
+.targetArea > div {
+	top: -10px;
+	right: 5px;
+	z-index: 1;
+}
+
+.playerArea > div[data-result="win"]::after,
+.targetArea > div[data-result="win"]::after {
+	background-image: url("../../image/ui/dialog/win.png") !important;
+	content: "";
+	background-size: 100% 100%;
+	z-index: 100;
+	opacity: 1;
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	bottom: -5px;
+	top: auto;
+	left: auto;
+	right: -25px;
+	animation: losewin 2s;
+	pointer-events: none;
+}
+
+.playerArea > div[data-result="lose"]::after,
+.targetArea > div[data-result="lose"]::after {
+	background-image: url("../../image/ui/dialog/lose.png") !important;
+	content: "";
+	background-size: 100% 100%;
+	z-index: 100;
+	opacity: 1;
+	width: 100px;
+	height: 80px;
+	position: absolute;
+	bottom: -10px;
+	top: auto;
+	left: auto;
+	right: -30px;
+	animation: losewin 2s;
+	pointer-events: none;
+}
+
+@keyframes losewin {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/** 多人拼点框 */
+
+.compareDialogMultiple {
+	position: absolute;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
 	width: 100%;
-	height: 100%;
-	line-height: 60px;
-	font-size: 66px;
-	font-family: xingkai;
-	color: red;
-	text-align: center;
-	text-shadow:
-		0 0 5px black,
-		0 0 7px black,
-		0 0 10px black;
+	left: 0;
+	right: 0;
+	bottom: 38%;
+	min-height: 260px;
+	padding: 0 4%;
+	overflow: visible;
+	z-index: 7;
+	--dui-pcd-img-h: 125px;
+	--dui-pcd-lace: 49px;
+	--dui-pcd-slice-t: 62px;
+	--dui-pcd-slice-b: 45px;
+	--dui-pcd-slice-side: 16px;
+	border-style: solid;
+	border-color: transparent;
+	border-width: 62px 16px 45px 16px;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png");
+	border-image-slice: 62 16 45 16 fill;
+	border-image-repeat: stretch;
+	background: transparent;
+	box-shadow: none;
 }
 
-.skill-dialog.compare > .content > .player-card[data-result="赢"]::after {
-	color: red;
-	animation: open 0.2s;
+.compareDialogMultiple.dui-pcd-collapsed {
+	width: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	bottom: auto !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+	overflow: visible !important;
 }
 
-.skill-dialog.compare > .content > .player-card[data-result="没赢"]::after {
-	color: white;
-	animation: open 0.2s;
+.compareDialogMultiple.dui-pcd-collapsed > :not(.dui-gold-title-wrap) {
+	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+.compareDialogMultiple.dui-pcd-collapsed > .dui-gold-title-wrap {
+	pointer-events: auto !important;
+}
+
+.compareDialogMultiple.dui-pcd-collapsed .dui-pcd-arrow {
+	transform: translate(12px, -50%) rotate(180deg);
+}
+
+.compareDialogMultiple > .dui-gold-title-wrap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -62px;
+	height: 49px;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	transform: none;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+	pointer-events: none;
+	z-index: 10;
+	border: none;
+	background: none;
+}
+
+.compareDialogMultiple > .dui-gold-title-wrap > .dui-gold-title {
+	line-height: normal;
+	width: auto !important;
+	flex: 0 0 auto;
+	font-size: 36px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+.compareTitleMultiple {
+	display: none;
+}
+
+.compareDialogMultiple .cardArea {
+	top: 60px;
+	width: auto;
+	height: 150px;
+	display: inline-flex;
+	align-items: flex-end;
+	position: relative;
+	white-space: nowrap;
+	margin: 0 6px;
+}
+
+.compareDialogMultiple .cardArea > .playerAreaName,
+.compareDialogMultiple .cardArea > .targetAreaName {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 35px;
+	height: 140px;
+	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat;
+	writing-mode: vertical-lr;
+	font-family: shousha, "HYZLSJ", serif;
+	font-size: 20px;
+	color: #ffffff;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325;
+}
+
+.compareDialogMultiple .cardArea > .playerArea,
+.compareDialogMultiple .cardArea > .targetArea {
+	position: relative;
+	left: auto;
+	top: auto;
+	width: calc(150px * 129 / 181);
+	height: 150px;
+	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
+}
+
+.compareDialogMultiple .cardArea > .playerArea > div[data-result="win"]::after,
+.compareDialogMultiple .cardArea > .targetArea > div[data-result="win"]::after {
+	background-image: url("../../image/ui/dialog/win.png") !important;
+	content: "";
+	background-size: 100% 100%;
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	bottom: -5px;
+	right: -25px;
+	z-index: 100;
+	animation: losewin 2s;
+	pointer-events: none;
+}
+
+.compareDialogMultiple .cardArea > .playerArea > div[data-result="lose"]::after,
+.compareDialogMultiple .cardArea > .targetArea > div[data-result="lose"]::after {
+	background-image: url("../../image/ui/dialog/lose.png") !important;
+	content: "";
+	background-size: 100% 100%;
+	position: absolute;
+	width: 100px;
+	height: 80px;
+	bottom: -10px;
+	right: -30px;
+	z-index: 100;
+	animation: losewin 2s;
+	pointer-events: none;
 }
 
 /** 确认框 */
@@ -698,4 +2782,330 @@
 .confirm-box.guan-xing > .content > .card.selected > .card-mask {
 	display: block !important;
 	opacity: 1;
+}
+
+/* ========== 判定框 #judgeBox（顺手同款 tittle_bg 九宫格，非整图拉伸） ========== */
+@keyframes dui-judge-open {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+#arena.decadeUI > #judgeBox.judgeBox,
+#arena.decadeUI > .dialog#judgeBox.judgeBox,
+#arena.decadeUI > .dialog.dui-judge-box {
+	--dui-judge-slice-t: 62px;
+	--dui-judge-slice-b: 45px;
+	--dui-judge-slice-side: 16px;
+	--dui-judge-lace: 49px;
+	--dui-judge-gap: 12px;
+	--dui-judge-content-h: 168px;
+	--dui-judge-frame-h: calc(var(--dui-judge-slice-t) + var(--dui-judge-content-h) + var(--dui-judge-slice-b));
+	overflow: visible !important;
+	width: 100% !important;
+	max-width: none !important;
+	height: var(--dui-judge-frame-h) !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(45% - (var(--dui-judge-frame-h) / 2)) !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	position: absolute !important;
+	background: transparent !important;
+	background-image: none !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-judge-slice-t) var(--dui-judge-slice-side) var(--dui-judge-slice-b) var(--dui-judge-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	border-radius: 0 !important;
+	z-index: 6 !important;
+	box-shadow: none !important;
+	pointer-events: none;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox:not(.dui-judge-stable),
+#arena.decadeUI > .dialog#judgeBox.judgeBox:not(.dui-judge-stable),
+#arena.decadeUI > .dialog.dui-judge-box:not(.dui-judge-stable) {
+	animation: dui-judge-open 0.5s ease;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox > .dui-gold-title-wrap,
+#arena.decadeUI > .dialog#judgeBox.judgeBox > .dui-gold-title-wrap {
+	left: 0;
+	right: 0;
+	width: 100%;
+	min-width: 0;
+	transform: none;
+	top: calc(0px - var(--dui-judge-slice-t));
+	height: var(--dui-judge-lace);
+	box-sizing: border-box;
+	justify-content: center;
+	overflow: visible;
+	z-index: 10;
+	border: none;
+	border-image: none;
+	background: none;
+	pointer-events: auto;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox > .dui-gold-title-wrap > .dui-gold-title,
+#arena.decadeUI > .dialog#judgeBox.judgeBox > .dui-gold-title-wrap > .dui-gold-title {
+	font-size: 36px !important;
+	line-height: normal;
+	width: auto !important;
+	height: auto;
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox .dui-pcd-arrow,
+#arena.decadeUI > .dialog#judgeBox.judgeBox .dui-pcd-arrow {
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	width: 39px;
+	height: 31px;
+	margin: 0;
+	transform: translate(12px, -50%);
+	background: url("../../image/ui/dialog/arrow.png") center / contain no-repeat;
+	pointer-events: auto;
+	cursor: pointer;
+	z-index: 9;
+	transition: transform 0.2s ease;
+}
+
+/* 判定框折叠：收成标题条（与顺手同款 tittle_bg 高度） */
+#arena.decadeUI > #judgeBox.judgeBox.dui-judge-collapsed,
+#arena.decadeUI > .dialog#judgeBox.judgeBox.dui-judge-collapsed,
+#arena.decadeUI > .dialog.dui-judge-box.dui-judge-collapsed {
+	--dui-judge-collapsed-h: 125px;
+	width: 100% !important;
+	max-width: none !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - (var(--dui-judge-collapsed-h) / 2)) !important;
+	bottom: auto !important;
+	margin: 0 !important;
+	transform: none !important;
+	height: var(--dui-judge-collapsed-h) !important;
+	min-height: var(--dui-judge-collapsed-h) !important;
+	max-height: var(--dui-judge-collapsed-h) !important;
+	overflow: visible !important;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox.dui-judge-collapsed > :not(.dui-gold-title-wrap),
+#arena.decadeUI > .dialog#judgeBox.judgeBox.dui-judge-collapsed > :not(.dui-gold-title-wrap),
+#arena.decadeUI > .dialog.dui-judge-box.dui-judge-collapsed > :not(.dui-gold-title-wrap) {
+	display: none !important;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox.dui-judge-collapsed > .dui-gold-title-wrap,
+#arena.decadeUI > .dialog#judgeBox.judgeBox.dui-judge-collapsed > .dui-gold-title-wrap,
+#arena.decadeUI > .dialog.dui-judge-box.dui-judge-collapsed > .dui-gold-title-wrap {
+	display: flex !important;
+	visibility: visible !important;
+	pointer-events: auto !important;
+	opacity: 1 !important;
+	z-index: 20;
+}
+
+#arena.decadeUI > #judgeBox.judgeBox.dui-judge-collapsed .dui-pcd-arrow,
+#arena.decadeUI > .dialog#judgeBox.judgeBox.dui-judge-collapsed .dui-pcd-arrow,
+#arena.decadeUI > .dialog.dui-judge-box.dui-judge-collapsed .dui-pcd-arrow {
+	transform: translate(12px, -50%) rotate(180deg);
+}
+
+#arena.decadeUI #judgeBox .introduce_card {
+	position: absolute;
+	top: var(--dui-judge-gap);
+	left: 60%;
+	width: 280px;
+	text-align: left;
+	height: calc(var(--dui-judge-content-h) - var(--dui-judge-gap));
+	font-size: 20px;
+	font-family: shousha, serif;
+	color: #c9c9ab;
+	text-shadow: 1px 0 5px black, 1px 1px 2px black, -1px 0 0 black, 0 -1px 0 black;
+	overflow-y: auto;
+	scrollbar-width: none;
+}
+
+#arena.decadeUI #judgeBox .introduce_card[data-type="card"],
+#arena.decadeUI #judgeBox .introduce_card[data-type="skill"] {
+	right: 25%;
+}
+
+#arena.decadeUI #judgeBox .introduce_card > span[data-suit-type="red"] {
+	color: red;
+	text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+}
+
+#arena.decadeUI #judgeBox .introduce_card > span[data-suit-type="black"] {
+	color: black;
+	text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+}
+
+#arena.decadeUI #judgeBox .judgeResultIntroduce {
+	position: absolute;
+	background-image: url("../../image/ui/dialog/name.png");
+	--w: 42px;
+	--h: calc(var(--w) * 161 / 51);
+	width: var(--w);
+	height: var(--h);
+	background-size: 100% 100%;
+	font-family: shousha, serif;
+	color: #c9c9ab;
+	text-shadow: 1px 0 5px black, 1px 1px 2px black, -1px 0 0 black, 0 -1px 0 black;
+	top: 24%;
+	font-size: 23px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	writing-mode: vertical-rl;
+	line-height: 50px;
+}
+
+#arena.decadeUI #judgeBox .judgeResultIntroduce[data-type="skill"] {
+	top: 10%;
+	left: 41.5%;
+}
+
+#arena.decadeUI #judgeBox .judgeResultIntroduce[data-type="card"] {
+	top: 12%;
+	left: 44%;
+}
+
+/* 连续判定（洛神/慧识/庀材）：左侧暂存已获得的判定牌 */
+#arena.decadeUI #judgeBox .judgeGainArea {
+	position: absolute;
+	left: 0;
+	top: var(--dui-judge-gap);
+	width: 38%;
+	height: 140px;
+	overflow: visible;
+	pointer-events: none;
+	z-index: 1;
+}
+
+#arena.decadeUI #judgeBox .judgeAvatarLayer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 30;
+	overflow: visible;
+}
+
+#arena.decadeUI #judgeBox .judgeGainArea > .card,
+#arena.decadeUI #judgeBox .judgeGainArea > div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: top left;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea {
+	position: absolute;
+	top: var(--dui-judge-gap);
+	left: auto;
+	width: 108px;
+	height: 140px;
+	background-size: 100% 100%;
+	z-index: 2;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea[data-type="card"] {
+	right: 41%;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea[data-type="skill"] {
+	right: 44%;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea > div {
+	position: absolute;
+	top: -10px;
+	right: 0;
+	left: 0;
+	z-index: 1;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea > div:first-child {
+	z-index: 2;
+}
+
+#arena.decadeUI #judgeBox .judgeDelayCard {
+	position: absolute;
+	top: var(--dui-judge-gap);
+	left: 34%;
+	width: 100px;
+	height: 140px;
+	background-size: 100% 100%;
+	z-index: 2;
+}
+
+#arena.decadeUI #judgeBox .judgeDelayCard > div:not(.smallCharacter):not(.suit-num) {
+	position: absolute;
+	top: -10px;
+	right: 5px;
+	z-index: 1;
+}
+
+#arena.decadeUI #judgeBox .smallCharacter {
+	position: absolute;
+	z-index: 1;
+	height: 2.2em;
+	width: 2.2em;
+	overflow: visible;
+	background-repeat: no-repeat;
+	background-size: 50px;
+	background-position: 50% 15%;
+	border: 2px solid #ad5949;
+}
+
+#arena.decadeUI #judgeBox .smallCharacter[data-type="card"] {
+	top: calc(var(--dui-judge-gap) + 122px);
+	left: calc(34% - 12px);
+}
+
+#arena.decadeUI #judgeBox .smallCharacter[data-type="skill"] {
+	top: var(--dui-judge-gap);
+	left: 37%;
+}
+
+#arena.decadeUI #judgeBox .smallCharacterName {
+	position: absolute;
+	left: 155%;
+	top: calc(100% - 12px);
+	transform: translateX(-50%);
+	width: max-content;
+	max-width: 6em;
+	white-space: nowrap;
+	writing-mode: horizontal-tb;
+	text-orientation: mixed;
+	text-align: center;
+	line-height: 1.2;
+	z-index: 1;
+	color: #c9c9ab;
+	font-family: shousha, serif;
+	font-size: 16px;
+	text-shadow: 1px 0 5px black, 1px 1px 2px black, -1px 0 0 black, 0 -1px 0 black;
+}
+
+#arena.decadeUI #judgeBox .judgeCardArea > .card,
+#arena.decadeUI #judgeBox .judgeDelayCard > .card {
+	transform: none !important;
+}
+
+#arena.decadeUI #judgeBox > .content-container,
+#arena.decadeUI #judgeBox > .content-container > .content {
+	display: none !important;
 }

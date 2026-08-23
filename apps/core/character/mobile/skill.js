@@ -14109,47 +14109,59 @@ const skills = {
 		async cost(event, trigger, player) {
 			const list = get.addNewRowList(player.getCards("h"), "suit", player);
 			let limit = event.skill === "sbqingzheng" ? 3 - player.countMark("sbjianxiong") : 1;
-			const result = await player
-				.chooseButtonTarget({
-					createDialog: [
-						[
-							[[`${get.prompt(event.skill)}<div class="text center">${get.translation(event.skill, "info")}</div>`], "addNewRow"],
-							[
-								dialog => {
-									dialog.classList.add("fullheight");
-									// 不添加scroll1和scroll2的类名
-									dialog.forcebutton = false;
-									dialog._scrollset = false;
-								},
-								"handle",
-							],
-							list.map(item => [Array.isArray(item) ? item : [item], "addNewRow"]),
-						],
+			const createDialog = [
+				[
+					[[`${get.prompt(event.skill)}<div class="text center">${get.translation(event.skill, "info")}</div>`], "addNewRow"],
+					[
+						dialog => {
+							dialog.classList.add("fullheight");
+							dialog.forcebutton = false;
+							dialog._scrollset = false;
+						},
+						"handle",
 					],
-					filterButton(button) {
-						const player = get.player();
-						if (!button.links.length || button.links.some(card => !lib.filter.cardDiscardable(card, player, get.event().getParent().skill))) {
-							return false;
-						}
-						return true;
-					},
+					list.map(item => [Array.isArray(item) ? item : [item], "addNewRow"]),
+				],
+			];
+			const filterButton = button => {
+				const player = get.player();
+				if (!button.links.length || button.links.some(card => !lib.filter.cardDiscardable(card, player, get.event().getParent().skill))) {
+					return false;
+				}
+				return true;
+			};
+			const ai1 = button => {
+				const player = get.player();
+				if (!game.hasPlayer(current => player != current && current.countDiscardableCards(player, "h") > 0 && get.attitude(player, current) < 0)) {
+					return 0;
+				}
+				let values = button.links.map(i => get.value(i)).reduce((p, c) => p + c, 0) / button.links.length;
+				if (button.links.length > 4 || values > 6) {
+					return 0;
+				}
+				return (13 - button.links.length) / values;
+			};
+			const result = await player
+				.chooseButton({
+					createDialog,
+					filterButton,
 					selectButton: limit,
 					limit,
+					ai: ai1,
+				})
+				.forResult();
+			if (!result?.bool || !result?.links?.length) {
+				event.result = { bool: false };
+				return;
+			}
+			const cards = player.getCards("h").filter(card => result.links.includes(get.suit(card, player)));
+			const targetResult = await player
+				.chooseTarget({
+					prompt: `${get.translation(event.skill)}：选择一名有手牌的其他角色`,
 					filterTarget(card, player, target) {
 						return target != player && target.countCards("h");
 					},
-					ai1(button) {
-						const player = get.player();
-						if (!game.hasPlayer(current => player != current && current.countDiscardableCards(player, "h") > 0 && get.attitude(player, current) < 0)) {
-							return 0;
-						}
-						let values = button.links.map(i => get.value(i)).reduce((p, c) => p + c, 0) / button.links.length;
-						if (button.links.length > 4 || values > 6) {
-							return 0;
-						}
-						return (13 - button.links.length) / values;
-					},
-					ai2(target) {
+					ai(target) {
 						const player = get.player(),
 							att = get.attitude(player, target);
 						if (att >= 0) {
@@ -14160,13 +14172,11 @@ const skills = {
 				})
 				.forResult();
 			event.result = {
-				bool: result?.bool,
-				cost_data: result?.links,
-				targets: result?.targets,
+				bool: targetResult?.bool,
+				cost_data: result.links,
+				targets: targetResult?.targets,
+				cards,
 			};
-			if (event.result.bool && result?.links?.length) {
-				event.result.cards = player.getCards("h").filter(card => result.links.includes(get.suit(card, player)));
-			}
 		},
 		async content(event, trigger, player) {
 			const {

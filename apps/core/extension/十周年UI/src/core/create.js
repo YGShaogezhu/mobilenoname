@@ -3,13 +3,14 @@
  */
 import { lib, game, ui, get, ai, _status } from "noname";
 import { element } from "../utils/element.js";
+import { createCompareDialogFactory } from "../overrides/compare-dialog.js";
 
 /**
  * 创建decadeUI.create模块
  * @returns {Object} create模块对象
  */
 export function createDecadeUICreateModule() {
-	return {
+	const module = {
 		/**
 		 * 创建技能对话框
 		 * @returns {HTMLElement} 对话框元素
@@ -29,7 +30,9 @@ export function createDecadeUICreateModule() {
 				open(customParent) {
 					if (!customParent) {
 						const size = decadeUI.get.bodySize();
-						this.style.minHeight = parseInt(size.height * 0.42) + "px";
+						if (!this.classList.contains("compare")) {
+							this.style.minHeight = parseInt(size.height * 0.42) + "px";
+						}
 						if (this.parentNode !== ui.arena) ui.arena.appendChild(this);
 					}
 					this.style.animation = "open-dialog 0.4s";
@@ -106,4 +109,7 @@ export function createDecadeUICreateModule() {
 			return dialog;
 		},
 	};
+
+	module.compareDialog = createCompareDialogFactory(module.skillDialog);
+	return module;
 }

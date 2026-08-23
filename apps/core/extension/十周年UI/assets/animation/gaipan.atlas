@@ -1,0 +1,69 @@
+
+gaipan.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+HuanPuEF_00
+  rotate: false
+  xy: 184, 54
+  size: 174, 50
+  orig: 180, 50
+  offset: 6, 0
+  index: -1
+HuanPuEF_01
+  rotate: false
+  xy: 2, 158
+  size: 180, 50
+  orig: 180, 50
+  offset: 0, 0
+  index: -1
+HuanPuEF_02
+  rotate: false
+  xy: 2, 106
+  size: 180, 50
+  orig: 180, 50
+  offset: 0, 0
+  index: -1
+HuanPuEF_03
+  rotate: false
+  xy: 184, 158
+  size: 180, 50
+  orig: 180, 50
+  offset: 0, 0
+  index: -1
+HuanPuEF_04
+  rotate: false
+  xy: 2, 54
+  size: 180, 50
+  orig: 180, 50
+  offset: 0, 0
+  index: -1
+HuanPuEF_05
+  rotate: false
+  xy: 184, 106
+  size: 180, 50
+  orig: 180, 50
+  offset: 0, 0
+  index: -1
+HuanPuEF_06
+  rotate: false
+  xy: 2, 2
+  size: 176, 50
+  orig: 180, 50
+  offset: 4, 0
+  index: -1
+HuanPuEF_07
+  rotate: false
+  xy: 180, 2
+  size: 168, 50
+  orig: 180, 50
+  offset: 12, 0
+  index: -1
+ParticleEditor
+  rotate: false
+  xy: 366, 149
+  size: 64, 59
+  orig: 64, 59
+  offset: 0, 0
+  index: -1

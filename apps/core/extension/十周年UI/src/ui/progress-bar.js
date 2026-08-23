@@ -27,6 +27,9 @@ const RED_THRESHOLD = 395 / 3;
 /** @type {number} 检查间隔(毫秒) */
 const CHECK_INTERVAL = 100;
 
+/** @type {number} 选牌框内进度条速度倍率（<1 更快） */
+const PCD_PROGRESS_SPEED = 0.45;
+
 // ==================== 工具函数 ====================
 
 /**
@@ -64,6 +67,53 @@ const isShoushaSyle = () => {
 const removeFirst = (parent, className) => {
 	parent.getElementsByClassName(className)[0]?.remove();
 };
+
+/**
+ * 取当前可见的选牌框
+ * @returns {HTMLElement|null}
+ */
+const findActivePcdDialog = () => {
+	const top = ui.dialog;
+	if (
+		top?.classList?.contains("dui-player-card-dialog") &&
+		!top.classList.contains("hidden") &&
+		top.isConnected
+	) {
+		return top;
+	}
+	for (const d of ui.dialogs || []) {
+		if (
+			d?.classList?.contains("dui-player-card-dialog") &&
+			!d.classList.contains("hidden") &&
+			d.isConnected
+		) {
+			return d;
+		}
+	}
+	return null;
+};
+
+/**
+ * 将已有进度条挂入选牌框（框晚于进度条创建时补同步）
+ * @returns {boolean}
+ */
+export function syncProgressBarToPcdDialog() {
+	const bar = document.getElementById(PROGRESS_BAR_ID);
+	const dialog = findActivePcdDialog();
+	if (!bar || !dialog) return !!bar && !!dialog;
+	bar.classList.add("dui-pcd-progress-bar");
+	bar.style.removeProperty("position");
+	bar.style.removeProperty("left");
+	bar.style.removeProperty("bottom");
+	const footer = dialog.querySelector(":scope > .dui-pcd-footer") || dialog;
+	if (bar.parentElement !== footer) {
+		footer.appendChild(bar);
+	}
+	import("../overrides/player-card-dialog.js")
+		.then(mod => mod.syncPcdFooterLayout?.())
+		.catch(() => {});
+	return true;
+}
 
 // ==================== 进度条配置 ====================
 
@@ -254,14 +304,24 @@ export function initPrecontentUI() {
 		clearTimer("timer2");
 		removeElementById(PROGRESS_BAR_ID);
 
+		const pcdDialog = findActivePcdDialog();
+		const inPcdDialog = !!pcdDialog;
 		const container = document.createElement("div");
 		container.id = PROGRESS_BAR_ID;
+		if (inPcdDialog) container.classList.add("dui-pcd-progress-bar");
 		const cfg = getProgressBarConfig();
 
 		if (cfg.clearSpecial) delete window.jindutiaoTeshu;
 		if (cfg.setSpecial && !window.jindutiaoTeshu) window.jindutiaoTeshu = true;
 
-		Object.assign(container.style, cfg.container);
+		const containerStyle = { ...cfg.container };
+		if (inPcdDialog) {
+			delete containerStyle.position;
+			delete containerStyle.left;
+			delete containerStyle.bottom;
+			delete containerStyle.width;
+		}
+		Object.assign(container.style, containerStyle);
 		const boxTime = createDiv(cfg.progressBar.data, cfg.progressBar.style);
 		container.appendChild(boxTime);
 
@@ -280,29 +340,44 @@ export function initPrecontentUI() {
 			});
 		}
 
-		document.body.appendChild(container);
-		const interval = parseFloat(lib.config.extension_十周年UI_jindutiaoST);
+		const footer = pcdDialog?.querySelector?.(":scope > .dui-pcd-footer");
+		(inPcdDialog ? footer || pcdDialog : document.body).appendChild(container);
 
-		window.timer = setInterval(() => {
-			boxTime.style.width = `${boxTime.data}px`;
-			boxTime.style.backgroundColor = boxTime.data <= RED_THRESHOLD ? "rgba(230,56,65,0.88)" : "rgb(230,151,91)";
-			if (--boxTime.data === 0) {
-				clearTimer("timer");
-				container.remove();
+		const runTimer = () => {
+			let progressMax = cfg.progressBar.data;
+			if (inPcdDialog) {
+				progressMax = Math.max(80, Math.round(container.clientWidth) || progressMax);
+				boxTime.data = progressMax;
+				boxTime.style.width = `${progressMax}px`;
 			}
-		}, interval);
+			const redAt = Math.max(20, progressMax * (RED_THRESHOLD / 395));
+			let interval = parseFloat(lib.config.extension_十周年UI_jindutiaoST);
+			if (inPcdDialog) interval = Math.max(10, interval * PCD_PROGRESS_SPEED);
 
-		if (window.jindutiaoTeshu && boxTime2 && imgBg3) {
-			window.timer2 = setInterval(() => {
-				boxTime2.style.width = `${--boxTime2.data}px`;
-				if (boxTime2.data === 0) {
-					clearTimer("timer2");
-					delete window.jindutiaoTeshu;
-					boxTime2.remove();
-					imgBg3.remove();
+			window.timer = setInterval(() => {
+				boxTime.style.width = `${boxTime.data}px`;
+				boxTime.style.backgroundColor = boxTime.data <= redAt ? "rgba(230,56,65,0.88)" : "rgb(230,151,91)";
+				if (--boxTime.data === 0) {
+					clearTimer("timer");
+					container.remove();
 				}
-			}, interval / 2);
-		}
+			}, interval);
+
+			if (window.jindutiaoTeshu && boxTime2 && imgBg3) {
+				window.timer2 = setInterval(() => {
+					boxTime2.style.width = `${--boxTime2.data}px`;
+					if (boxTime2.data === 0) {
+						clearTimer("timer2");
+						delete window.jindutiaoTeshu;
+						boxTime2.remove();
+						imgBg3.remove();
+					}
+				}, interval / 2);
+			}
+		};
+
+		if (inPcdDialog) requestAnimationFrame(runTimer);
+		else runTimer();
 	};
 
 	/**
@@ -394,6 +469,7 @@ const setupWatcher = config => {
 		if (playerShown) return;
 		playerShown = true;
 		game.Jindutiaoplayer();
+		syncProgressBarToPcdDialog();
 	};
 
 	const hidePlayer = () => {
@@ -402,6 +478,9 @@ const setupWatcher = config => {
 		clearTimer("timer");
 		clearTimer("timer2");
 		removeElementById(PROGRESS_BAR_ID);
+		import("../overrides/player-card-dialog.js")
+			.then(mod => mod.syncPcdFooterLayout?.())
+			.catch(() => {});
 	};
 
 	// 暴露重置方法供配置热更新使用

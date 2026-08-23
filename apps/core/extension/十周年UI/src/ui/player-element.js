@@ -237,7 +237,6 @@ export function createPlayerElement(position, noclick) {
 		for (let i = 0; i < 40; i++) element.create("cardbg", node).style.transform = `translateX(${i * 5 - 5}px)`;
 		chainImg.onerror = undefined;
 	};
-	chainImg.src = decadeUIPath + "image/ui/chain/tie_suo.png";
 
 	const extend = {
 		$cardCount: playerExtend.node.count,

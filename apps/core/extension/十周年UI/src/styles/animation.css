@@ -150,6 +150,17 @@
 	}
 }
 
+/** 选牌框专用：只淡入，不动 transform（保留 translateY(-50%) 等居中） */
+@keyframes open-dialog-dui-pcd {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
 @keyframes close-dialog {
 	from {
 		opacity: 1;
