@@ -148,7 +148,7 @@ body[data-style="off"] .card.layered-card[data-card-face="4"].selected::before {
 	z-index: 8;
 }
 
-/** 出牌来源提示（对齐琉璃/手杀：无灰底条，描边浮字） */
+/** 出牌来源提示（对齐手杀：无灰底条，描边浮字） */
 
 .card > .used-info {
 	position: absolute;
@@ -165,7 +165,7 @@ body[data-style="off"] .card.layered-card[data-card-face="4"].selected::before {
 	font-size: 20px;
 	font-weight: normal;
 	letter-spacing: 2px;
-	font-family: "FZLBJW";
+	font-family: "shousha";
 	color: #eddac3;
 	text-align: center;
 	text-shadow:

@@ -118,6 +118,10 @@ export const dynamicSkinConfig = {
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
+			gongji: {
+				action: "GongJi_2",
+				// action: ["GongJi_1", "GongJi_2"],
+			},
 			beijing: {
 				name: '高望/朝华同袍/BeiJing',
 				x: [0, 0.4],

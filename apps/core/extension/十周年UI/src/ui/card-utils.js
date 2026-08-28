@@ -832,9 +832,23 @@ export function tryAddPlayerCardUseTag(card, player, event, decadeUI) {
 			omitPlayerName = true;
 			tagText = handleJudgeTag(card, event, decadeUI);
 			break;
-		case "showcards":
-			tagText = usedInfoAction(`${get.translation(event.getParent())}展示`);
+		case "showcards": {
+			const parent = event.getParent?.();
+			let label = "";
+			if (parent) {
+				const skillKey = parent.skill || (parent.name !== "useSkill" ? parent.name : null);
+				if (skillKey) {
+					const translated = get.translation(skillKey);
+					if (translated && translated !== skillKey) label = translated;
+				}
+			}
+			if (!label) {
+				const match = String(event.str || "").match(/【(.+?)】/);
+				if (match) label = match[1];
+			}
+			tagText = usedInfoAction(label ? `${label}展示` : "展示");
 			break;
+		}
 		case "loseasync":
 			if (event.parent) {
 				if (player === event.parent.target) {

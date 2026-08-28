@@ -906,3 +906,187 @@ export function createContentLose(baseLose) {
 		...baseLose.slice(2),
 	];
 }
+
+/**
+ * 是否保留引擎原版展示弹框（自定义 dialog / 强制弹框）
+ * @param {Object} event
+ * @returns {boolean}
+ */
+function shouldKeepShowCardsDialog(event) {
+	if (event.forceDialog) return true;
+	if (event.createDialog) return true;
+	if (typeof event.dialog === "number") return true;
+	if (event.dialog) return true;
+	return false;
+}
+
+/**
+ * 十周年：展示牌到临时出牌区（不弹 buttons 框）
+ * @param {Function} baseShowCards - 原版 showCards
+ * @returns {Function}
+ */
+export function createContentShowCards(baseShowCards) {
+	return async function showCards(event, trigger, player) {
+		const { cards, triggeronly, isFlash, multipleShow } = event;
+		if (get.itemtype(cards) != "cards") {
+			return event.finish();
+		}
+
+		// 技能自带自定义 dialog 时走原版
+		if (shouldKeepShowCardsDialog(event)) {
+			return baseShowCards.call(this, event, trigger, player);
+		}
+
+		event.show_map = new Map();
+		event.show_map.set("others", {
+			cardPile: [],
+			discardPile: [],
+			ordering: [],
+			special: [],
+			noPosition: [],
+		});
+		await event.trigger("showCards");
+
+		if (get.itemtype(event.cards) != "cards") {
+			return;
+		}
+
+		event.result = {
+			cards: event.cards.slice(0),
+			show_map: event.show_map,
+		};
+		await event.trigger("showCardsFixing");
+		event.cards = event.result.cards;
+		const shownCards = event.cards;
+
+		const directLose = [];
+		event.directLose = directLose;
+		const ownerLose = new Map();
+		event.ownerLose = ownerLose;
+		for (const card of shownCards) {
+			const pos = get.position(card, true);
+			const owner = get.owner(card);
+			if (owner && !event.show_map.has(owner)) {
+				event.show_map.set(owner, {
+					hs: [],
+					es: [],
+					js: [],
+					xs: [],
+					ss: [],
+					cards2: [],
+					cards: [],
+				});
+				ownerLose.set(owner, []);
+			}
+			if ("hejsx".includes(pos) && owner) {
+				event.show_map.get(owner)[`${pos}s`].push(card);
+				event.show_map.get(owner).cards.push(card);
+				if ("he".includes(pos)) {
+					event.show_map.get(owner).cards2.push(card);
+				}
+				ownerLose.get(owner).push(card);
+			} else if ("cds".includes(pos)) {
+				directLose.push(card);
+				event.show_map.get("others")[["cardPile", "discardPile", "special"].find(i => i.startsWith(pos))]?.push(card);
+			} else {
+				directLose.push(card);
+				if ("cds".includes(card.original)) {
+					event.show_map.get("others")[["cardPile", "discardPile", "special"].find(i => i.startsWith(pos))]?.push(card);
+				} else if (pos == "o") {
+					event.show_map.get("others").ordering.push(card);
+				} else {
+					event.show_map.get("others").noPosition.push(card);
+				}
+			}
+		}
+
+		if (triggeronly) {
+			return;
+		}
+
+		// 亮出：牌进处理区；普通展示：牌仍留原位，仅抛出副本
+		if (!event.noOrdering && isFlash) {
+			if (Array.from(ownerLose.values())?.flat()?.length > 0) {
+				const next = game.loseAsync({ lose_list: Array.from(ownerLose.entries()) }).set("relatedEvent", event.relatedEvent || event.getParent());
+				next.setContent("chooseToCompareLose");
+				await next;
+			}
+			if (directLose.length > 0) {
+				await game.cardsGotoOrdering(directLose).set("relatedEvent", event.relatedEvent || event.getParent());
+			}
+		}
+
+		if (!event.str) {
+			event.str = `${get.translation(player.name)}展示的牌`;
+		}
+
+		event.videoId = lib.status.videoId++;
+		game.addVideo("showCards", player, [event.str, get.cardsInfo(shownCards)]);
+
+		game.broadcastAll(
+			(thrower, cards, id) => {
+				const evt = game.online ? {} : _status.event;
+				evt.nodes ??= [];
+				evt.videoId = id;
+				for (const card of cards) {
+					const copy = card.copy("thrown");
+					let node;
+					if (game.chess) {
+						node = copy.addTempClass("start");
+						ui.arena.appendChild(node);
+					} else if (typeof thrower.$throwordered2 === "function") {
+						node = thrower.$throwordered2(copy, true);
+					} else {
+						node = thrower.$throwordered(copy, true);
+					}
+					evt.nodes.push(node);
+				}
+			},
+			player,
+			shownCards,
+			event.videoId
+		);
+
+		const cards2 = shownCards.slice(0);
+		if (event.hiddencards && !isFlash) {
+			cards2.removeArray(event.hiddencards);
+		}
+		if (event.log != false) {
+			const logVerb = isFlash ? "亮出了" : "展示了";
+			if (multipleShow !== true) {
+				const logList = event.log?.(cards2, player) || [player, logVerb, cards2];
+				game.log(...logList);
+			} else {
+				const targets = Array.from(ownerLose.keys());
+				for (const target of targets.sortBySeat()) {
+					const cardsx = ownerLose.get(target)?.filter(card => !event.hiddenCards?.includes(card));
+					if (cardsx?.length) {
+						const logList = event.log?.(cardsx, target) || [target, logVerb, cardsx];
+						game.log(...logList);
+					}
+				}
+				if (directLose.length) {
+					const logList = event.log?.(directLose, player) || [player, logVerb, directLose];
+					game.log(...logList);
+				}
+			}
+		}
+
+		game.addCardKnower(shownCards, "everyone");
+		const delay = Math.max(2, Math.min(5, shownCards.length));
+		await game.delayx(event.delay_time || delay);
+
+		if (event.clearArena !== false) {
+			game.broadcastAll(() => ui.clear());
+		}
+
+		if (event.callback) {
+			const next = game.createEvent("showCardsCallback", false);
+			next.player = player;
+			next.cards = event.result.cards;
+			next.result = event.result;
+			next.setContent(event.callback);
+			await next;
+		}
+	};
+}

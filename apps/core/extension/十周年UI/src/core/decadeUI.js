@@ -29,7 +29,7 @@ import { controlAdd, controlOpen, controlClose, controlReplace, controlUpdateLay
 import { dialogOpen, applyDialogOverrides } from "../overrides/dialog.js";
 import { eventAddMessageHook, eventTriggerMessage } from "../overrides/event.js";
 import { cardCopy, cardInit, cardUpdateTransform, cardMoveTo, cardMoveDelete } from "../overrides/card.js";
-import { createContentGain, contentJudge, createContentLose, createContentChooseNumbers, createContentChooseControl } from "../overrides/content.js";
+import { createContentGain, contentJudge, createContentLose, createContentChooseNumbers, createContentChooseControl, createContentShowCards } from "../overrides/content.js";
 import { contentChooseToCompare, contentChooseToCompareMultiple, contentChooseToCompareMeanwhile } from "../overrides/compare-dialog.js";
 import { applyLibOverrides } from "../overrides/lib.js";
 import { getObjtype, applyGetOverrides } from "../overrides/get.js";
@@ -211,6 +211,7 @@ export const createDecadeUIObject = () => ({
 						gain: createContentGain(base.lib.element.content.gain),
 						judge: contentJudge(),
 						lose: createContentLose(base.lib.element.content.lose),
+						showCards: createContentShowCards(base.lib.element.content.showCards),
 						chooseNumbers: createContentChooseNumbers(base.lib.element.content.chooseNumbers),
 						chooseControl: createContentChooseControl(base.lib.element.content.chooseControl),
 						chooseToCompare: contentChooseToCompare(),
@@ -280,6 +281,7 @@ export const createDecadeUIObject = () => ({
 		// 数组型 content 步骤：递归 override 不一定整表替换，这里强制挂载
 		lib.element.content.chooseControl = createContentChooseControl(base.lib.element.content.chooseControl);
 		lib.element.content.chooseNumbers = createContentChooseNumbers(base.lib.element.content.chooseNumbers);
+		lib.element.content.showCards = createContentShowCards(base.lib.element.content.showCards);
 
 		// 挂载动画模块
 		Object.assign(decadeUI, {
