@@ -447,14 +447,29 @@ export function createShoushaLbtnPlugin(lib, game, ui, get, ai, _status, app) {
 		initConfirmRewrite() {
 			const self = this;
 			ui.create.confirm = (str, func) => {
-				if (ui.confirm?.classList.contains("closing")) {
-					ui.confirm.remove();
+				// closing / removing 都视为失效，必须重建（否则转化框关后确定栏卡 removing 要点屏幕）
+				if (
+					ui.confirm &&
+					(ui.confirm.classList.contains("closing") ||
+						ui.confirm.classList.contains("removing") ||
+						!ui.confirm.isConnected)
+				) {
+					try {
+						ui.confirm.remove();
+					} catch (e) {}
 					ui.controls.remove(ui.confirm);
 					ui.confirm = null;
 				}
 
 				if (!ui.confirm) {
 					ui.confirm = self.create.confirm();
+				}
+
+				ui.confirm.classList.remove("removing", "closing");
+
+				// 复用已有 confirm 时也关掉核心 stayleft「结束回合」，避免与 jscp 取消键重复
+				if (_status.event.endButton?.parentNode) {
+					_status.event.endButton.close();
 				}
 
 				ui.confirm.node.ok.classList.add("disabled");

@@ -79,6 +79,13 @@ export function syncPcdFooterLayout(dialog = findActivePcdDialog()) {
 		progressBar.remove();
 	}
 
+	if (progressBar?.parentElement === footer) {
+		import("../ui/progress-bar.js").then(m => m.fitProgressFillToTrack?.(progressBar)).catch(() => {});
+		requestAnimationFrame(() => {
+			import("../ui/progress-bar.js").then(m => m.fitProgressFillToTrack?.(progressBar)).catch(() => {});
+		});
+	}
+
 	const btnOk = confirmBar?.querySelector(".dui-pcd-btn-ok");
 	const btnCancel = confirmBar?.querySelector(".dui-pcd-btn-cancel");
 	const confirmVisible =
@@ -386,7 +393,12 @@ export function syncPlayerCardDialogConfirmUi() {
  * @param {HTMLElement} dialog
  */
 export function lockPlayerCardDialogPlacement(dialog) {
-	if (!dialog?.classList?.contains("dui-player-card-dialog")) return;
+	if (
+		!dialog?.classList?.contains("dui-player-card-dialog") &&
+		!dialog?.classList?.contains("decade-shousha-vcard")
+	) {
+		return;
+	}
 	const layout = dialog.dataset.layout;
 	dialog.style.setProperty("left", "0px", "important");
 	dialog.style.setProperty("right", "0px", "important");
@@ -415,7 +427,7 @@ export function lockPlayerCardDialogPlacement(dialog) {
 		layout === "two-row";
 	const oneRow = layout === "hand" || layout === "ej";
 	if (!twoRow && !oneRow) {
-		// 其它 layout 展开时清掉折叠写入的 125px，交还 CSS
+		// 其它 layout（含 shousha-vcard）展开时清掉折叠写入的 125px，交还 CSS
 		dialog.style.removeProperty("height");
 		dialog.style.removeProperty("min-height");
 		dialog.style.removeProperty("max-height");
@@ -598,6 +610,10 @@ function bindCollapseArrow(dialog, wrap) {
 		evt.stopPropagation();
 		evt.preventDefault();
 		if (evt.type !== "click") return;
+		if (dialog.classList.contains("decade-shousha-vcard")) {
+			animateShoushaVcardCollapse(dialog);
+			return;
+		}
 		dialog.classList.toggle("dui-pcd-collapsed");
 		lockPlayerCardDialogPlacement(dialog);
 		requestAnimationFrame(() => {
@@ -608,6 +624,127 @@ function bindCollapseArrow(dialog, wrap) {
 	arrow.addEventListener("click", toggle);
 	arrow.addEventListener("mousedown", evt => evt.stopPropagation());
 	arrow.addEventListener("touchstart", evt => evt.stopPropagation(), { passive: true });
+}
+
+/** 手杀转化框折叠动画时长（对齐党锢 0.2s linear） */
+const SHOUSHA_COLLAPSE_MS = 200;
+
+/**
+ * 手杀转化框折叠/展开：高度过渡 + 内容淡出（对齐手杀美化党锢）
+ * @param {HTMLElement} dialog
+ */
+function animateShoushaVcardCollapse(dialog) {
+	if (!dialog?.classList?.contains("decade-shousha-vcard") || dialog._duiShoushaCollapsing) return;
+
+	const collapsedH = PCD_FRAME_H_COLLAPSED;
+	const isCollapsed = dialog.classList.contains("dui-pcd-collapsed");
+	const content = dialog.querySelector(":scope > .content-container");
+	const footer = dialog.querySelector(":scope > .dui-shousha-footer");
+	dialog._duiShoushaCollapsing = true;
+
+	const clearCollapseInline = () => {
+		for (const prop of ["height", "min-height", "max-height", "top", "transition", "overflow"]) {
+			dialog.style.removeProperty(prop);
+		}
+		if (content) {
+			content.style.removeProperty("max-height");
+			content.style.removeProperty("opacity");
+			content.style.removeProperty("transition");
+		}
+		if (footer) {
+			footer.style.removeProperty("max-height");
+			footer.style.removeProperty("opacity");
+			footer.style.removeProperty("transition");
+			footer.style.removeProperty("padding");
+		}
+	};
+
+	const finish = () => {
+		dialog._duiShoushaCollapsing = false;
+		dialog.classList.remove("dui-pcd-collapse-anim");
+		if (dialog.classList.contains("dui-pcd-collapsed")) {
+			dialog.style.setProperty("height", `${collapsedH}px`, "important");
+			dialog.style.setProperty("min-height", `${collapsedH}px`, "important");
+			dialog.style.setProperty("max-height", `${collapsedH}px`, "important");
+			dialog.style.setProperty("top", `calc(50% - ${collapsedH / 2}px)`, "important");
+			dialog.style.removeProperty("transition");
+			dialog.style.removeProperty("overflow");
+		} else {
+			clearCollapseInline();
+		}
+		lockPlayerCardDialogPlacement(dialog);
+		syncPlayerCardDialogConfirmUi();
+	};
+
+	const runTransition = (fromH, toH, collapsing) => {
+		dialog.classList.add("dui-pcd-collapse-anim");
+		dialog.style.setProperty("transition", "none");
+		dialog.style.setProperty("overflow", "hidden");
+		dialog.style.setProperty("height", `${fromH}px`, "important");
+		dialog.style.setProperty("min-height", `${fromH}px`, "important");
+		dialog.style.setProperty("max-height", `${fromH}px`, "important");
+		dialog.style.setProperty("top", `calc(50% - ${fromH / 2}px)`, "important");
+
+		if (content) {
+			content.style.transition = "none";
+			content.style.maxHeight = collapsing ? `${Math.max(content.scrollHeight, 1)}px` : "0px";
+			content.style.opacity = collapsing ? "1" : "0";
+		}
+		if (footer) {
+			footer.style.transition = "none";
+			footer.style.maxHeight = collapsing ? `${Math.max(footer.scrollHeight, 1)}px` : "0px";
+			footer.style.opacity = collapsing ? "1" : "0";
+		}
+
+		void dialog.offsetHeight;
+
+		const ease = `all ${SHOUSHA_COLLAPSE_MS / 1000}s linear`;
+		dialog.style.setProperty("transition", ease);
+		if (content) content.style.transition = ease;
+		if (footer) footer.style.transition = ease;
+
+		requestAnimationFrame(() => {
+			dialog.style.setProperty("height", `${toH}px`, "important");
+			dialog.style.setProperty("min-height", `${toH}px`, "important");
+			dialog.style.setProperty("max-height", `${toH}px`, "important");
+			dialog.style.setProperty("top", `calc(50% - ${toH / 2}px)`, "important");
+			if (content) {
+				content.style.maxHeight = collapsing ? "0px" : `${Math.max(content.scrollHeight, 1)}px`;
+				content.style.opacity = collapsing ? "0" : "1";
+			}
+			if (footer) {
+				footer.style.maxHeight = collapsing ? "0px" : `${Math.max(footer.scrollHeight, 1)}px`;
+				footer.style.opacity = collapsing ? "0" : "1";
+				if (collapsing) footer.style.padding = "0px";
+			}
+		});
+
+		let done = false;
+		const onEnd = ev => {
+			if (ev?.target !== dialog && ev?.propertyName && ev.propertyName !== "height") return;
+			if (done) return;
+			done = true;
+			dialog.removeEventListener("transitionend", onEnd);
+			finish();
+		};
+		dialog.addEventListener("transitionend", onEnd);
+		setTimeout(onEnd, SHOUSHA_COLLAPSE_MS + 80);
+	};
+
+	if (!isCollapsed) {
+		const fromH = Math.max(dialog.offsetHeight, collapsedH);
+		dialog.classList.add("dui-pcd-collapsed");
+		runTransition(fromH, collapsedH, true);
+		return;
+	}
+
+	// 展开：先测目标高度，再从标题条高度过渡上去（不瞬切）
+	dialog.style.setProperty("transition", "none");
+	dialog.classList.remove("dui-pcd-collapsed");
+	clearCollapseInline();
+	void dialog.offsetHeight;
+	const toH = Math.max(dialog.offsetHeight, collapsedH + 1);
+	runTransition(collapsedH, toH, false);
 }
 
 /**
@@ -2214,6 +2351,8 @@ function isAllCardChooseButton(dialog) {
 	const buttons = dialog?.buttons;
 	if (!Array.isArray(buttons) || !buttons.length) return false;
 	return buttons.every(btn => {
+		// 手杀 vcard 窄条不是真实手牌，不能套选手牌框
+		if (btn?.dataset?.vcard === "true" || btn?.classList?.contains("vcard")) return false;
 		if (!btn?.link) return btn?.classList?.contains("card");
 		const type = get.itemtype(btn.link);
 		return type === "card" || btn.classList?.contains("card");
@@ -2321,6 +2460,19 @@ function isHandOnlyChooseButton(event, dialog) {
  */
 function shouldSkipSkillCardDialog(dialog) {
 	if (dialog.classList.contains("prompt") || dialog.classList.contains("popped")) return true;
+	// 转化卡牌手杀样式：保留 vcard 分列，不要套选手牌框
+	if (dialog._shoushaButton) return true;
+	if (
+		dialog.classList.contains("decade-shousha-vcard") ||
+		dialog.classList.contains("decade-shousha-no-nature") ||
+		dialog.classList.contains("decade-shousha-vertical") ||
+		dialog.classList.contains("decade-shousha-multi")
+	) {
+		return true;
+	}
+	if (dialog.querySelector?.(".dialog-basic, .dialog-trick, .dialog-delay, .card[data-vcard='true']")) {
+		return true;
+	}
 	try {
 		if (ui.arena?.classList.contains("choose-character")) return true;
 	} catch (e) {}
@@ -2337,6 +2489,7 @@ export function enhancePlayerCardDialog(event, fallbackTitle, options = {}) {
 	const dialog = options.dialog || event?.dialog;
 	if (!dialog || typeof dialog !== "object" || !dialog.classList) return;
 	if (event?.directresult) return;
+	if (shouldSkipSkillCardDialog(dialog)) return;
 
 	let layout = options.layout || dialog.dataset.layout || "hej";
 	// 误判为 two-pile 时，按 DOM 形状纠正为攻心 move-bins / 分花色 suit-select
@@ -2741,6 +2894,90 @@ function installPlayerCardDialogConfirmUiSync() {
 			ui.create.confirm = wrapped._duiPcdOriginal;
 		}
 	};
+}
+
+/**
+ * 手杀转化 vcard 对话框：套顺手同款 tittle_bg 外框 + 金色标题（保留分列内容）
+ * @param {HTMLElement} dialog
+ * @param {string} [fallbackTitle]
+ */
+export function enhanceShoushaVcardDialogFrame(dialog, fallbackTitle = "选牌") {
+	if (!dialog?.classList?.contains("decade-shousha-vcard")) return;
+
+	const event = _status.event;
+	const skipSkillClass = new Set([
+		"skill-chooseToUse",
+		"skill-chooseToRespond",
+		"skill-chooseButton",
+		"skill-chooseButtonTarget",
+		"skill-phaseUse",
+		"skill-phase",
+		"skill-phaseZhunbei",
+		"skill-phaseJudge",
+		"skill-phaseDraw",
+		"skill-phaseDiscard",
+		"skill-phaseJieshu",
+		"skill-useSkill",
+		"skill-trigger",
+		"skill-arrangeTrigger",
+	]);
+	let titleFromClass = "";
+	for (const cls of dialog.classList) {
+		if (!cls.startsWith("skill-") || skipSkillClass.has(cls)) continue;
+		const id = cls.slice("skill-".length);
+		const fromSkill = translateSkillTitle(id, event?.player);
+		if (fromSkill) {
+			titleFromClass = fromSkill;
+			break;
+		}
+	}
+	const title =
+		(fallbackTitle && fallbackTitle !== "选牌" ? fallbackTitle : "") ||
+		titleFromClass ||
+		resolveParentTitle(event, fallbackTitle);
+	injectGoldTitle(dialog, title);
+	hidePromptCaptions(dialog);
+	applyDialogFrameSize(dialog);
+
+	dialog.dataset.layout = "shousha-vcard";
+	for (const prop of ["width", "left", "right", "top", "bottom", "min-height", "max-height", "height", "transform"]) {
+		dialog.style.removeProperty(prop);
+	}
+
+	const buttons = dialog.querySelector(".buttons");
+	if (buttons?.style) {
+		buttons.style.removeProperty("height");
+		buttons.style.removeProperty("left");
+		buttons.style.removeProperty("width");
+		buttons.style.display = "flex";
+		buttons.style.justifyContent = "center";
+		buttons.style.alignItems = "flex-start";
+		buttons.style.flexWrap = "nowrap";
+		buttons.style.zoom = "1";
+	}
+
+	// 框内栏进 footer；单选无确定，底部挂进度条+提示
+	const confirmBar = dialog._confirm || dialog.querySelector(".dialog-confirm");
+	if (confirmBar) {
+		dialog.classList.add("decade-shousha-has-confirm");
+	}
+	try {
+		import("./temp-card.js").then(m => m.syncShoushaFooterLayout?.(dialog)).catch(() => {});
+	} catch (e) {}
+
+	// 转化框打开时暂时藏外侧清除/底部确认
+	if (dialog.classList.contains("decade-shousha-vcard")) {
+		for (const control of Array.from(document.querySelectorAll("#dui-controls .control"))) {
+			const text = (control.textContent || "").replace(/\s+/g, "");
+			if (text.includes("清除选择")) {
+				control.classList.add("decade-shousha-hidden-control");
+				control.style?.setProperty?.("display", "none", "important");
+			} else if (control.classList.contains("lbtn-confirm") || control.classList.contains("combo-control")) {
+				control.classList.add("decade-shousha-temp-hide-confirm");
+				control.style?.setProperty?.("display", "none", "important");
+			}
+		}
+	}
 }
 
 /**

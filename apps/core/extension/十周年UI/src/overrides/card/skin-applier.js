@@ -175,6 +175,9 @@ function applyDynamicSkin(cardElement, skinKey, filename) {
  * @param {Array|Object} card - 卡牌信息
  */
 export function applyCardSkin(cardElement, card) {
+	// 手杀转化 vcard 窄条用 cardTitle，不走整图/分层美化
+	if (cardElement?.dataset?.vcard === "true" || cardElement?.classList?.contains("vcard")) return;
+
 	const cardName = Array.isArray(card) ? card[2] : card.name;
 	const cardNature = Array.isArray(card) ? card[3] : card.nature;
 

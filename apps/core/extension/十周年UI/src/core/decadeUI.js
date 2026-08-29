@@ -264,7 +264,6 @@ export const createDecadeUIObject = () => ({
 
 		const restoreFns = [];
 		restoreFns.push(...applyGameOverrides());
-		restoreFns.push(...applyTempCardOverrides());
 		restoreFns.push(...applyPlayerCardDialogOverrides());
 		restoreFns.push(...applyLibOverrides());
 		restoreFns.push(...applyDialogOverrides());
@@ -277,6 +276,9 @@ export const createDecadeUIObject = () => ({
 		override(ui, ride.ui);
 		override(game, ride.game);
 		override(get, ride.get);
+
+		// 必须在 ride.ui 替换 ui.create.button 之后再挂，否则手杀 vcard 牌名条会被盖掉
+		restoreFns.push(...applyTempCardOverrides());
 
 		// 数组型 content 步骤：递归 override 不一定整表替换，这里强制挂载
 		lib.element.content.chooseControl = createContentChooseControl(base.lib.element.content.chooseControl);

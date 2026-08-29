@@ -1618,7 +1618,7 @@
 	min-height: 52px;
 	padding: 12px 36px !important;
 	margin: 0 !important;
-	font-family: shousha, xinwei, serif;
+	font-family: shousha, serif;
 	font-size: clamp(18px, 2.4vw, 24px);
 	line-height: 1.4;
 	color: rgb(45, 32, 18);
@@ -1703,11 +1703,13 @@
 	transform: none !important;
 	width: min(480px, calc(100% - 32px)) !important;
 	max-width: calc(100% - 32px) !important;
+	overflow: hidden !important;
 	flex: 0 0 auto;
 	order: 2;
 	z-index: 24;
 	pointer-events: none;
 	box-sizing: border-box !important;
+	margin: 0 !important;
 }
 
 #arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn {
@@ -1784,8 +1786,20 @@
 
 #arena.decadeUI > .dialog.dui-player-card-dialog > #jindutiaopl.dui-pcd-progress-bar > div:first-child,
 #arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer > #jindutiaopl.dui-pcd-progress-bar > div:first-child {
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	margin: 0 !important;
+	height: 100% !important;
 	max-width: 100% !important;
 	box-sizing: border-box !important;
+}
+
+#arena.decadeUI > .dialog.dui-player-card-dialog > #jindutiaopl.dui-pcd-progress-bar > img,
+#arena.decadeUI > .dialog.dui-player-card-dialog > .dui-pcd-footer > #jindutiaopl.dui-pcd-progress-bar > img {
+	max-width: 100% !important;
+	left: 0 !important;
+	width: 100% !important;
 }
 
 #arena.decadeUI > .dialog.dui-player-card-dialog .buttons,
@@ -3108,4 +3122,700 @@
 #arena.decadeUI #judgeBox > .content-container,
 #arena.decadeUI #judgeBox > .content-container > .content {
 	display: none !important;
+}
+
+/* ============================================================
+ * 转化卡牌类界面手杀样式
+ * 对应 overrides/temp-card.js：vcard 窄条 / 临时牌 / 虚拟预览 / 确定取消
+ * 素材：
+ *   - 外框 → image/ui/dialog/tittle_bg.png（与顺手选牌框同款）
+ *   - cardTitle → image/ui/cardTitle/
+ *   - game_button_light / chongxin → ui/assets/lbtn/uibutton/
+ *   - 确定取消 → image/ui/dialog/
+ * ============================================================ */
+
+:root {
+	--dui-shousha-vcard-w: 10vw;
+	--dui-shousha-vcard-h: 5vw;
+	--dui-shousha-confirm-bar-h: 60px;
+	/* 由 syncShoushaFooterLayout 按实际子项写入；默认 0 不预留空带 */
+	--dui-shousha-footer-h: 0px;
+	--dui-shousha-confirm-w: 133px;
+	--dui-shousha-confirm-h: 50px;
+	--dui-shousha-reset-w: calc(var(--dui-shousha-confirm-h) * 184 / 60);
+	--dui-shousha-reset-h: var(--dui-shousha-confirm-h);
+	--dui-shousha-col-basic: calc(2 * var(--dui-shousha-vcard-w) + var(--dui-shousha-trick-gap));
+	--dui-shousha-trick-gap: 0.45vw;
+	--dui-shousha-col-gap: 4vw;
+	--dui-shousha-col-trick: calc(4 * var(--dui-shousha-vcard-w) + 3 * var(--dui-shousha-trick-gap));
+	--dui-shousha-col-basic-vertical: calc(1 * var(--dui-shousha-vcard-w));
+	--dui-shousha-col-trick-vertical: calc(4 * var(--dui-shousha-vcard-w) + 3 * var(--dui-shousha-trick-gap));
+}
+
+/* --- 外框：与顺手选牌框同款 tittle_bg；牌区与底部（进度/提示）分栏 --- */
+
+#arena.decadeUI > .dialog.decade-shousha-vcard {
+	--dui-pcd-img-w: 1334;
+	--dui-pcd-img-h: 125px;
+	--dui-pcd-lace: 49px;
+	--dui-pcd-slice-t: 62px;
+	--dui-pcd-slice-b: 45px;
+	--dui-pcd-slice-side: 16px;
+	/* 由 syncShoushaFooterLayout 按牌区实测写入；默认不撑空 */
+	--dui-shousha-frame-body: 0px;
+	--dui-shousha-frame-body-max: min(38vh, 380px);
+	--dui-shousha-frame-h: calc(
+		var(--dui-pcd-slice-t) + var(--dui-shousha-frame-body) + var(--dui-shousha-footer-h) + var(--dui-pcd-slice-b)
+	);
+	overflow: visible !important;
+	width: 100% !important;
+	max-width: none !important;
+	left: 0 !important;
+	right: 0 !important;
+	/* 相对 arena 上下居中（高度随内容变化） */
+	top: calc(50% - var(--dui-shousha-frame-h) / 2) !important;
+	bottom: auto !important;
+	margin: 0 !important;
+	transform: none !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	position: absolute !important;
+	aspect-ratio: auto;
+	height: var(--dui-shousha-frame-h) !important;
+	min-height: var(--dui-shousha-frame-h) !important;
+	max-height: none !important;
+	background: transparent !important;
+	background-image: none !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-width: var(--dui-pcd-slice-t) var(--dui-pcd-slice-side) var(--dui-pcd-slice-b) var(--dui-pcd-slice-side) !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.decade-shousha-no-nature {
+	--dui-shousha-frame-body-max: min(48vh, 480px);
+}
+
+/* 牌名区：底部让出 footer（进度条 + 提示词 [+ 取消/多选确定]） */
+#arena.decadeUI > .dialog.decade-shousha-vcard > .content-container {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: var(--dui-shousha-footer-h) !important;
+	width: 100% !important;
+	height: auto !important;
+	overflow: hidden auto !important;
+	pointer-events: auto !important;
+	background: transparent !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .content-container > .content {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	width: 100% !important;
+	height: auto !important;
+	min-height: 0 !important;
+	padding: 8px 2% 8px !important;
+	box-sizing: border-box !important;
+	background: transparent !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .content-container > .content > .caption.dui-prompt-caption,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dui-prompt-caption {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .content-container > .content > .buttons {
+	display: flex !important;
+	justify-content: center !important;
+	align-items: flex-start !important;
+	flex-wrap: nowrap !important;
+	gap: var(--dui-shousha-col-gap) !important;
+	column-gap: var(--dui-shousha-col-gap) !important;
+	width: 96% !important;
+	max-width: 1200px !important;
+	height: auto !important;
+	min-height: 0 !important;
+	margin: 0 auto !important;
+	left: auto !important;
+	zoom: 1 !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-gold-title-wrap {
+	left: 0;
+	right: 0;
+	width: 100%;
+	min-width: 0;
+	transform: none;
+	top: calc(0px - var(--dui-pcd-slice-t));
+	height: var(--dui-pcd-lace);
+	box-sizing: border-box;
+	aspect-ratio: auto;
+	justify-content: center;
+	overflow: visible;
+	z-index: 10;
+	border: none;
+	border-image: none;
+	background: none;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-gold-title-wrap > .dui-gold-title {
+	line-height: normal;
+	width: auto !important;
+	flex: 0 0 auto;
+	font-size: 36px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dui-pcd-arrow {
+	position: absolute;
+	left: 55%;
+	top: 50%;
+	width: 39px;
+	height: 31px;
+	margin: 0;
+	transform: translate(12px, -50%);
+	background: url("../../image/ui/dialog/arrow.png") center / contain no-repeat;
+	pointer-events: auto;
+	cursor: pointer;
+	z-index: 9;
+	transition: transform 0.2s linear;
+}
+
+/* 折叠/展开过渡中：裁切内容，避免生硬闪隐 */
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapse-anim {
+	overflow: hidden !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed {
+	width: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	top: calc(50% - 62.5px) !important;
+	height: var(--dui-pcd-img-h) !important;
+	min-height: var(--dui-pcd-img-h) !important;
+	max-height: var(--dui-pcd-img-h) !important;
+}
+
+/* 折叠态仍保留节点以便过渡；动画结束后由高度裁切，不瞬隐 */
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed > .content-container,
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed > .dui-shousha-footer {
+	pointer-events: none !important;
+	opacity: 0;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed > .dui-gold-title-wrap {
+	visibility: visible !important;
+	pointer-events: auto !important;
+	top: calc(0px - var(--dui-pcd-slice-t));
+	height: var(--dui-pcd-lace);
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed .dui-pcd-arrow {
+	transform: translate(12px, -50%) rotate(180deg);
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .content-container,
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer {
+	overflow: hidden;
+}
+
+/* 底部栈：取消/多选确定 → 进度条 → 提示词（自上而下）；高度随内容 */
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer {
+	position: absolute !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	width: 100% !important;
+	height: auto !important;
+	min-height: 0 !important;
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 6px;
+	padding: 4px 16px 8px !important;
+	box-sizing: border-box !important;
+	pointer-events: none !important;
+	z-index: 40;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-pcd-collapsed > .dui-shousha-footer {
+	pointer-events: none !important;
+}
+
+/* 确定栏：最上（进度条之上） */
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > .dialog-confirm,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dui-shousha-footer > .dialog-confirm {
+	position: relative !important;
+	top: auto !important;
+	bottom: auto !important;
+	left: auto !important;
+	right: auto !important;
+	width: 100% !important;
+	height: var(--dui-shousha-confirm-bar-h) !important;
+	min-height: var(--dui-shousha-confirm-bar-h) !important;
+	margin: 0 !important;
+	box-sizing: border-box !important;
+	display: block !important;
+	pointer-events: none !important;
+	z-index: 41;
+	order: 1;
+	flex: 0 0 auto;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > .dialog-confirm.decade-shousha-confirm-hidden,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dui-shousha-footer > .dialog-confirm.decade-shousha-confirm-hidden {
+	display: none !important;
+	height: 0 !important;
+	min-height: 0 !important;
+	overflow: hidden !important;
+	pointer-events: none !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-ok:not(.unclickable),
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-cancel,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-reset:not(.disabled) {
+	pointer-events: auto !important;
+	z-index: 42;
+}
+
+/* 确定居中；取消中间偏右；重新选择靠左 */
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-ok,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-cancel {
+	position: absolute !important;
+	top: 50% !important;
+	width: var(--dui-shousha-confirm-w) !important;
+	height: var(--dui-shousha-confirm-h) !important;
+	margin: 0 !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-ok {
+	left: 50% !important;
+	right: auto !important;
+	transform: translate(-50%, -50%);
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-ok.decade-shousha-hidden-ok,
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm.decade-shousha-no-ok .dialog-confirm-button-ok {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm-button-cancel {
+	left: auto !important;
+	right: max(18%, 48px) !important;
+	transform: translateY(-50%);
+	width: 143px !important;
+}
+
+/* 单选仅取消：中间偏右 */
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm.decade-shousha-no-ok .dialog-confirm-button-cancel {
+	left: calc(72% + 72px) !important;
+	right: auto !important;
+	transform: translate(-50%, -50%);
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard .dialog-confirm.has-reset .dialog-confirm-button-reset {
+	position: absolute !important;
+	left: max(20%, 48px);
+	right: auto !important;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--dui-shousha-reset-w) !important;
+	height: var(--dui-shousha-reset-h) !important;
+	background: none !important;
+	background-image: none !important;
+	margin: 0 !important;
+	pointer-events: auto !important;
+}
+
+/* 进度条：第 2 行（确定/取消之下） */
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > #jindutiaopl.dui-shousha-progress-bar,
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > #jindutiaopl.dui-pcd-progress-bar {
+	position: relative !important;
+	left: auto !important;
+	bottom: auto !important;
+	transform: none !important;
+	width: min(480px, calc(100% - 32px)) !important;
+	max-width: calc(100% - 32px) !important;
+	height: 16px !important;
+	min-height: 16px !important;
+	max-height: 16px !important;
+	overflow: hidden !important;
+	flex: 0 0 16px !important;
+	order: 2;
+	z-index: 41;
+	pointer-events: none !important;
+	box-sizing: border-box !important;
+	margin: 0 !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > #jindutiaopl > div:first-child {
+	position: absolute !important;
+	left: 0 !important;
+	top: 0 !important;
+	margin: 0 !important;
+	height: 100% !important;
+	max-width: 100% !important;
+	box-sizing: border-box !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > #jindutiaopl > img {
+	max-width: 100% !important;
+	left: 0 !important;
+}
+
+/* 提示词：第 3 行（最下） */
+#arena.decadeUI > .dialog.decade-shousha-vcard > .dui-shousha-footer > .dui-shousha-hint {
+	order: 3;
+	flex: 0 0 auto;
+	position: relative;
+	z-index: 42;
+	width: 100%;
+	max-width: 90%;
+	min-height: 28px;
+	margin: 4px 0 2px !important;
+	text-align: center;
+	font-family: "FZLBJW", "shousha", serif;
+	font-size: 18px;
+	line-height: 28px;
+	color: #f5e6c8;
+	text-shadow:
+		0 0 2px #3a2a12,
+		0 1px 2px rgba(0, 0, 0, 0.65);
+	pointer-events: none;
+	user-select: none;
+	box-sizing: border-box;
+	padding: 0 8px;
+}
+
+/* 底部栏外的「清除选择」彻底隐藏；转化框打开时暂时藏底部 lbtn-confirm */
+#dui-controls > .control.decade-shousha-hidden-control,
+#dui-controls .control.decade-shousha-hidden-control,
+#arena.decadeUI:has(.dialog.decade-shousha-vcard.decade-shousha-multi) #dui-controls > .control.stayleft,
+#arena.decadeUI:has(.dialog.decade-shousha-vcard.decade-shousha-no-nature) #dui-controls > .control.stayleft {
+	display: none !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden !important;
+	border: none !important;
+}
+
+#arena.decadeUI:has(.dialog.decade-shousha-vcard .dialog-confirm) #dui-controls > .control.lbtn-confirm,
+#arena.decadeUI:has(.dialog.decade-shousha-vcard .dialog-confirm) #dui-controls > .control.combo-control.lbtn-confirm,
+#arena.decadeUI:has(.dialog.decade-shousha-vcard .dui-shousha-footer) #dui-controls > .control.lbtn-confirm,
+#arena.decadeUI:has(.dialog.decade-shousha-vcard .dui-shousha-footer) #dui-controls > .control.combo-control.lbtn-confirm,
+#dui-controls > .control.decade-shousha-temp-hide-confirm,
+#dui-controls .control.decade-shousha-temp-hide-confirm {
+	display: none !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+
+/* --- 临时牌 / 虚拟预览（手牌区） --- */
+
+.temp-card-hidden-dialog {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+
+.handcards > .card.forcehide:not(.temp-card),
+.handcards1 > .card.forcehide:not(.temp-card),
+.handcards2 > .card.forcehide:not(.temp-card) {
+	filter: grayscale(1) brightness(0.5);
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+.card.temp-card,
+.card.vituralCard,
+.card[data-vitural-card="true"] {
+	opacity: 1 !important;
+	filter: none !important;
+}
+
+.card.temp-card.selected,
+.card.vituralCard.selected {
+	z-index: 10;
+}
+
+/* --- vcard 窄条牌名（cardTitle） --- */
+
+.card[data-vcard="true"].unselectable,
+.card[data-vcard="true"]:not(.selectable),
+.control.unclickable,
+.dialog-confirm > .unclickable {
+	pointer-events: none !important;
+	filter: grayscale(1);
+	-webkit-filter: grayscale(1);
+}
+
+.card[data-vcard="true"].unselectable,
+.card[data-vcard="true"]:not(.selectable) {
+	opacity: 1 !important;
+}
+
+.button.card[data-vcard="true"]::before {
+	border: none;
+	background-image: none;
+}
+
+.button.card[data-vcard="true"]::after {
+	box-shadow: none !important;
+}
+
+.button.card[data-vcard="true"] > .vcard-selected-border {
+	position: absolute;
+	left: -8%;
+	top: -21%;
+	width: 116%;
+	height: 130%;
+	background: url("../../ui/assets/lbtn/uibutton/game_button_light.png") 0 0 / 100% 100%;
+	opacity: 0;
+}
+
+.button.card[data-vcard="true"].selected > .vcard-selected-border {
+	opacity: 1;
+}
+
+.button.card[data-vcard="true"] {
+	margin: 0.1%;
+	width: var(--dui-shousha-vcard-w) !important;
+	height: var(--dui-shousha-vcard-h) !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	max-width: none !important;
+	max-height: none !important;
+	background-color: transparent !important;
+	background-size: 100% 100% !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	box-shadow: none !important;
+	border: none !important;
+	overflow: visible !important;
+}
+
+.button.card[data-vcard="true"].layered-card,
+.button.card[data-vcard="true"].decade-card,
+.button.card[data-vcard="true"].fullskin {
+	background-color: transparent !important;
+}
+
+.button.card[data-vcard="true"] > *:not(.vcard-selected-border):not(.--name):not(.caption) {
+	display: none !important;
+}
+
+/* --- 确定 / 取消 / 清除选择 --- */
+
+.dialog-confirm {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute !important;
+	width: 100%;
+	height: var(--dui-shousha-confirm-bar-h);
+	min-height: var(--dui-shousha-confirm-bar-h);
+	bottom: 24%;
+	left: 0;
+	margin: 0 !important;
+	z-index: 100;
+	gap: 24px;
+	pointer-events: auto;
+	box-sizing: border-box;
+}
+
+.dialog-confirm.decade-no-time {
+	bottom: 15%;
+}
+
+.decade-shousha-no-nature .dialog-confirm,
+.decade-shousha-vcard.decade-shousha-no-nature .dialog-confirm,
+.decade-shousha-multi .dialog-confirm,
+.decade-shousha-vcard.decade-shousha-multi .dialog-confirm,
+.decade-shousha-vcard .dialog-confirm {
+	bottom: auto !important;
+}
+
+.dialog-confirm-button-ok,
+.dialog-confirm-button-cancel {
+	position: relative;
+	width: var(--dui-shousha-confirm-w);
+	height: var(--dui-shousha-confirm-h);
+	background: url("../../image/ui/dialog/confirmButton.png") 0 0 / 100% 100%;
+	flex-shrink: 0;
+	box-sizing: border-box;
+	display: block;
+	opacity: 1;
+	visibility: visible;
+}
+
+.dialog-confirm-button-ok.decade-no-cancel {
+	margin-right: 0;
+}
+
+.dialog-confirm-button-cancel {
+	background-image: url("../../image/ui/dialog/cancel.png");
+}
+
+.dialog-confirm-button-reset {
+	width: var(--dui-shousha-reset-w);
+	height: var(--dui-shousha-reset-h);
+	background: none;
+	background-image: none;
+	flex-shrink: 0;
+	cursor: pointer;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	display: block;
+}
+
+.dialog-confirm-button-reset > img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-drag: none;
+}
+
+.dialog-confirm-button-reset.disabled {
+	/* 未选时也正常显示，仅禁止点击生效 */
+	opacity: 1;
+	pointer-events: none !important;
+	filter: none;
+}
+
+.dialog-confirm-button-reset.glow {
+	opacity: 1;
+	filter: brightness(1.12) drop-shadow(0 0 6px rgba(255, 220, 120, 0.85));
+}
+
+/* --- 基本 / 锦囊分列：同行高、同间距，左右行对齐 --- */
+
+.dialog-basic,
+.dialog-trick {
+	display: grid !important;
+	grid-auto-rows: var(--dui-shousha-vcard-h);
+	row-gap: var(--dui-shousha-trick-gap);
+	column-gap: var(--dui-shousha-trick-gap);
+	justify-content: start;
+	justify-items: stretch;
+	align-content: start;
+	align-items: start;
+	position: relative;
+	height: auto !important;
+	min-height: 0;
+	overflow: visible;
+	box-sizing: content-box;
+	padding: 0;
+	margin: 0;
+}
+
+.dialog-basic {
+	grid-template-columns: repeat(2, var(--dui-shousha-vcard-w));
+	width: var(--dui-shousha-col-basic) !important;
+}
+
+.dialog-trick {
+	grid-template-columns: repeat(4, var(--dui-shousha-vcard-w));
+	width: var(--dui-shousha-col-trick) !important;
+}
+
+.dialog-basic > .button.card[data-vcard="true"],
+.dialog-trick > .button.card[data-vcard="true"] {
+	margin: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.dialog-delay {
+	display: none !important;
+}
+
+.decade-shousha-vertical .dialog-basic,
+.decade-shousha-vcard.decade-shousha-vertical .dialog-basic {
+	grid-template-columns: repeat(1, var(--dui-shousha-vcard-w));
+	justify-content: center;
+	width: var(--dui-shousha-col-basic-vertical) !important;
+}
+
+.decade-shousha-vertical .dialog-trick,
+.decade-shousha-vcard.decade-shousha-vertical .dialog-trick {
+	width: var(--dui-shousha-col-trick-vertical) !important;
+}
+
+/* --- 多选转化：选中计数（须盖过 vcard 选中框） --- */
+
+.decade-shousha-multi .button .caption,
+.decade-shousha-vcard.decade-shousha-multi .button.card[data-vcard="true"] > .caption,
+.decade-shousha-vcard.decade-shousha-no-nature .button.card[data-vcard="true"] > .caption {
+	display: flex !important;
+	justify-content: flex-start;
+	align-items: center;
+	position: absolute !important;
+	left: 4%;
+	top: 60%;
+	transform: translateY(-50%);
+	width: 30%;
+	height: 30%;
+	min-height: 16px;
+	text-align: left;
+	background: url("../../image/ui/cardTitle/biaoji.png") 0 0 / 100% 100%;
+	padding: 0 0 1px 4px;
+	box-sizing: border-box;
+	z-index: 5;
+	pointer-events: none;
+	overflow: visible;
+	opacity: 1 !important;
+	visibility: visible !important;
+	filter: none !important;
+}
+
+.decade-shousha-multi .button .caption *,
+.decade-shousha-vcard.decade-shousha-multi .button.card[data-vcard="true"] > .caption *,
+.decade-shousha-vcard.decade-shousha-no-nature .button.card[data-vcard="true"] > .caption * {
+	color: rgb(203 203 203 / 78%) !important;
+	font-size: 16px !important;
+	line-height: 1 !important;
+	letter-spacing: -0.08em !important;
+}
+
+.decade-shousha-multi .button:not(.selected) .caption,
+.decade-shousha-vcard.decade-shousha-multi .button.card[data-vcard="true"]:not(.selected) > .caption,
+.decade-shousha-vcard.decade-shousha-no-nature .button.card[data-vcard="true"]:not(.selected) > .caption {
+	display: none !important;
+}
+
+.decade-shousha-multi .button .caption *,
+.decade-shousha-vcard.decade-shousha-multi .button.card[data-vcard="true"] > .caption *,
+.decade-shousha-vcard.decade-shousha-no-nature .button.card[data-vcard="true"] > .caption * {
+	text-shadow: none !important;
+	-webkit-text-stroke: 0 !important;
+}
+
+.decade-shousha-multi .button .caption,
+.decade-shousha-multi .button .caption * {
+	font-size: 16px !important;
+	font-family: xinwei, shousha, sans-serif !important;
+	letter-spacing: -0.08em !important;
+	text-shadow: none !important;
 }

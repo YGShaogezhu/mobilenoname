@@ -96,9 +96,9 @@ export const enableEquipCopy = {
  * @type {Object}
  */
 export const replace_dialog_shousha = {
-	name: "转化卡牌类界面手杀样式",
+	name: "转化卡牌类界",
 	init: true,
-	intro: "开启后，转化/视为类技能会把手牌区变暗并生成临时虚拟卡牌，像手杀一样选择，重启生效",
+	intro: "开启后，转化/视为类技能采用手杀交互，重启生效",
 };
 
 /**

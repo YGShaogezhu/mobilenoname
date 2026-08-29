@@ -69,24 +69,18 @@ const removeFirst = (parent, className) => {
 };
 
 /**
- * 取当前可见的选牌框
+ * 取当前可见的选牌框 / 转化框（进度条嵌入用）
  * @returns {HTMLElement|null}
  */
 const findActivePcdDialog = () => {
+	const isEmbed = d =>
+		d?.classList?.contains("dui-player-card-dialog") || d?.classList?.contains("decade-shousha-vcard");
 	const top = ui.dialog;
-	if (
-		top?.classList?.contains("dui-player-card-dialog") &&
-		!top.classList.contains("hidden") &&
-		top.isConnected
-	) {
+	if (isEmbed(top) && !top.classList.contains("hidden") && top.isConnected) {
 		return top;
 	}
 	for (const d of ui.dialogs || []) {
-		if (
-			d?.classList?.contains("dui-player-card-dialog") &&
-			!d.classList.contains("hidden") &&
-			d.isConnected
-		) {
+		if (isEmbed(d) && !d.classList.contains("hidden") && d.isConnected) {
 			return d;
 		}
 	}
@@ -102,17 +96,70 @@ export function syncProgressBarToPcdDialog() {
 	const dialog = findActivePcdDialog();
 	if (!bar || !dialog) return !!bar && !!dialog;
 	bar.classList.add("dui-pcd-progress-bar");
+	if (dialog.classList.contains("decade-shousha-vcard")) {
+		bar.classList.add("dui-shousha-progress-bar");
+	}
 	bar.style.removeProperty("position");
 	bar.style.removeProperty("left");
 	bar.style.removeProperty("bottom");
-	const footer = dialog.querySelector(":scope > .dui-pcd-footer") || dialog;
+	bar.style.removeProperty("width");
+	bar.style.removeProperty("margin");
+	const footer =
+		dialog.querySelector(":scope > .dui-pcd-footer") ||
+		dialog.querySelector(":scope > .dui-shousha-footer") ||
+		dialog;
 	if (bar.parentElement !== footer) {
 		footer.appendChild(bar);
 	}
+	requestAnimationFrame(() => fitProgressFillToTrack(bar));
 	import("../overrides/player-card-dialog.js")
 		.then(mod => mod.syncPcdFooterLayout?.())
 		.catch(() => {});
+	import("../overrides/temp-card.js")
+		.then(mod => mod.syncShoushaFooterLayout?.(dialog))
+		.catch(() => {});
 	return true;
+}
+
+/**
+ * 进度填充宽度对齐轨道实际宽度（避免仍按 620px 等旧值缩到框正中间）
+ * @param {HTMLElement} [bar]
+ */
+export function fitProgressFillToTrack(bar) {
+	bar = bar || document.getElementById(PROGRESS_BAR_ID);
+	if (!bar?.isConnected) return;
+	const trackW = Math.max(1, Math.round(bar.clientWidth) || 0);
+	if (!trackW) return;
+
+	const fill = bar.querySelector(":scope > div");
+	if (!fill) return;
+
+	fill.style.position = "absolute";
+	fill.style.left = "0";
+	fill.style.top = "0";
+	fill.style.right = "auto";
+	fill.style.margin = "0";
+	fill.style.maxWidth = "100%";
+	fill.style.height = "100%";
+	fill.style.boxSizing = "border-box";
+
+	const oldMax = Number(fill._progressMax) || Number(fill.data) || trackW;
+	const cur = Number(fill.data);
+	if (Number.isFinite(cur) && oldMax > 0) {
+		const ratio = Math.min(1, Math.max(0, cur / oldMax));
+		fill._progressMax = trackW;
+		fill.data = Math.max(0, Math.round(trackW * ratio));
+		fill.style.width = `${(fill.data / trackW) * 100}%`;
+	} else {
+		fill._progressMax = trackW;
+		fill.style.width = "100%";
+	}
+
+	for (const img of Array.from(bar.querySelectorAll(":scope > img"))) {
+		img.style.left = "0";
+		img.style.maxWidth = "100%";
+		img.style.width = "100%";
+	}
 }
 
 // ==================== 进度条配置 ====================
@@ -306,9 +353,11 @@ export function initPrecontentUI() {
 
 		const pcdDialog = findActivePcdDialog();
 		const inPcdDialog = !!pcdDialog;
+		const isShoushaVcard = !!pcdDialog?.classList?.contains("decade-shousha-vcard");
 		const container = document.createElement("div");
 		container.id = PROGRESS_BAR_ID;
 		if (inPcdDialog) container.classList.add("dui-pcd-progress-bar");
+		if (isShoushaVcard) container.classList.add("dui-shousha-progress-bar");
 		const cfg = getProgressBarConfig();
 
 		if (cfg.clearSpecial) delete window.jindutiaoTeshu;
@@ -340,22 +389,38 @@ export function initPrecontentUI() {
 			});
 		}
 
-		const footer = pcdDialog?.querySelector?.(":scope > .dui-pcd-footer");
+		const footer =
+			pcdDialog?.querySelector?.(":scope > .dui-pcd-footer") ||
+			pcdDialog?.querySelector?.(":scope > .dui-shousha-footer");
 		(inPcdDialog ? footer || pcdDialog : document.body).appendChild(container);
 
 		const runTimer = () => {
 			let progressMax = cfg.progressBar.data;
 			if (inPcdDialog) {
 				progressMax = Math.max(80, Math.round(container.clientWidth) || progressMax);
+				boxTime._progressMax = progressMax;
 				boxTime.data = progressMax;
-				boxTime.style.width = `${progressMax}px`;
+				boxTime.style.position = "absolute";
+				boxTime.style.left = "0";
+				boxTime.style.top = "0";
+				boxTime.style.margin = "0";
+				boxTime.style.height = "100%";
+				boxTime.style.maxWidth = "100%";
+				boxTime.style.width = "100%";
+				container.style.position = "relative";
+				container.style.overflow = "hidden";
 			}
 			const redAt = Math.max(20, progressMax * (RED_THRESHOLD / 395));
 			let interval = parseFloat(lib.config.extension_十周年UI_jindutiaoST);
 			if (inPcdDialog) interval = Math.max(10, interval * PCD_PROGRESS_SPEED);
 
 			window.timer = setInterval(() => {
-				boxTime.style.width = `${boxTime.data}px`;
+				const max = Number(boxTime._progressMax) || progressMax;
+				if (inPcdDialog && max > 0) {
+					boxTime.style.width = `${Math.max(0, (boxTime.data / max) * 100)}%`;
+				} else {
+					boxTime.style.width = `${boxTime.data}px`;
+				}
 				boxTime.style.backgroundColor = boxTime.data <= redAt ? "rgba(230,56,65,0.88)" : "rgb(230,151,91)";
 				if (--boxTime.data === 0) {
 					clearTimer("timer");
