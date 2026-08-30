@@ -451,6 +451,7 @@ function refreshJudgeBoxForNext(event, player) {
 	ensureJudgeAvatarLayer(box);
 
 	const judgingCard = player.judging[0];
+	clearJudgeThrownMark();
 	if (judgingCard) judgingCard.id = "judgeCard";
 	event.judgeCard = createJudgeDisplayCard(judgingCard);
 }
@@ -526,6 +527,7 @@ export function setupJudgeBox(event, player) {
 	}
 
 	const judgingCard = player.judging[0];
+	clearJudgeThrownMark();
 	if (judgingCard) judgingCard.id = "judgeCard";
 	event.judgeCard = createJudgeDisplayCard(judgingCard);
 }
@@ -647,6 +649,18 @@ export function moveJudgeCard(element) {
 ui.judgeCardmove = moveJudgeCard;
 
 /**
+ * 清除场上 thrown 判定弱化标记，避免弃牌区牌一直半透明
+ */
+function clearJudgeThrownMark() {
+	const marked = document.querySelectorAll(".card#judgeCard, .card.judge-highlight, .card.thrown#judgeCard, .card.thrown.judge-highlight");
+	for (const el of marked) {
+		if (el.id === "judgeCard") el.removeAttribute("id");
+		el.classList.remove("judge-highlight");
+		el.style?.removeProperty?.("opacity");
+	}
+}
+
+/**
  * 清除判定框 DOM
  */
 export function closeJudgeBox() {
@@ -654,6 +668,7 @@ export function closeJudgeBox() {
 		clearInterval(ui._judgeBoxClosePoll);
 		delete ui._judgeBoxClosePoll;
 	}
+	clearJudgeThrownMark();
 	preserveGainCards();
 	if (ui.judgeBox) {
 		ui.judgeBox.close?.();
@@ -681,36 +696,55 @@ export function closeJudgeBox() {
 ui.judgeBoxdel = closeJudgeBox;
 
 /**
+ * 连续判定进行中：保留左侧临时区牌，等技能父事件结束后再关框
+ * @param {GameEvent} event
+ * @returns {boolean} 是否已交给轮询关框
+ */
+function deferCloseUntilSessionEnd(event) {
+	const sessionRoot = getJudgeSessionRoot(event) || judgeSessionRoot;
+	if (!sessionRoot || sessionRoot.finished) return false;
+	if (!judgeCardGets.length && !ui.judgeBox) return false;
+	judgeSessionRoot = sessionRoot;
+	watchJudgeSkillParentEnd(sessionRoot);
+	return true;
+}
+
+/**
  * 琉璃 step 7-8：按回调结果决定关框或移牌到左侧暂存
  * @param {GameEvent} event
  * @param {GameEvent|null} callbackEvent
  */
 export async function handleJudgeBoxCleanup(event, callbackEvent) {
 	if (event.result?.bool == null) {
-		closeJudgeBox();
+		if (!deferCloseUntilSessionEnd(event)) closeJudgeBox();
 		return;
 	}
 
 	const judgeCard3 = event.judgeCard2 || event.judgeCard;
 
+	// 延时锦囊：快速结束判定框（judge2 仅成败动画，无左侧临时区）
+	if (event.card) {
+		closeJudgeBox();
+		return;
+	}
+
+	// 无 callback：单次技能判定应关框；若已有连续暂存则等父事件结束，勿清临时区
 	if (!callbackEvent) {
-		if (!event.judge2) {
-			closeJudgeBox();
-		}
+		if (judgeCardGets.length > 0 && deferCloseUntilSessionEnd(event)) return;
+		closeJudgeBox();
 		return;
 	}
 
 	if (!event.judge2) {
-		closeJudgeBox();
+		if (!deferCloseUntilSessionEnd(event)) closeJudgeBox();
 		return;
 	}
 
-	// 单次 judge 的 parent 结束不代表技能连续判定结束，不能据此关框
-	const shouldClose =
-		!callbackEvent || !event.result?.bool || callbackEvent._result?.bool === false;
+	// 连续判定结束（失败 / callback 不再继续）：保留临时区牌，等技能流程走完再关
+	const shouldClose = !event.result?.bool || callbackEvent._result?.bool === false;
 
 	if (shouldClose) {
-		closeJudgeBox();
+		if (!deferCloseUntilSessionEnd(event)) closeJudgeBox();
 		return;
 	}
 
