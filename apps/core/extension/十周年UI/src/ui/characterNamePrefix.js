@@ -7,7 +7,7 @@ import { lib, game, ui, get, ai, _status } from "noname";
  * 隐藏前缀列表
  * @type {string[]}
  */
-const HIDDEN_PREFIXES = ["新杀", "手杀", "OL", "TW"];
+const HIDDEN_PREFIXES = ["新杀", "手杀", "OL", "TW", "手杀界", "手杀神", "旧"];
 
 /**
  * 移除隐藏前缀
