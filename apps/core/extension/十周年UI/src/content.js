@@ -26,6 +26,7 @@ import { setupSsJiaobiao } from "./features/ssJiaobiao.js";
 import { setupSsEquipments } from "./features/ssEquipments.js";
 import { setupDualDeputyFrame } from "./features/dualDeputyFrame.js";
 import { setupStorageIntro } from "./features/storageIntro.js";
+import { setupChoosePopup } from "./features/choosePopup.js";
 
 // 音频模块
 import { setupSkillDieAudio, setupEnhancedAudio, setupCharacterAudio } from "./audio/index.js";
@@ -90,6 +91,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupSsEquipments();
 	setupDualDeputyFrame();
 	setupStorageIntro();
+	setupChoosePopup();
 	setupEnhancedAudio();
 	setupCharacterBackground();
 	setupCharacterNamePrefix();

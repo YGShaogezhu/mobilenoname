@@ -330,6 +330,7 @@ function getConfigsByTab(tabId) {
 			{ key: "shiliyouhua", name: "官方势力", type: "toggle" },
 			{ isTitle: true, name: "游戏功能" },
 			{ key: "enableEquipCopy", name: "装备入手", type: "toggle" },
+			{ key: "choosePopup", name: "手杀选牌弹出", type: "toggle" },
 			{ key: "replace_dialog_shousha", name: "转化卡牌类界面手杀样式", type: "toggle" },
 			{ key: "storageIntro", name: "手杀牌库显示", type: "toggle" },
 			{ key: "mx_decade_characterDialog", name: "自由选将筛选框", type: "select" },

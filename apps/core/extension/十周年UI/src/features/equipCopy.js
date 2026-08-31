@@ -176,6 +176,8 @@ function cleanup(event, player) {
  */
 export function setupEquipCopy() {
 	lib.hooks.checkBegin.add(async event => {
+		// 「手杀选牌弹出」已覆盖装备区弹出，避免重复
+		if (lib.config["extension_十周年UI_choosePopup"]) return;
 		if (!lib.config["extension_十周年UI_enableEquipCopy"]) return;
 
 		const player = event.player;
@@ -203,6 +205,7 @@ export function setupEquipCopy() {
 	});
 
 	lib.hooks.checkCard.add((card, event) => {
+		if (lib.config["extension_十周年UI_choosePopup"]) return;
 		if (!lib.config["extension_十周年UI_enableEquipCopy"] || !event.copyCards) return;
 
 		if (get.position(card) === "e" && card.classList.contains("selected")) {
@@ -215,6 +218,7 @@ export function setupEquipCopy() {
 	});
 
 	lib.hooks.checkEnd.add(event => {
+		if (lib.config["extension_十周年UI_choosePopup"]) return;
 		if (!lib.config["extension_十周年UI_enableEquipCopy"] || !event.copyCards) return;
 
 		for (const equip of event.player.getCards("e")) {
@@ -229,6 +233,7 @@ export function setupEquipCopy() {
 	});
 
 	lib.hooks.uncheckBegin.add(async (event, args) => {
+		if (lib.config["extension_十周年UI_choosePopup"]) return;
 		if (!lib.config["extension_十周年UI_enableEquipCopy"]) return;
 
 		const shouldCleanup = args.includes("card") && event.copyCards && (event.result || (["chooseToUse", "chooseToRespond"].includes(event.name) && !event.skill && !event.result));

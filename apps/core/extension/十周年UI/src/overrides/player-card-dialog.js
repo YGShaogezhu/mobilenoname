@@ -2360,6 +2360,26 @@ function isAllCardChooseButton(dialog) {
 }
 
 /**
+ * 是否应交给「手杀选牌弹出」入手（权计/排异等纯卡牌弹窗）
+ * @param {GameEvent} event
+ * @param {HTMLElement} dialog
+ * @returns {boolean}
+ */
+function shouldDeferToChoosePopup(event, dialog) {
+	if (!lib.config["extension_十周年UI_choosePopup"]) return false;
+	if (event?.name !== "chooseButton" && event?.name !== "chooseButtonTarget") return false;
+	if (!isAllCardChooseButton(dialog)) return false;
+	if (dialog.buttons.length > 25) return false;
+	if (isTwoRowHandChooseButton(event, dialog)) return false;
+	if (isEjOnlyChooseButton(event, dialog)) return false;
+	if (isMoveCardTwoPlayerEj(event, dialog)) return false;
+	for (const node of dialog.content?.querySelectorAll?.(".caption, .text.center") || []) {
+		if (/装备|判定/.test((node.textContent || "").replace(/\s+/g, ""))) return false;
+	}
+	return true;
+}
+
+/**
  * 魄袭：两组手牌 caption + 卡片
  * @param {GameEvent} event
  * @param {HTMLElement} dialog
@@ -2712,6 +2732,8 @@ export function tryEnhanceSkillCardDialog(dialog) {
 		return;
 	}
 	if (event?.name === "chooseButton") {
+		// 「手杀选牌弹出」开启时：纯卡牌 chooseButton（排异/权计等）改由入手逻辑处理，不套选牌框
+		if (shouldDeferToChoosePopup(event, dialog)) return;
 		if (isMoveCardTwoPlayerEj(event, dialog)) {
 			enhancePlayerCardDialog(event, resolveParentTitle(event, "移牌"), { dialog, layout: "two-ej-row" });
 			return;
