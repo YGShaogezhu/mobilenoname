@@ -102,6 +102,16 @@ export const replace_dialog_shousha = {
 };
 
 /**
+ * 手杀牌库显示配置
+ * @type {Object}
+ */
+export const storageIntro = {
+	name: "手杀牌库显示",
+	init: false,
+	intro: "开启后，标记类技能显示为移动版牌库样式（可展开/收起），重启生效",
+};
+
+/**
  * 自由选将筛选框配置
  * @type {Object}
  */
@@ -138,5 +148,6 @@ export const miscConfigs = {
 	mx_decade_characterDialog,
 	enableEquipCopy,
 	replace_dialog_shousha,
+	storageIntro,
 	stuff_title_end,
 };

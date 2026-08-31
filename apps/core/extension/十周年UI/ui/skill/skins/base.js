@@ -243,6 +243,7 @@ export function createBaseSkillPlugin(lib, game, ui, get, ai, _status, app) {
 					const node = this;
 					const info = node.info;
 					const player = node.parentNode.parentNode;
+					_status._decadePaikuOpen = false;
 
 					if (info.name) {
 						if (typeof info.name === "function") {
@@ -272,6 +273,10 @@ export function createBaseSkillPlugin(lib, game, ui, get, ai, _status, app) {
 							}
 						}
 					}
+
+					// 牌库弹层已打开时取消本体 tip，避免空气泡叠层
+					if (_status._decadePaikuOpen) return false;
+
 					uiintro.add(ui.create.div(".placeholder.slim"));
 				},
 			},

@@ -1,0 +1,343 @@
+/**
+ * 手杀牌库弹层样式
+ * 外框 / 牌区对齐顺手选牌框（dui-player-card-dialog 单行）
+ * 图片路径相对本文件：src/styles → image/ui/dialog
+ */
+
+.dialog#mobiledialog,
+#arena > .dialog#mobiledialog {
+	/* 与顺手 --dui-pcd-* 对齐
+	 * border-box 下 height 必须含上下边框，否则内容区会被 slice 吃掉：
+	 * 174 - 62 - 45 = 67px（原先 bug）
+	 */
+	--paiku-slice-t: 62px;
+	--paiku-slice-b: 45px;
+	--paiku-slice-side: 16px;
+	--paiku-row-h: 150px;
+	--paiku-gap: 12px;
+	--paiku-tab-w: calc(var(--paiku-row-h) * 45 / 164);
+	/* 内容区内高：gap + 牌行 + gap */
+	--paiku-inner-h: calc(var(--paiku-gap) + var(--paiku-row-h) + var(--paiku-gap));
+	/* 整框总高（对齐顺手 --dui-pcd-frame-h-1row） */
+	--paiku-frame-h: calc(
+		var(--paiku-slice-t) + var(--paiku-gap) + var(--paiku-row-h) + var(--paiku-gap) + var(--paiku-slice-b)
+	);
+
+	z-index: 9 !important;
+	transition: all 0.2s linear !important;
+	display: flex !important;
+	width: 100% !important;
+	max-width: none !important;
+	height: var(--paiku-frame-h) !important;
+	min-height: var(--paiku-frame-h) !important;
+	left: 0 !important;
+	right: 0 !important;
+	border-width: var(--paiku-slice-t) var(--paiku-slice-side) var(--paiku-slice-b) var(--paiku-slice-side) !important;
+	border-style: solid !important;
+	border-color: transparent !important;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png") !important;
+	border-image-slice: 62 16 45 16 fill !important;
+	border-image-repeat: stretch !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	position: absolute !important;
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	top: 10% !important;
+	overflow: visible !important;
+	box-sizing: border-box !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.window > .dialog#mobiledialog {
+	z-index: 66 !important;
+}
+
+.dialog#mobiledialog.contentx {
+	transition: all 0.2s linear;
+	width: 100%;
+	height: var(--paiku-inner-h);
+	position: absolute;
+}
+
+.dialog#mobiledialog.changeSkill {
+	width: 50%;
+	left: 25%;
+	border-image-slice: 62 350 45 350 fill;
+}
+
+.dialog#mobiledialog > .content,
+#arena > .dialog#mobiledialog > .content {
+	position: relative !important;
+	width: 100% !important;
+	height: 100% !important;
+	overflow: visible !important;
+	display: block !important;
+	box-sizing: border-box !important;
+	transition: all 0.2s linear;
+	background: transparent !important;
+}
+
+.dialog#mobiledialog.open {
+	height: 0px !important;
+	min-height: 0 !important;
+	top: calc(30% + 50px) !important;
+}
+
+.dialog#mobiledialog > .content-container.open {
+	height: 0px !important;
+	top: calc(30% + 50px) !important;
+}
+
+.dialog#mobiledialog > .arrow {
+	top: -50px;
+	left: 57%;
+	transform: rotate(0deg);
+	transition: all 0.2s linear;
+	width: 30px;
+	height: 30px;
+	background-image: url("../../image/ui/dialog/arrow.png");
+	background-size: 100% 100%;
+	z-index: 2;
+}
+
+.dialog#mobiledialog.open > .arrow,
+.dialog#mobiledialog.open > .game_skill_title:not(.ssTitle) > .game_skill_arrow,
+.dialog#mobiledialog.open > .game_skill_title.ssTitle > .game_skill_arrow {
+	transform: rotate(180deg);
+}
+
+.dialog#mobiledialog > .game_skill_title {
+	left: 0;
+	width: 100%;
+	top: calc(0px - var(--paiku-slice-t));
+	height: var(--paiku-slice-t);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.dialog#mobiledialog > .game_skill_title.ssTitle {
+	left: 0;
+	width: 100%;
+	top: calc(0px - var(--paiku-slice-t));
+	height: var(--paiku-slice-t);
+	text-align: center;
+	letter-spacing: 3px;
+	background: linear-gradient(
+			#c8beb4 1%,
+			#fcf8cc 12%,
+			#f3f0be,
+			#fef5a8,
+			#e1d275,
+			#c9b173,
+			#d6cb6f,
+			#a99355,
+			#ac9557,
+			#a38a51,
+			#a38a51,
+			#b29983,
+			#b19786,
+			#b19786,
+			#b19786,
+			#9b8583
+		),
+		linear-gradient(to right, #fcf8cc, #ac9557);
+	font-family: "HYZLSJ", shousha, serif;
+	font-size: 42px;
+	font-weight: normal;
+	-webkit-background-clip: text;
+	text-shadow: none;
+	-webkit-text-fill-color: transparent;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.dialog#mobiledialog > .game_skill_title:not(.ssTitle) > .game_skill_arrow,
+.dialog#mobiledialog > .game_skill_title.ssTitle > .game_skill_arrow {
+	bottom: auto;
+	right: auto;
+	position: relative;
+	transform: rotate(0deg);
+	transition: all 0.2s linear;
+	width: 36px;
+	height: auto;
+	margin-left: 4px;
+	padding-bottom: 0;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
+.dialog#mobiledialog > .game_skill_title img {
+	height: 70%;
+	width: auto;
+	pointer-events: none;
+}
+
+/* 点击外部遮罩 - 透明不灰屏 */
+.hokdibeijing {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0);
+	z-index: 100;
+}
+
+/* 侧签：与白卡内容盒同高 150（不是 margin-box） */
+.dialog#mobiledialog > .content > .sgs-quanjiname {
+	background-image: url("../../image/ui/dialog/name.png") !important;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	/* 白卡标准盒高 150；宽随 name.png 比例 */
+	height: 150px !important;
+	min-height: 150px !important;
+	max-height: 150px !important;
+	width: auto !important;
+	aspect-ratio: 45 / 164;
+	writing-mode: vertical-rl;
+	writing-mode: tb-rl;
+	font-size: clamp(16px, 1.85vw, 24px) !important;
+	top: var(--paiku-gap);
+	left: clamp(10px, 10vw, 64px);
+	color: #ffffff !important;
+	text-shadow: 0 0 2px #453325, 0 0 2px #453325, 0 0 2px #453325 !important;
+	font-family: shousha, "HYZLSJ", serif !important;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	position: absolute;
+	box-sizing: border-box !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: 2;
+}
+
+/* 牌区：高度 = 白卡 150，与侧签齐平 */
+.dialog#mobiledialog > .content > .sgs-quanjiarea {
+	background-color: transparent !important;
+	background-image: url("../../image/ui/dialog/area.png") !important;
+	background-repeat: no-repeat !important;
+	background-size: 100% 100% !important;
+	background-position: center !important;
+	left: calc(clamp(10px, 10vw, 64px) + (150px * 45 / 164) + 25px);
+	right: clamp(10px, 10vw, 64px);
+	width: auto !important;
+	height: 150px !important;
+	min-height: 150px !important;
+	max-height: 150px !important;
+	top: var(--paiku-gap);
+	display: block;
+	border-radius: 0;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	position: absolute;
+	box-sizing: border-box !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	scrollbar-width: none;
+	z-index: 1;
+}
+
+.dialog#mobiledialog > .content > .sgs-quanjiarea::-webkit-scrollbar {
+	display: none;
+}
+
+/* 白卡标准盒 108×150，与侧签同高 */
+.dialog#mobiledialog > .content > .sgs-quanjiarea > .card,
+.dialog#mobiledialog > .content > .sgs-quanjiarea.duiquanji > .card {
+	position: absolute !important;
+	top: 0 !important;
+	height: 150px !important;
+	width: 108px !important;
+	max-height: 150px !important;
+	aspect-ratio: auto;
+	transform: none !important;
+	zoom: 1 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	background-size: 100% 100% !important;
+}
+
+/* 观潮文案区 */
+.dialog#mobiledialog > .content > .sgs-guanchaoarea {
+	background-color: transparent !important;
+	background-image: url("../../image/ui/dialog/area.png") !important;
+	background-repeat: no-repeat !important;
+	background-size: 100% 100% !important;
+	background-position: center !important;
+	left: calc(clamp(10px, 10vw, 64px) + (150px * 45 / 164) + 25px);
+	width: min(420px, 50vw);
+	height: 150px !important;
+	min-height: 150px !important;
+	max-height: 150px !important;
+	top: var(--paiku-gap);
+	display: block;
+	border-radius: 0;
+	overflow-x: hidden !important;
+	overflow-y: auto !important;
+	position: absolute;
+	box-sizing: border-box;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.dialog#mobiledialog > .content > .sgs-guanchaoarea > .guanchaocaption {
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+	justify-content: center;
+	align-items: center;
+	display: grid;
+	color: #e7dac9;
+	font-family: shousha;
+	font-size: 20px;
+	text-align: center;
+	padding: 8px 12px;
+	box-sizing: border-box;
+}
+
+/* storageintro 对话框样式 */
+.dialog#storageintro {
+	transition: all 0.2s linear;
+	display: flex;
+	width: 100% !important;
+	/* border-box：总高需含上下边框，内高约 174 */
+	height: 281px !important;
+	left: 0 !important;
+	border-width: 62px 16px 45px 16px;
+	border-style: solid;
+	border-color: transparent;
+	border-image-source: url("../../image/ui/dialog/tittle_bg.png");
+	border-image-slice: 62 16 45 16 fill;
+	border-image-repeat: stretch;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	background: none;
+	box-shadow: none !important;
+	box-sizing: border-box !important;
+	top: 10% !important;
+}
+
+#window > .dialog#storageintro.popped {
+	z-index: 5;
+	width: 220px;
+	background: rgba(0, 0, 0, 0);
+	box-shadow: none;
+	border-radius: 6px;
+	transition: opacity 0.3s;
+	background-image: none;
+}
