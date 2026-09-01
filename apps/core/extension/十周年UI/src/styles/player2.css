@@ -180,6 +180,39 @@
 	opacity: 1;
 }
 
+/** 灰色目标不可选原因（用牌提示；大小/位置与封手牌分开） */
+.player > .target-ban-prompt {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 16px;
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+	font-family: "shousha", sans-serif;
+	line-height: 1.15;
+	letter-spacing: 0.08em;
+	color: #ffe9cc;
+	-webkit-text-stroke: 4px #7d121a;
+	paint-order: stroke fill;
+	text-shadow:
+		-1px -1px 0 #7d121a,
+		1px -1px 0 #7d121a,
+		-1px 1px 0 #7d121a,
+		1px 1px 0 #7d121a,
+		-2px 0 0 #7d121a,
+		2px 0 0 #7d121a,
+		0 -2px 0 #7d121a,
+		0 2px 0 #7d121a;
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 70;
+}
+
+.player.linked > .target-ban-prompt {
+	transform: translate(-50%, -50%);
+}
+
 /** 玩家尺寸 */
 #arena:not(.fewplayer) > .player:not(.minskin),
 #arena:not(.fewplayer):not([data-player_height=""]) > .player:not(.minskin) {
@@ -1257,6 +1290,42 @@
 	color: transparent;
 	-webkit-text-stroke: 4px #803b02;
 	z-index: -1;
+}
+
+/** 目标提示（targetprompt / targetprompt2） */
+.player > .damage.target-prompt,
+.player > .damage.normal-font.target-prompt,
+.player > .damage.target-prompt.damageadded,
+.player.minskin > .damage.normal-font.target-prompt {
+	font-family: "HYZLSJ";
+	font-size: 24px;
+	color: #fcfc91;
+	text-shadow: 2px 2px 5px black !important;
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 0;
+	opacity: 1;
+	white-space: nowrap;
+	pointer-events: none;
+	position: absolute;
+	z-index: 100;
+	transform: translate(-50%, -50%);
+	transition: none;
+}
+
+.player.linked > .damage.target-prompt,
+.player.linked > .damage.target-prompt.damageadded {
+	transform: translate(-50%, -50%);
+}
+
+.player > .damage.target-prompt::before {
+	content: none;
 }
 
 /** 联机计时器 */

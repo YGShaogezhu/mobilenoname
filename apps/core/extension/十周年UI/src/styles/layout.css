@@ -502,6 +502,35 @@ body > .background {
 	z-index: 8;
 }
 
+/** 技能封牌提示（用牌提示） */
+.card > .card-ban-prompt {
+	position: absolute;
+	left: 50%;
+	top: 55%;
+	transform: translate(-50%, -50%);
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+	font-family: "shousha", sans-serif;
+	font-size: 24px;
+	line-height: 1.15;
+	letter-spacing: 0.08em;
+	color: #ffe9cc;
+	-webkit-text-stroke: 6.5px #7d121a;
+	paint-order: stroke fill;
+	text-shadow:
+		-1px -1px 0 #7d121a,
+		1px -1px 0 #7d121a,
+		-1px 1px 0 #7d121a,
+		1px 1px 0 #7d121a,
+		-2px 0 0 #7d121a,
+		2px 0 0 #7d121a,
+		0 -2px 0 #7d121a,
+		0 2px 0 #7d121a;
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 10;
+}
+
 .card.invalided > .card-mask,
 #arena.selecting:not(.video) .handcards > .card:not(.selectable) > .card-mask,
 #arena.thrownhighlight > .card.thrown:not(.thrownhighlight):not(.drawingcard),

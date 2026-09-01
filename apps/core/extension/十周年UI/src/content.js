@@ -27,6 +27,7 @@ import { setupSsEquipments } from "./features/ssEquipments.js";
 import { setupDualDeputyFrame } from "./features/dualDeputyFrame.js";
 import { setupStorageIntro } from "./features/storageIntro.js";
 import { setupChoosePopup } from "./features/choosePopup.js";
+import { setupUseCardPrompt } from "./features/useCardPrompt.js";
 
 // 音频模块
 import { setupSkillDieAudio, setupEnhancedAudio, setupCharacterAudio } from "./audio/index.js";
@@ -92,6 +93,7 @@ export const finalizeDecadeUICore = (decadeUI, config) => {
 	setupDualDeputyFrame();
 	setupStorageIntro();
 	setupChoosePopup();
+	setupUseCardPrompt();
 	setupEnhancedAudio();
 	setupCharacterBackground();
 	setupCharacterNamePrefix();

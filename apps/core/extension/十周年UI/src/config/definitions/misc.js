@@ -102,6 +102,16 @@ export const choosePopup = {
 };
 
 /**
+ * 用牌提示配置
+ * @type {Object}
+ */
+export const useCardPrompt = {
+	name: "用牌提示",
+	init: true,
+	intro: "开启后：目标提示竖排美化；技能封禁手牌显示「无法使用」；灰色目标显示不可选原因（距离不够等）",
+};
+
+/**
  * 转化卡牌类界面手杀样式配置
  * @type {Object}
  */
@@ -158,6 +168,7 @@ export const miscConfigs = {
 	mx_decade_characterDialog,
 	enableEquipCopy,
 	choosePopup,
+	useCardPrompt,
 	replace_dialog_shousha,
 	storageIntro,
 	stuff_title_end,
