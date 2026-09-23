@@ -77,10 +77,10 @@ export const dynamicSkinConfig = {
 		},
 	},
 	scs_zhaozhong: {//赵忠
-		朝华同袍:{
+		朝华同袍: {
 			name: '赵忠/朝华同袍/XingXiang',
-			x: [0,0.25],
-			y: [0,0.5],
+			x: [0, 0.25],
+			y: [0, 0.5],
 			scale: 0.4,
 			angle: 0,
 			//speed: 1,
@@ -91,13 +91,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_bilan: {//毕岚
-		朝华同袍:{
+		朝华同袍: {
 			name: '毕岚/朝华同袍/XingXiang',
-			x: [0,1.3],
-			y: [0,0.3],
+			x: [0, 1.3],
+			y: [0, 0.3],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -108,10 +108,10 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_gaowang: {//高望
-		朝华同袍:{
+		朝华同袍: {
 			name: '高望/朝华同袍/XingXiang',
 			x: [0, 0.4],
 			y: [0, 0.4],
@@ -131,10 +131,10 @@ export const dynamicSkinConfig = {
 		},
 	},
 	scs_duangui: {//段珪
-		朝华同袍:{
+		朝华同袍: {
 			name: '段珪/朝华同袍/XingXiang',
-			x: [0,0.2],
-			y: [0,0.25],
+			x: [0, 0.2],
+			y: [0, 0.25],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -145,13 +145,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
-	}, 
+		},
+	},
 	scs_sunzhang: {//孙璋
-		朝华同袍:{
+		朝华同袍: {
 			name: '孙璋/朝华同袍/XingXiang',
-			x: [0,0.1],
-			y: [0,0.1],
+			x: [0, 0.1],
+			y: [0, 0.1],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -162,13 +162,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_hankui: {//韩悝
-		朝华同袍:{
+		朝华同袍: {
 			name: '韩悝/朝华同袍/XingXiang',
-			x: [0,0.5],
-			y: [0,0.1],
+			x: [0, 0.5],
+			y: [0, 0.1],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -179,13 +179,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_xiayun: {//夏恽
-		朝华同袍:{
+		朝华同袍: {
 			name: '夏恽/朝华同袍/XingXiang',
-			x: [0,0.6],
-			y: [0,0.15],
+			x: [0, 0.6],
+			y: [0, 0.15],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -196,13 +196,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_zhangrang: {//张让
-		朝华同袍:{
+		朝华同袍: {
 			name: '张让/朝华同袍/XingXiang',
-			x: [0,0.6],
-			y: [0,0.15],
+			x: [0, 0.6],
+			y: [0, 0.15],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -213,13 +213,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_lisong: {//栗嵩
-		朝华同袍:{
+		朝华同袍: {
 			name: '栗嵩/朝华同袍/XingXiang',
-			x: [0,0.5],
-			y: [0,0.1],
+			x: [0, 0.5],
+			y: [0, 0.1],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -230,13 +230,13 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
+		},
 	},
 	scs_guosheng: {//郭胜
-		朝华同袍:{
+		朝华同袍: {
 			name: '郭胜/朝华同袍/XingXiang',
-			x: [0,0.5],
-			y: [0,0.2],
+			x: [0, 0.5],
+			y: [0, 0.2],
 			scale: 0.5,
 			angle: 0,
 			//speed: 1,
@@ -247,8 +247,28 @@ export const dynamicSkinConfig = {
 				x: [0, 0.4],
 				y: [0, 0.5],
 			},
-		},  
-	},   
+		},
+	},
+
+	mb_zerong: {//手杀笮融
+		佛魔一如: {
+			name: '笮融/佛魔一如/XingXiang',
+			x: [0, 0.52],
+			y: [0, 0.14],
+			scale: 0.5,
+			skin: "skin0",
+			gongji: {
+				// action: 'GongJi',
+				skin: "skin0",
+			},
+			beijing: {
+				name: '笮融/佛魔一如/BeiJing',
+				x: [0, 1.06],
+				y: [0, 0.61],
+				scale: 0.3,
+			},
+		},
+	},
 };
 
 /**

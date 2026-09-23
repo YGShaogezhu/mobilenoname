@@ -228,12 +228,13 @@ function loadConfigs(container, tabId) {
 			input.addEventListener("blur", function () {
 				const newValue = this.value.trim();
 
-				if (newValue) {
-					if (configDef.onblur) {
-						configDef.onblur.call(this);
-					} else {
-						game.saveConfig(configKey, newValue);
+				if (configDef.onblur) {
+					configDef.onblur.call(this);
+					if (configDef.update) {
+						configDef.update();
 					}
+				} else if (newValue) {
+					game.saveConfig(configKey, newValue);
 
 					if (configDef.update) {
 						configDef.update();
@@ -329,8 +330,8 @@ function getConfigsByTab(tabId) {
 			{ key: "wujiangbeijing", name: "武将背景", type: "toggle" },
 			{ key: "shiliyouhua", name: "官方势力", type: "toggle" },
 			{ isTitle: true, name: "游戏功能" },
-			{ key: "enableEquipCopy", name: "装备入手", type: "toggle" },
 			{ key: "choosePopup", name: "手杀选牌弹出", type: "toggle" },
+			{ key: "choosePopupSkills", name: "按钮入手技能", type: "input" },
 			{ key: "useCardPrompt", name: "用牌提示", type: "toggle" },
 			{ key: "replace_dialog_shousha", name: "转化卡牌类界面手杀样式", type: "toggle" },
 			{ key: "storageIntro", name: "手杀牌库显示", type: "toggle" },

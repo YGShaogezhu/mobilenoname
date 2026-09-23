@@ -1,7 +1,7 @@
 /**
  * @fileoverview 手杀选牌弹出（卡牌弹出 + 按钮弹出）
- * @description 移植自王者荣耀 / 手杀美化：
- * 1) 装备区、判定区、武将牌上的可选牌弹出到手牌区
+ * @description 移植自王者荣耀 / 手杀美化，并替代原「装备入手」：
+ * 1) 装备区、判定区、武将牌上的可选牌弹出到手牌区（装备/延时用 cardequipd、carddelay 角标）
  * 2) chooseButton 中的卡牌按钮弹出到手牌区
  * 合并为一个开关控制
  *
@@ -9,6 +9,7 @@
  * 且不可调用已不存在的 card.lose()。
  */
 import { lib, game, ui, get, _status } from "noname";
+import { isChoosePopupButtonSkill } from "./choosePopupSkills.js";
 
 const CONFIG_KEY = "extension_十周年UI_choosePopup";
 const POPUP_FLAG = "_decadeChoosePopup";
@@ -86,6 +87,19 @@ function clearPopupCards(player) {
 	if (player === game.me || _status.video) {
 		ui.updatehl();
 	}
+}
+
+/**
+ * 装备 / 延时锦囊区域角标（替代原 equipHand.png）
+ * @param {HTMLElement} card
+ * @param {string} [position]
+ */
+function applyPopupZoneMark(card, position) {
+	card.querySelector(":scope > .decade-popup-zone")?.remove();
+	delete card.dataset.popupZone;
+	if (position !== "e" && position !== "j") return;
+	card.dataset.popupZone = position;
+	ui.create.div(`.decade-popup-zone.${position === "e" ? "equip" : "delay"}`, card);
 }
 
 /**
@@ -178,7 +192,12 @@ function setupCardPopup() {
 
 		const cardx = createPopupCard(card, "card");
 		cardx._realid = card;
-		cardx.addGaintag(get.position(card) + "_position");
+		const zone = get.position(card);
+		if (zone === "e" || zone === "j") {
+			applyPopupZoneMark(cardx, zone);
+		} else {
+			cardx.addGaintag(zone + "_position");
+		}
 
 		const onTap = function (e) {
 			e?.stopPropagation?.();
@@ -231,12 +250,54 @@ function setupCardPopup() {
 }
 
 /**
+ * 是否为虚拟牌 / 转化牌按钮（交给 temp-card，不走选牌弹出）
+ * @param {HTMLElement} button
+ * @returns {boolean}
+ */
+function isVirtualButton(button) {
+	if (!button) return false;
+	if (button.dataset?.vcard === "true" || button.classList?.contains("vcard")) return true;
+	const link = button.link;
+	if (!link) return false;
+	if (link.isCard === false) return true;
+	return false;
+}
+
+/**
+ * 当前事件是否已由虚拟牌入手（temp-card）接管
+ * @param {GameEvent} event
+ * @param {HTMLElement} [dialog]
+ * @param {Player} [player]
+ * @returns {boolean}
+ */
+function isTempCardSession(event, dialog, player) {
+	if (!event) return false;
+	if (event._selectableCards?.length) return true;
+	if (event._chooseTempCard) return true;
+	if (event._notchooseTempCard) return false;
+	const dlg = dialog || get.idDialog(event.dialog) || event.dialog;
+	if (dlg?._shoushaButton) return true;
+	if (dlg?.classList?.contains("decade-shousha-vcard")) return true;
+	if (dlg?.classList?.contains("temp-card-hidden-dialog")) return true;
+	if (dlg?.classList?.contains("decade-shousha-no-nature")) return true;
+	if (dlg?.classList?.contains("decade-shousha-vertical")) return true;
+	if (dlg?.classList?.contains("decade-shousha-multi")) return true;
+	const p = player || event.player;
+	if (p?.node && getHandcardNodes(p).some(c => c.classList?.contains("temp-card"))) return true;
+	if (Array.isArray(dlg?.buttons) && dlg.buttons.some(isVirtualButton)) return true;
+	return false;
+}
+
+/**
  * 手杀按钮弹出：chooseButton 中卡牌按钮隐藏对话框并弹出到手牌区
  */
 function setupButtonPopup() {
 	lib.hooks.checkBegin.add(function decadeChooseButtonPopup(event) {
 		if (!lib.config[CONFIG_KEY]) return;
 		if (!["chooseButton", "chooseButtonTarget"].includes(event.name)) return;
+
+		// 仅白名单技能走按钮入手，其它（五谷、贿生等）保留原窗口
+		if (!isChoosePopupButtonSkill(event)) return;
 
 		const player = event.player;
 		if (!player?.node) return;
@@ -272,6 +333,9 @@ function setupButtonPopup() {
 		}
 
 		const dialog = get.idDialog(event.dialog) || event.dialog || (Array.isArray(event.createDialog) ? 0 : ui.dialog);
+		// 虚拟牌 / temp-card 会话一律不碰
+		if (isTempCardSession(event, dialog, player)) return;
+
 		const canPopup = (() => {
 			if (!dialog?.buttons?.length || dialog.buttons.length > 25) return false;
 			if (_status.dieClose?.includes(dialog)) return false;
@@ -283,7 +347,7 @@ function setupButtonPopup() {
 			);
 			if (handCaptions.length >= 2) return false;
 			return dialog.buttons.every(button => {
-				if (button?.dataset?.vcard === "true" || button?.classList?.contains("vcard")) return false;
+				if (isVirtualButton(button)) return false;
 				const type = get.itemtype(button.link);
 				return type === "card" || type === "cards" || button.classList?.contains("card");
 			});
@@ -326,7 +390,12 @@ function setupButtonPopup() {
 			card._realid = button;
 			card.button = button;
 			card.link = button.link;
-			if (button.link?.gaintag) card.addGaintag(button.link.gaintag);
+			const zone = get.itemtype(button.link) === "card" ? get.position(button.link) : null;
+			if (zone === "e" || zone === "j") {
+				applyPopupZoneMark(card, zone);
+			} else if (button.link?.gaintag) {
+				card.addGaintag(button.link.gaintag);
+			}
 
 			const onTap = function (e) {
 				e?.stopPropagation?.();

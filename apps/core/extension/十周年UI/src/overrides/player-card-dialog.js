@@ -5,6 +5,7 @@
 import { lib, get, ui, game, _status } from "noname";
 import { applyLayeredCard, clearLayeredCard } from "./card/layered-card.js";
 import { syncProgressBarToPcdDialog } from "../ui/progress-bar.js";
+import { isChoosePopupButtonSkill } from "../features/choosePopupSkills.js";
 
 const CN_NAME_REG = /[\u4e00-\u9fff]+/;
 
@@ -2367,7 +2368,19 @@ function isAllCardChooseButton(dialog) {
  */
 function shouldDeferToChoosePopup(event, dialog) {
 	if (!lib.config["extension_十周年UI_choosePopup"]) return false;
+	if (!isChoosePopupButtonSkill(event)) return false;
 	if (event?.name !== "chooseButton" && event?.name !== "chooseButtonTarget") return false;
+	// 虚拟牌 / 转化框留给 temp-card
+	if (dialog?._shoushaButton) return false;
+	if (dialog?.classList?.contains("decade-shousha-vcard")) return false;
+	if (dialog?.classList?.contains("temp-card-hidden-dialog")) return false;
+	if (event?._chooseTempCard || event?._selectableCards?.length) return false;
+	if (Array.isArray(dialog?.buttons) && dialog.buttons.some(btn => {
+		if (btn?.dataset?.vcard === "true" || btn?.classList?.contains("vcard")) return true;
+		return btn?.link && btn.link.isCard === false;
+	})) {
+		return false;
+	}
 	if (!isAllCardChooseButton(dialog)) return false;
 	if (dialog.buttons.length > 25) return false;
 	if (isTwoRowHandChooseButton(event, dialog)) return false;

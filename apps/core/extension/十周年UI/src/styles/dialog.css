@@ -2443,50 +2443,45 @@
 	top: 2px;
 	width: calc(150px * 129 / 181);
 	height: 150px;
+	isolation: isolate;
+	overflow: visible;
 	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
 }
 
-.playerArea > div,
-.targetArea > div {
+.playerArea > div:not(.dui-compare-result),
+.targetArea > div:not(.dui-compare-result) {
 	top: -10px;
 	right: 5px;
 	z-index: 1;
+	opacity: 1 !important;
 }
 
-.playerArea > div[data-result="win"]::after,
-.targetArea > div[data-result="win"]::after {
-	background-image: url("../../image/ui/dialog/win.png") !important;
-	content: "";
+.playerArea > .dui-compare-result,
+.targetArea > .dui-compare-result {
+	position: absolute;
+	top: 60%;
+	left: 45%;
+	bottom: 0;
+	right: 0;
+	z-index: 20;
+	pointer-events: none;
+	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	z-index: 100;
-	opacity: 1;
+	animation: losewin 2s;
+}
+
+.playerArea > .dui-compare-result[data-result="win"],
+.targetArea > .dui-compare-result[data-result="win"] {
 	width: 80px;
 	height: 80px;
-	position: absolute;
-	bottom: -5px;
-	top: auto;
-	left: auto;
-	right: -25px;
-	animation: losewin 2s;
-	pointer-events: none;
+	background-image: url("../../image/ui/dialog/win.png");
 }
 
-.playerArea > div[data-result="lose"]::after,
-.targetArea > div[data-result="lose"]::after {
-	background-image: url("../../image/ui/dialog/lose.png") !important;
-	content: "";
-	background-size: 100% 100%;
-	z-index: 100;
-	opacity: 1;
+.playerArea > .dui-compare-result[data-result="lose"],
+.targetArea > .dui-compare-result[data-result="lose"] {
 	width: 100px;
 	height: 80px;
-	position: absolute;
-	bottom: -10px;
-	top: auto;
-	left: auto;
-	right: -30px;
-	animation: losewin 2s;
-	pointer-events: none;
+	background-image: url("../../image/ui/dialog/lose.png");
 }
 
 @keyframes losewin {
@@ -2504,13 +2499,13 @@
 	position: absolute;
 	display: flex;
 	flex-wrap: wrap;
-	align-items: flex-end;
+	align-items: center;
 	justify-content: center;
 	width: 100%;
 	left: 0;
 	right: 0;
-	bottom: 38%;
-	min-height: 260px;
+	bottom: 40%;
+	min-height: 200px;
 	padding: 0 4%;
 	overflow: visible;
 	z-index: 7;
@@ -2591,14 +2586,15 @@
 }
 
 .compareDialogMultiple .cardArea {
-	top: 60px;
+	top: auto;
 	width: auto;
 	height: 150px;
 	display: inline-flex;
 	align-items: flex-end;
+	gap: 10px;
 	position: relative;
 	white-space: nowrap;
-	margin: 0 6px;
+	margin: 0 14px;
 }
 
 .compareDialogMultiple .cardArea > .playerAreaName,
@@ -2608,7 +2604,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 35px;
-	height: 140px;
+	height: 150px;
 	background: url("../../image/ui/dialog/name.png") center / 100% 100% no-repeat;
 	writing-mode: vertical-lr;
 	font-family: shousha, "HYZLSJ", serif;
@@ -2624,37 +2620,20 @@
 	top: auto;
 	width: calc(150px * 129 / 181);
 	height: 150px;
+	isolation: isolate;
+	overflow: visible;
 	background: url("../../image/ui/dialog/cardbg.png") center / 100% 100% no-repeat;
 }
 
-.compareDialogMultiple .cardArea > .playerArea > div[data-result="win"]::after,
-.compareDialogMultiple .cardArea > .targetArea > div[data-result="win"]::after {
-	background-image: url("../../image/ui/dialog/win.png") !important;
-	content: "";
-	background-size: 100% 100%;
-	position: absolute;
-	width: 80px;
-	height: 80px;
-	bottom: -5px;
-	right: -25px;
-	z-index: 100;
-	animation: losewin 2s;
-	pointer-events: none;
+.compareDialogMultiple .cardArea > .playerArea > .card,
+.compareDialogMultiple .cardArea > .targetArea > .card {
+	z-index: 1 !important;
+	opacity: 1 !important;
 }
 
-.compareDialogMultiple .cardArea > .playerArea > div[data-result="lose"]::after,
-.compareDialogMultiple .cardArea > .targetArea > div[data-result="lose"]::after {
-	background-image: url("../../image/ui/dialog/lose.png") !important;
-	content: "";
-	background-size: 100% 100%;
-	position: absolute;
-	width: 100px;
-	height: 80px;
-	bottom: -10px;
-	right: -30px;
-	z-index: 100;
-	animation: losewin 2s;
-	pointer-events: none;
+.compareDialogMultiple .cardArea > .playerArea > .dui-compare-result,
+.compareDialogMultiple .cardArea > .targetArea > .dui-compare-result {
+	z-index: 20;
 }
 
 /** 确认框 */

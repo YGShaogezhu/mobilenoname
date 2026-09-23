@@ -296,18 +296,26 @@
 	box-shadow: none !important;
 }
 
-/** 装备点击效果 */
+/** 选牌弹出：装备 / 延时锦囊区域角标 */
 
-.epclick {
+.card > .decade-popup-zone {
 	position: absolute;
 	width: 106px;
 	height: 150px;
 	left: 2px;
 	top: 2px;
-	background-image: url(../../image/styles/shousha/equipHand.png);
 	background-size: 100% 100%;
+	background-repeat: no-repeat;
 	z-index: 7;
 	pointer-events: none;
+}
+
+.card > .decade-popup-zone.equip {
+	background-image: url(../../image/styles/shousha/cardequipd.png);
+}
+
+.card > .decade-popup-zone.delay {
+	background-image: url(../../image/styles/shousha/carddelay.png);
 }
 
 /** 手牌提示 */

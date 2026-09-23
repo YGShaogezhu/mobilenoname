@@ -82,23 +82,26 @@ export const shiliyouhua = {
 };
 
 /**
- * 装备手牌化配置
- * @type {Object}
- */
-export const enableEquipCopy = {
-	name: "装备入手",
-	init: true,
-	intro: "开启后，选择卡牌时装备区的牌会复制到手牌区显示，方便选择，即时生效（开启「手杀选牌弹出」时优先生效后者）",
-};
-
-/**
- * 手杀选牌弹出（卡牌弹出 + 按钮弹出合并）
+ * 手杀选牌弹出（卡牌弹出 + 按钮弹出合并，含原装备入手）
  * @type {Object}
  */
 export const choosePopup = {
 	name: "手杀选牌弹出",
 	init: true,
-	intro: "开启后，装备区/判定区/武将牌上的牌及选牌按钮会以卡牌形式弹出到手牌区（合并原手杀卡牌弹出与手杀按钮弹出），重启生效",
+	intro: "开启后，装备区/判定区/武将牌上的实体牌会弹出手牌区（装备/延时角标）；chooseButton 仅对白名单技能弹入手牌，其它仍用原选牌窗口",
+};
+
+/**
+ * 按钮入手技能白名单（逗号分隔）
+ * @type {Object}
+ */
+export const choosePopupSkills = {
+	name: "按钮入手技能",
+	init: "quanji,requanji,gzquanji,xinquanji,zyquanji,junquanji,paiyi,gzpaiyi,xinpaiyi,zypaiyi",
+	intro: "仅列出的技能在 chooseButton 时会弹入手牌区；未列入的（如五谷、贿生、一般选牌）仍用原选牌窗口。逗号分隔，留空则关闭按钮入手（装备/判定区弹出手牌仍生效）",
+	onblur() {
+		game.saveConfig("extension_十周年UI_choosePopupSkills", this.value.trim());
+	},
 };
 
 /**
@@ -166,8 +169,8 @@ export const miscConfigs = {
 	wujiangbeijing,
 	shiliyouhua,
 	mx_decade_characterDialog,
-	enableEquipCopy,
 	choosePopup,
+	choosePopupSkills,
 	useCardPrompt,
 	replace_dialog_shousha,
 	storageIntro,

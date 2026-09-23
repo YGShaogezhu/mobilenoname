@@ -415,9 +415,10 @@ function createCompareMeanwhilePanel(player, targets, eventName) {
 function appendCardToSlot(selector, card, owner) {
 	const slot = document.querySelector(selector);
 	if (!slot || !card) return;
-	const node = card.copy();
+	const node = card.copy(false);
 	node.card = card;
 	node.style.setProperty("transform", "translate(0px, 0px) scale(1)", "");
+	node.style.setProperty("opacity", "1", "");
 	slot.style.setProperty("transform", "translate(0px, 0px) scale(1)", "");
 	applyCompareWhiteCard(node, owner);
 	slot.appendChild(node);
@@ -429,8 +430,13 @@ function appendCardToSlot(selector, card, owner) {
  * @param {boolean} win
  */
 function setSlotResult(slot, win) {
-	if (!slot?.firstChild) return;
-	slot.firstChild.dataset.result = win ? "win" : "lose";
+	if (!slot) return;
+	slot.dataset.result = win ? "win" : "lose";
+	let mark = slot.querySelector(":scope > .dui-compare-result");
+	if (!mark) {
+		mark = ui.create.div(".dui-compare-result", slot);
+	}
+	mark.dataset.result = win ? "win" : "lose";
 }
 
 /**
@@ -991,10 +997,12 @@ export function contentChooseToCompareMultiple() {
 		},
 		async (event, trigger, player) => {
 			if (event.callback) {
-				game.broadcastAll((card1, card2) => {
-					if (card1.clone) card1.clone.style.opacity = 0.5;
-					if (card2.clone) card2.clone.style.opacity = 0.5;
-				}, event.card1, event.card2);
+				if (!window.decadeUI) {
+					game.broadcastAll((card1, card2) => {
+						if (card1.clone) card1.clone.style.opacity = 0.5;
+						if (card2.clone) card2.clone.style.opacity = 0.5;
+					}, event.card1, event.card2);
+				}
 				const next = game.createEvent("compareMultiple");
 				next.player = player;
 				next.target = event.target;

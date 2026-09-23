@@ -1,9 +1,8 @@
 /**
- * 装备牌处理模块入口 - 手牌化装备（装备入手）
+ * 装备牌处理模块入口 - 选手牌「全选」增强
  */
 
 import { lib, game, ui, get } from "noname";
-import { setupEquipCopy } from "./equipCopy.js";
 import { wrapAround } from "../utils/safeOverride.js";
 
 /**
@@ -24,8 +23,8 @@ export function setupEquipHand() {
 			const player = event2.player;
 
 			const selecteds = [...ui.selected.cards].map(card => {
-				const copy = player.getCards("s", i => i.relatedCard === card)[0];
-				return copy || card;
+				const popup = player.getCards("hs", i => i._realid === card && i._decadeChoosePopup)[0];
+				return popup || card;
 			});
 			ui.selected.cards.length = 0;
 			game.check();
@@ -50,6 +49,4 @@ export function setupEquipHand() {
 			}
 		}));
 	});
-
-	setupEquipCopy();
 }

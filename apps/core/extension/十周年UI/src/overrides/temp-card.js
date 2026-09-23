@@ -28,6 +28,7 @@ const MULTI_SELECT_SKILLS = ["sbkanpo", "sb_kanpo", "twkanpo"];
 const NO_NATURE_SKILLS = ["sbkanpo", "sb_kanpo", "twkanpo"];
 /** 看破类：提示词按可记录次数区分 */
 const KANPO_HINT_SKILLS = ["sbkanpo", "sb_kanpo", "twkanpo"];
+
 /** 转化选牌：基本牌展示顺序（杀闪后接火杀雷杀，再桃酒） */
 const SHOUSHA_BASIC_ORDER = ["sha", "shan", "tao", "jiu"];
 /** 转化选牌：属性杀顺序（插在闪之后） */
