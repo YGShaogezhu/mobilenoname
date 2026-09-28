@@ -3065,7 +3065,7 @@ const skills = {
 		async cost(event, trigger, player) {
 			event.result = await player
 				.chooseTarget(get.prompt2(event.skill), (card, player, target) => {
-					return target.countCards("h") > 0 && target != player;
+					return target.hasCards("h") && target != player;
 				})
 				.set("ai", target => {
 					const player = get.player();
@@ -3089,7 +3089,7 @@ const skills = {
 					.set("filterOk", () => {
 						const player = get.player();
 						const selected = ui.selected.cards;
-						if (!selected.length) {
+						if (!selected?.length) {
 							return false;
 						}
 						return (
@@ -3108,7 +3108,7 @@ const skills = {
 							if (att > 0) {
 								return 8 - get.value(card);
 							}
-							return Math.ceil(get.number(card, player) / 4) * (6 - get.value(card));
+							return Math.ceil(get.number(card, player) / 4) * Math.max(1, 6 - get.value(card));
 						}
 						return 0;
 					})
@@ -4212,9 +4212,21 @@ const skills = {
 				target.addGaintag(target.getCards("h"), "twsbfangzhu");
 			}
 		},
+		ai: {
+			maixie_defend: true,
+			effect: {
+				target(card, player, target) {
+					if (player.hasSkillTag("jueqing", false, target)) {
+						return [1, -1];
+					}
+					return 0.8;
+				},
+			},
+		},
 		group: "twsbfangzhu_liufang",
 		subSkill: {
 			liufang: {
+				audio: "twsbfangzhu",
 				trigger: {
 					global: "phaseBegin",
 				},
@@ -6582,7 +6594,7 @@ const skills = {
 				})
 				.set(
 					"cards",
-					(function () {
+					(() => {
 						let cards = player
 							.getCards("h")
 							.slice(0)
@@ -6590,7 +6602,7 @@ const skills = {
 						let result = [];
 						while (result.length < target.countCards("h")) {
 							let card = cards.shift();
-							if (get.value(card) <= 5) {
+							if (card != null && get.value(card) <= 5) {
 								result.push(card);
 							} else {
 								break;
@@ -12893,7 +12905,7 @@ const skills = {
 					if (!hs.length || !ts.length) {
 						return 0;
 					}
-					if (get.number(hs[0]) > get.number(ts[0]) || get.number(hs[0]) - ts.length >= 9 + Math.min(2, player.hp / 2)) {
+					if ((get.attitude(player, target) < 0) && (get.number(hs[0]) > get.number(ts[0]) || get.number(hs[0]) - ts.length >= 9 + Math.min(2, player.hp / 2))) {
 						return get.sgnAttitude(player, target) * get.effect(target, { name: "shunshou_copy2" }, player, player);
 					}
 					return 0;
@@ -19745,6 +19757,7 @@ const skills = {
 		},
 	},
 	twruilian2: {
+		audio: "twruilian",
 		trigger: { global: "phaseEnd" },
 		direct: true,
 		charlotte: true,
@@ -22133,10 +22146,10 @@ const skills = {
 		enable: "phaseUse",
 		usable: 1,
 		filterTarget: true,
-		/*limited: true,
+		//limited: true,
 		skillAnimation: true,
 		animationColor: "qun",
-		async cost(event, trigger, player) {
+		/*async cost(event, trigger, player) {
 			event.result = await player
 				.chooseTarget(get.prompt2(event.skill))
 				.set("ai", target => {
@@ -27287,7 +27300,7 @@ const skills = {
 		},
 		direct: true,
 		filter(event, player) {
-			return player.countCards("he") > 0;
+			return player.hasCards("he");
 		},
 		content() {
 			"step 0";
@@ -27982,6 +27995,8 @@ const skills = {
 						const player = get.player();
 						if (button.link[2] == "dz_mantianguohai" && player.countCards("hs", "dz_mantianguohai") < 2) {
 							return 10;
+						} else if (player.countCards("hs", button.link[2]) == 1) {
+							return 4 + get.value({ name: button.link[2] });
 						}
 						return get.value({ name: button.link[2] });
 					})
@@ -28070,7 +28085,8 @@ const skills = {
 					filterCard: lib.filter.cardDiscardable,
 					filterTarget: true,
 					ai1(card) {
-						return 8 - get.value(card);
+						if (card.name == "dz_mantianguohai") return 0.1;
+						return 10 - get.value(card);
 					},
 					ai2(target) {
 						if (target.hasJudge("lebu")) {
@@ -28092,6 +28108,32 @@ const skills = {
 			} = event;
 			await player.discard(cards);
 			target.insertPhase();
+		},
+		ai: {
+			effect: {
+				player(card, player, target) {
+					let bool = false;
+					const history = player.getHistory("useCard"),
+						map = {};
+					if (history.length) {
+						for (const evt of history) {
+							if (get.type2(evt.card) == "trick") {
+								if (!map[evt.card.name]) {
+									map[evt.card.name] = true;
+								} else {
+									bool = true;
+									break;
+								}
+							}
+						}
+						if (bool && get.type(card) == "trick" && player == _status.currentPhase) {
+							if (!player.needsToDiscard() || card.name == "dz_mantianguohai") {
+								return "zeroplayertarget";
+							}
+						}
+					}
+				},
+			},
 		},
 	},
 	//tw葛玄

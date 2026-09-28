@@ -6508,6 +6508,7 @@ export class Player extends HTMLDivElement {
 	 */
 	chooseCardOL(params) {
 		const next = game.createEvent("chooseCardOL");
+		next.player = this;
 		next._args = [];
 
 		const args = [...arguments];
@@ -9058,6 +9059,7 @@ export class Player extends HTMLDivElement {
 		}
 		next.filterStop = function () {
 			if (this.num <= 0 || this.player.isHealthy()) {
+				this.num = 0;
 				delete this.filterStop;
 				this.finish();
 				this._triggered = null;
@@ -11349,8 +11351,8 @@ export class Player extends HTMLDivElement {
 					player.additionalSkills[skill] = [];
 				}
 				for (var i = 0; i < skillsToAdd.length; i++) {
-					player.addSkill(skillsToAdd[i], null, true, true);
 					player.additionalSkills[skill].push(skillsToAdd[i]);
+					player.addSkill(skillsToAdd[i], null, true, true);
 				}
 				game.broadcast(
 					(player, map) => {
@@ -14928,7 +14930,7 @@ export class Player extends HTMLDivElement {
 			let node = arguments[0];
 			let eventInfo = arguments[2],
 				player = this;
-			if (eventInfo !== false) {
+			if (eventInfo == null) {
 				eventInfo = get.cardsetion(player);
 			}
 			if (eventInfo?.length) {

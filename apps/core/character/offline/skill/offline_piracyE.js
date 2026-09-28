@@ -13,43 +13,43 @@ const skills = {
 		},
 		filter(event, player) {
 			const target = game.findPlayer(current => current.getSeatNum() == 1);
-			if (_status.currentPhase !== target) {
+			if (!target?.isIn()) {
 				return false;
 			}
 			if (event.name == "phase") {
-				const cards = event.player
+				const cards = target
 					.getHistory("useCard")
 					.filter(evt => ["basic", "trick"].includes(get.type(evt.card)))
-					.map(evt => get.autoViewAs({ name: evt.card.name, nature: evt.card.nature, isCard: true }, "unsure"))
-					.flat()
+					.flatMap(evt => get.autoViewAs({ name: evt.card.name, nature: evt.card.nature, isCard: true }, "unsure"))
 					.unique();
-				return cards.some(card => player.hasUseTarget(card));
+				return cards.some(card => player.hasUseTarget(card)) && event.player == target;
 			}
-			if (!event.getg?.(_status.currentPhase)?.length) {
-				return false;
-			}
-			return event.getParent(2)?.name !== "peersheng";
+			const cards = event.getg?.(target);
+			return event.getParent(2)?.name !== "peersheng" && cards?.length > 0;
 		},
 		async content(event, trigger, player) {
+			const target = game.findPlayer(current => current.getSeatNum() == 1);
 			if (trigger.name == "phase") {
-				const cards = trigger.player
+				const cards = target
 					.getHistory("useCard")
 					.filter(evt => ["basic", "trick"].includes(get.type(evt.card)))
-					.map(evt => get.autoViewAs({ name: evt.card.name, nature: evt.card.nature, isCard: true }, "unsure"))
-					.flat();
+					.flatMap(evt => get.autoViewAs({ name: evt.card.name, nature: evt.card.nature, isCard: true }, "unsure"));
 				while (true) {
 					if (cards.some(card => player.hasUseTarget(card))) {
 						const result = await player
 							.chooseButton({
 								createDialog: ["二圣：你可以视为使用一张牌", [cards, "vcard"]],
-								filterButton(button) {
-									const player = get.player();
+								filterButton(button, player) {
 									const card = button.link;
 									return player.hasUseTarget(card);
 								},
 								ai(button) {
 									const player = get.player();
 									const card = button.link;
+									//防止ai只杀不酒
+									if (card.name == "jiu") {
+										return 114514;
+									}
 									return player.getUseValue(card);
 								},
 							})
@@ -66,7 +66,7 @@ const skills = {
 					}
 				}
 			} else {
-				await player.draw({ num: trigger.getg(_status.currentPhase).length });
+				await player.draw({ num: trigger.getg(target).length });
 			}
 		},
 	},
@@ -550,7 +550,8 @@ const skills = {
 					.forResult();
 				if (result?.bool && result.links?.length) {
 					const skill = result.links[0];
-					await player.addAdditionalSkills(event.name, skill);
+					const skills = player.additionalSkills?.[event.name] ?? [];
+					await player.addAdditionalSkills(event.name, skills.concat([skill]));
 					lib.card["huashen_card_" + name].skills.push(skill);
 				}
 			}
@@ -1133,7 +1134,7 @@ const skills = {
 			event.result = await player
 				.chooseTarget({
 					prompt: get.prompt(event.skill),
-					prompt2: "选择一名其他角色令其回复一点体力",
+					prompt2: "选择一名其他角色令其回复1点体力",
 					filterTarget(card, player, target) {
 						return target !== player && target.isDamaged();
 					},
@@ -1421,7 +1422,7 @@ const skills = {
 				},
 			},
 		},
-		subSkill: { 
+		subSkill: {
 			backup: {},
 			used: { charlotte: true, onremove: true },
 		},
@@ -1474,6 +1475,7 @@ const skills = {
 	},
 	//e郭照
 	pepianchong: {
+		audio: "pianchong",
 		trigger: { player: "phaseDrawBegin1" },
 		check(event, player) {
 			return true;
@@ -1492,6 +1494,7 @@ const skills = {
 		},
 		subSkill: {
 			effect: {
+				audio: "pepianchong",
 				trigger: {
 					player: ["loseAfter"],
 					global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
@@ -1519,6 +1522,7 @@ const skills = {
 		},
 	},
 	pezunwei: {
+		audio: "zunwei",
 		enable: "phaseUse",
 		usable: 1,
 		filter(event, player) {
