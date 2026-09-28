@@ -24,9 +24,6 @@ export const jindutiaoYangshi = {
 	item: {
 		0: "关闭",
 		1: "手杀进度条",
-		2: "十周年PC端进度条",
-		3: "十周年客户端进度条",
-		4: "一将成名进度条",
 	},
 	update: onJindutiaoYangshiUpdate,
 };
@@ -75,9 +72,6 @@ export const JDTSYangshi = {
 	item: {
 		0: "关闭",
 		1: "手杀阶段提示",
-		2: "十周年阶段提示",
-		3: "OL阶段提示",
-		4: "欢乐阶段提示",
 	},
 	update: onJDTSYangshiUpdate,
 };
@@ -90,22 +84,8 @@ export const GTBBYangshi = {
 	name: "狗托播报",
 	init: "1",
 	intro: "开启后，顶部会出现滚动播报栏",
-	item: { 0: "关闭", 1: "手杀", 2: "十周年" },
+	item: { 0: "关闭", 1: "手杀" },
 	onclick: onGTBBYangshiClick,
-};
-
-/**
- * 播报字体配置
- * @type {Object}
- */
-export const GTBBFont = {
-	name: "播报字体",
-	init: "on",
-	intro: "切换狗托播报字体（即时生效）",
-	item: {
-		on: '<font face="shousha">手杀',
-		off: '<font face="yuanli">十周年',
-	},
 };
 
 /**
@@ -203,7 +183,6 @@ export const componentConfigs = {
 	jindutiaoSet,
 	JDTSYangshi,
 	GTBBYangshi,
-	GTBBFont,
 	GTBBTime,
 	playerMarkStyle,
 	loadingStyle,

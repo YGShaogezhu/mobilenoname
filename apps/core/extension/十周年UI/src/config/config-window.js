@@ -312,7 +312,6 @@ function getConfigsByTab(tabId) {
 			{ isTitle: true, name: "界面元素" },
 			{ key: "JDTSYangshi", name: "阶段提示", type: "select" },
 			{ key: "GTBBYangshi", name: "狗托播报", type: "select" },
-			{ key: "GTBBFont", name: "播报字体", type: "select" },
 			{ key: "GTBBTime", name: "时间间隔", type: "select" },
 			{ key: "playerMarkStyle", name: "标记样式", type: "select" },
 			{ key: "loadingStyle", name: "光标+loading框", type: "select" },

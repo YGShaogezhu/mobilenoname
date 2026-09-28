@@ -106,12 +106,10 @@ function getCharacterTitle(charName) {
 }
 
 /**
- * 创建跑马灯HTML内容
- * @param {object} config - 配置对象
- * @param {string} config.GTBBFont - 字体配置
+ * 创建跑马灯HTML内容（手杀样式）
  * @returns {string} HTML字符串
  */
-function createMarqueeHTML(config) {
+function createMarqueeHTML() {
 	const nickname = lib.config.connect_nickname;
 	const randomNames = mapCharacters(getDisplayName);
 	const skins = mapCharacters(name => {
@@ -130,18 +128,13 @@ function createMarqueeHTML(config) {
 	const general = generals.randomGet();
 	const reward = [`<font color="#56e4fa">${skin}</font>`, `<font color="#f3c20f">${general}</font>`].randomGet();
 
-	const useCustomFont = config.GTBBFont !== "off";
-	const fontset = useCustomFont ? "FZLBJW" : "yuanli";
-	const colorA = useCustomFont ? "#efe8dc" : "#86CC5B";
-	const colorB = useCustomFont ? "#22c622" : "#B3E1EC";
-
 	return `
 		<marquee direction="left" behavior="scroll" scrollamount="9.8" loop="1" width="100%" height="50" align="absmiddle">
-			<font face="${fontset}">
+			<font face="FZLBJW">
 				玩家
-				<font color="${colorA}"><b>${name}</b></font>
+				<font color="#efe8dc"><b>${name}</b></font>
 				${ACTIONS.randomGet()}
-				<font color="${colorB}"><b>${STORIES.randomGet()}${BOX_TYPES.randomGet()}</b></font>
+				<font color="#22c622"><b>${STORIES.randomGet()}${BOX_TYPES.randomGet()}</b></font>
 				获得了<b>${reward}</b>${TAIL_MSGS.randomGet()}
 			</font>
 		</marquee>
@@ -149,22 +142,14 @@ function createMarqueeHTML(config) {
 }
 
 /**
- * 应用样式到播报元素
+ * 应用手杀样式到播报元素
  * @param {HTMLElement} div - 外层容器
  * @param {HTMLElement} div2 - 内层容器
- * @param {boolean} isStyleOn - 是否启用样式
  * @returns {void}
  */
-function applyStyles(div, div2, isStyleOn) {
-	if (isStyleOn) {
-		div.style.cssText = "pointer-events:none;width:100%;height:25px;font-size:23px;z-index:6;";
-		div2.style.cssText = "pointer-events:none;background:rgba(0,0,0,0.5);width:100%;height:27px;";
-	} else {
-		div.style.cssText =
-			"pointer-events:none;width:56%;height:35px;font-size:18px;z-index:20;background-size:100% 100%;background-repeat:no-repeat;left:50%;top:15%;transform:translateX(-50%);";
-		div.style.backgroundImage = `url(${lib.assetURL}extension/十周年UI/ui/assets/lbtn/uibutton/goutuo.png)`;
-		div2.style.cssText = "pointer-events:none;width:85.5%;height:35px;left:8%;line-height:35px;";
-	}
+function applyStyles(div, div2) {
+	div.style.cssText = "pointer-events:none;width:100%;height:25px;font-size:23px;z-index:6;";
+	div2.style.cssText = "pointer-events:none;background:rgba(0,0,0,0.5);width:100%;height:27px;";
 }
 
 /**
@@ -178,13 +163,12 @@ export function initGTBB() {
 	const div = ui.create.div("");
 	const div2 = ui.create.div("", div);
 	div.id = "gtbb-container";
-	const extConfig = lib.config["extension_十周年UI_GTBBFont"];
 	const interval = parseFloat(lib.config["extension_十周年UI_GTBBTime"]);
 
-	applyStyles(div, div2, styleType === "1");
+	applyStyles(div, div2);
 
 	function showGTBB() {
-		div2.innerHTML = createMarqueeHTML({ GTBBFont: extConfig });
+		div2.innerHTML = createMarqueeHTML();
 		div.show();
 		setTimeout(() => div.hide(), 15500);
 	}

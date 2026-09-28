@@ -165,114 +165,32 @@ export function fitProgressFillToTrack(bar) {
 // ==================== 进度条配置 ====================
 
 /**
- * 获取进度条配置
+ * 获取进度条配置（手杀进度条）
  * @returns {object} 进度条配置对象
  */
 const getProgressBarConfig = () => {
-	const styleType = lib.config.extension_十周年UI_jindutiaoYangshi;
 	const bottom = parseFloat(lib.config["extension_十周年UI_jindutiaoSet"]) + "%";
-
-	/** @type {Record<string, object>} */
-	const configs = {
-		1: {
-			container: {
-				backgroundColor: "rgba(0,0,0,0.4)",
-				width: "620px",
-				height: "12.3px",
-				borderRadius: "1000px",
-				boxShadow: "0px 0px 9px #2e2b27 inset,0px 0px 2.1px #FFFFD5",
-				overflow: "hidden",
-				border: "1.2px solid #000000",
-				position: "fixed",
-				left: "calc(50% - 300px)",
-				bottom,
-			},
-			progressBar: { data: 620, style: "background-image: linear-gradient(#fccc54 15%, #d01424 30%, #cc6953 90%);height:12.8px;" },
-			clearSpecial: true,
+	return {
+		container: {
+			backgroundColor: "rgba(0,0,0,0.4)",
+			width: "620px",
+			height: "12.3px",
+			borderRadius: "1000px",
+			boxShadow: "0px 0px 9px #2e2b27 inset,0px 0px 2.1px #FFFFD5",
+			overflow: "hidden",
+			border: "1.2px solid #000000",
+			position: "fixed",
+			left: "calc(50% - 300px)",
+			bottom,
 		},
-		2: {
-			container: { width: "400px", height: "24px", display: "block", left: "calc(50% - 197px)", position: "fixed", bottom },
-			progressBar: {
-				data: 300,
-				style: "width:280px;height:4.3px;margin:14px 0 0 85px;background-color:#E2E20A;border-right:5px solid #FFF;position:absolute;top:-3.5px;",
-			},
-			backgroundImage: {
-				src: "extension/十周年UI/ui/assets/lbtn/uibutton/jindutiao.png",
-				style: "--w:400px;--h:calc(var(--w)*44/759);width:var(--w);height:var(--h);position:absolute;top:0;",
-			},
-			clearSpecial: true,
-		},
-		3: {
-			container: {
-				width: "400px",
-				height: "13px",
-				display: "block",
-				boxShadow: "0 0 4px #000000",
-				margin: "0 0 !important",
-				position: "fixed",
-				left: "calc(50% - 197px)",
-				bottom,
-			},
-			progressBar: {
-				data: 395,
-				style: "z-index:1;width:399px;height:8px;margin:0 0 0 1px;background-color:#F4C336;border-top:3px solid #EBE1A7;border-bottom:2px solid #73640D;border-left:1px solid #73640D;position:absolute;top:0px;border-radius:3px;",
-			},
-			secondaryBar: {
-				data: 395,
-				style: "width:399px;height:0.1px;margin:0 0 0 0.5px;background-color:#fff;opacity:0.8;border-top:1px solid #FFF;border-bottom:1px solid #FFF;border-left:1px solid #FFF;position:absolute;top:17px;border-radius:2px;",
-			},
-			backgroundImages: [
-				{
-					src: "extension/十周年UI/ui/assets/lbtn/uibutton/jindutiao2.1.png",
-					style: "width:400px;height:4px;position:absolute;top:16px;z-index:-1;",
-				},
-				{
-					src: "extension/十周年UI/ui/assets/lbtn/uibutton/jindutiao2.png",
-					style: "width:400px;height:13px;position:absolute;top:0;opacity:0;",
-				},
-				{
-					src: "extension/十周年UI/ui/assets/lbtn/uibutton/jindutiao2.1.png",
-					style: "width:400px;height:14px;position:absolute;top:0;z-index:-1;",
-				},
-			],
-			setSpecial: true,
-		},
-		4: {
-			container: {
-				width: "450px",
-				height: "13px",
-				display: "block",
-				margin: "0 0 !important",
-				position: "fixed",
-				left: "calc(50% - 220px)",
-				bottom,
-				backgroundColor: "#4B3621",
-				borderRadius: "6px",
-			},
-			progressBar: {
-				data: 449,
-				style: "z-index:1;width:449px;height:12px;margin:0;background-color:rgb(230,151,91);position:absolute;top:1px;border-radius:6px;",
-			},
-			clearSpecial: true,
+		progressBar: {
+			data: 620,
+			style: "background-image: linear-gradient(#fccc54 15%, #d01424 30%, #cc6953 90%);height:12.8px;",
 		},
 	};
-	return configs[styleType] ?? configs[1];
 };
 
 // ==================== 元素创建 ====================
-
-/**
- * 创建图片元素
- * @param {string} src - 图片路径
- * @param {string} style - CSS样式
- * @returns {HTMLImageElement}
- */
-const createImg = (src, style) => {
-	const img = document.createElement("img");
-	img.src = `${lib.assetURL}${src}`;
-	img.style.cssText = style;
-	return img;
-};
 
 /**
  * 创建div元素
@@ -360,9 +278,6 @@ export function initPrecontentUI() {
 		if (isShoushaVcard) container.classList.add("dui-shousha-progress-bar");
 		const cfg = getProgressBarConfig();
 
-		if (cfg.clearSpecial) delete window.jindutiaoTeshu;
-		if (cfg.setSpecial && !window.jindutiaoTeshu) window.jindutiaoTeshu = true;
-
 		const containerStyle = { ...cfg.container };
 		if (inPcdDialog) {
 			delete containerStyle.position;
@@ -373,21 +288,6 @@ export function initPrecontentUI() {
 		Object.assign(container.style, containerStyle);
 		const boxTime = createDiv(cfg.progressBar.data, cfg.progressBar.style);
 		container.appendChild(boxTime);
-
-		let boxTime2 = null,
-			imgBg3 = null;
-		if (cfg.secondaryBar) {
-			boxTime2 = createDiv(cfg.secondaryBar.data, cfg.secondaryBar.style);
-			container.appendChild(boxTime2);
-		}
-		if (cfg.backgroundImage) container.appendChild(createImg(cfg.backgroundImage.src, cfg.backgroundImage.style));
-		if (cfg.backgroundImages) {
-			cfg.backgroundImages.forEach((c, i) => {
-				const img = createImg(c.src, c.style);
-				if (i === 0) imgBg3 = img;
-				container.appendChild(img);
-			});
-		}
 
 		const footer =
 			pcdDialog?.querySelector?.(":scope > .dui-pcd-footer") ||
@@ -427,18 +327,6 @@ export function initPrecontentUI() {
 					container.remove();
 				}
 			}, interval);
-
-			if (window.jindutiaoTeshu && boxTime2 && imgBg3) {
-				window.timer2 = setInterval(() => {
-					boxTime2.style.width = `${--boxTime2.data}px`;
-					if (boxTime2.data === 0) {
-						clearTimer("timer2");
-						delete window.jindutiaoTeshu;
-						boxTime2.remove();
-						imgBg3.remove();
-					}
-				}, interval / 2);
-			}
 		};
 
 		if (inPcdDialog) requestAnimationFrame(runTimer);

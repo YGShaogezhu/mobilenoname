@@ -6,28 +6,19 @@
 import { lib, game, ui, get, ai, _status } from "noname";
 
 /**
- * 获取图片路径
+ * 获取图片路径（手杀阶段提示）
  * @param {string} imageName - 图片名称
  * @returns {string} 完整图片路径
  */
-const getImagePath = imageName => {
-	const style = lib.config.extension_十周年UI_JDTSYangshi;
-	/** @type {Record<string, string>} */
-	const extMap = { 2: "png", 3: "webp", 4: "jpeg" };
-	return `extension/十周年UI/ui/assets/lbtn/tips/${imageName}.${extMap[style] || "jpg"}`;
-};
+const getImagePath = imageName => `extension/十周年UI/ui/assets/lbtn/tips/${imageName}.jpg`;
 
 /**
- * 获取图片位置
+ * 获取图片位置（手杀阶段提示）
  * @returns {number[]} 位置数组 [x, y, width, height]
  */
 const getPosition = () => {
-	const style = lib.config.extension_十周年UI_JDTSYangshi;
-	if (style === "1") {
-		const isSpecialMode = get.mode() === "taixuhuanjing" || lib.config.extension_EngEX_SSServant;
-		return isSpecialMode ? [10, 58, 7, 6] : [3, 58, 7, 6];
-	}
-	return [18, 65, 8, 4.4];
+	const isSpecialMode = get.mode() === "taixuhuanjing" || lib.config.extension_EngEX_SSServant;
+	return isSpecialMode ? [10, 58, 7, 6] : [3, 58, 7, 6];
 };
 
 /**
