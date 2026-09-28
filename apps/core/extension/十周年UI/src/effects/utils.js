@@ -7,16 +7,6 @@
 import { lib, game, ui, get, ai, _status } from "noname";
 
 /**
- * 获取玩家头像节点
- * @param {Object} player - 玩家对象
- * @param {boolean} [isUnseen=false] - 是否使用副将头像
- * @returns {HTMLElement} 头像DOM节点
- */
-export function getAvatar(player, isUnseen = false) {
-	return isUnseen ? player.node.avatar2 : player.node.avatar;
-}
-
-/**
  * 解析CSS url()
  * @param {string} url - CSS url字符串
  * @returns {string} 解析后的URL
@@ -96,21 +86,6 @@ export async function getOptimalPath(originalUrl) {
 export function getDefaultAvatar(player) {
 	const gender = player.sex === "female" ? "female" : "male";
 	return `${lib.assetURL}image/character/default_silhouette_${gender}.jpg`;
-}
-
-/**
- * 生成随机位置(用于击杀特效光效)
- * @param {number} height - 窗口高度
- * @returns {{x: string, y: string, scale: number}} 随机位置和缩放
- */
-export function randomPosition(height) {
-	const signX = decadeUI.getRandom(0, 1) ? "" : "-";
-	const signY = decadeUI.getRandom(0, 1) ? "" : "-";
-	return {
-		x: `${signX}${decadeUI.getRandom(0, 100)}px`,
-		y: `${signY}${decadeUI.getRandom(0, height / 4)}px`,
-		scale: decadeUI.getRandom(1, 10) / 10,
-	};
 }
 
 /**

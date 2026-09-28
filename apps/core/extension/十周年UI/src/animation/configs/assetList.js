@@ -38,7 +38,6 @@ export const assetList = [
 	{ name: "effect_wufengjian" },
 	{ name: "effect_yajiaoqiang" },
 	{ name: "effect_yinfengjia" },
-	{ name: "effect_jisha1" },
 	{ name: "effect_zhenwang" },
 
 	// 延时锦囊特效

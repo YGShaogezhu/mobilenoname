@@ -9,14 +9,12 @@ import { lib, game, ui, get, ai, _status } from "noname";
 export { CONFIG, GENERAL_NAME_STYLE } from "./config.js";
 export * from "./utils.js";
 export { drawLine } from "./line.js";
-export { playKillEffect } from "./kill.js";
 export { playSkillEffect } from "./skill.js";
 export { setupCardGhost, addGhostTrail, setGhostEffectEnabled, GHOST_CONFIG } from "./cardGhost.js";
 
 // ==================== 游戏集成 ====================
 
 import { drawLine } from "./line.js";
-import { playKillEffect } from "./kill.js";
 import { playSkillEffect } from "./skill.js";
 import { setupCardGhost, addGhostTrail, setGhostEffectEnabled } from "./cardGhost.js";
 
@@ -35,7 +33,6 @@ export function setupEffects() {
 			create: () => decadeUI.dialog.create("effect-dialog dui-dialog"),
 		},
 		line: drawLine,
-		kill: playKillEffect,
 		skill: playSkillEffect,
 		ghost: {
 			add: addGhostTrail,

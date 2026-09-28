@@ -1,6 +1,6 @@
 /**
  * @fileoverview 动画技能模块
- * @description 包含游戏开始动画、边框等级、击杀特效等动画相关技能
+ * @description 包含游戏开始动画、边框等级等动画相关技能
  * @module skills/animate
  */
 
@@ -90,32 +90,6 @@ export const animateSkill = {
 		},
 		async content() {
 			ui.clear.delay = "usecard";
-		},
-	},
-
-	/**
-	 * 击杀特效
-	 * @description 在击杀时播放特效动画
-	 */
-	decadeUI_dieKillEffect: {
-		trigger: { source: ["dieBegin"] },
-		forced: true,
-		popup: false,
-		priority: -100,
-		lastDo: true,
-		silent: true,
-		filter() {
-			return lib.config.extension_十周年UI_killEffect;
-		},
-		async content(event, trigger) {
-			if (!trigger.source || !trigger.player) return;
-			game.broadcastAll(
-				(source, player) => {
-					if (window.decadeUI) decadeUI.effect.kill(source, player);
-				},
-				trigger.source,
-				trigger.player
-			);
 		},
 	},
 

@@ -19,12 +19,6 @@ export const CONFIG = {
 
 	// 时间配置(ms)
 	EFFECT_DURATION: 2180,
-	KILL_DELAY: 2000,
-	KILL_CLOSE: 3000,
-
-	// 击杀特效
-	KILL_LIGHT_COUNT: 10,
-	KILL_SCALE: 1.2,
 
 	// 技能特效尺寸
 	SKILL_MAX_W: 288,
