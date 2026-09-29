@@ -180,12 +180,13 @@
 	font-family: "FZLBJW";
 	font-size: 25px;
 	font-weight: 500;
-	-webkit-text-stroke: 1px #4a5320;
+	-webkit-text-stroke: 4.5px #4a5320;
 	paint-order: stroke fill;
-	text-shadow:
+	text-shadow: none;
+	/* text-shadow:
 		0 1px 0 #1a140c,
 		0 2px 2px rgba(0, 0, 0, 0.45),
-		0 0 4px rgba(200, 160, 70, 0.28);
+		0 0 4px rgba(200, 160, 70, 0.28); */
 	border-radius: 4px;
 	overflow: visible;
 	transition: none;
@@ -242,8 +243,30 @@
 	margin-left: 15px;
 }
 
-/* 按钮禁用 */
-.control > div.disabled:not([data-type="endButton"]) {
+/* 普通选项不满足：保留按钮，改用 cbtn2（不灰化取消） */
+.control > div.disabled:not(.primary):not(.primary2):not(.beishui-btn):not(.yjxp-btn):not(.wx-btn):not(.huan):not(.qi):not([data-type="endButton"]):not([data-type="skill2"]),
+.control.disabled > div:not(.primary):not(.primary2):not(.beishui-btn):not(.yjxp-btn):not(.wx-btn):not(.huan):not(.qi):not([data-type="endButton"]):not([data-type="skill2"]) {
+	background-image: url("../../assets/lbtn/uibutton/cbtn2.png");
+	background-size: 100% 100%;
+	filter: none !important;
+	-webkit-filter: none !important;
+	opacity: 1 !important;
+}
+
+/* 父级禁用时也不淡出整块选项 */
+.control.disabled:has(> div:not(.primary):not(.primary2):not(.beishui-btn):not(.yjxp-btn):not(.wx-btn):not(.huan):not(.qi):not([data-type="endButton"]):not([data-type="skill2"])) {
+	opacity: 1 !important;
+}
+
+/* 确认/取消等其它按钮禁用仍灰化 */
+.control > div.disabled.primary:not([data-type="endButton"]),
+.control > div.disabled.primary2:not([data-type="endButton"]),
+.control > div.disabled.beishui-btn,
+.control > div.disabled.yjxp-btn,
+.control > div.disabled.wx-btn,
+.control > div.disabled.huan,
+.control > div.disabled.qi,
+.control:not(.lbtn-confirm) > [data-type="skill2"].disabled:not(.recasting-btn) {
 	background-size: 100% 100%;
 	filter: grayscale(100%) !important;
 	-webkit-filter: grayscale(100%) !important;
@@ -275,6 +298,14 @@
 	line-height: 22px;
 	min-width: 72px !important;
 	min-height: 0 !important;
+}
+
+/* gskills 不满足：改用 cbtn2 */
+.lbtn-confirm > [data-type="skill2"]:not(.recasting-btn).disabled {
+	background-image: url("../../assets/lbtn/uibutton/cbtn2.png") !important;
+	filter: none !important;
+	-webkit-filter: none !important;
+	opacity: 1 !important;
 }
 
 .lbtn-confirm[data-skill] > [data-type="skill2"] {

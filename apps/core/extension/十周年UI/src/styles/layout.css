@@ -656,6 +656,8 @@ body > .background {
 	margin: 0 15px !important;
 	padding: 0;
 	opacity: 1;
+	font-size: 22px;
+    letter-spacing: 2px;
 }
 
 #arena > #dui-controls > .control > div:only-child {
