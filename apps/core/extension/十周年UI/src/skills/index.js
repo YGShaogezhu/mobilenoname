@@ -66,13 +66,18 @@ export function initSkills() {
 		}
 	}
 
-	// 势力优化
+	// 势力优化（神将等）
 	if (lib.config["extension_十周年UI_shiliyouhua"]) {
 		Object.defineProperty(lib, "group", {
 			get: () => ["wei", "shu", "wu", "qun", "jin"],
 			set: () => {},
 		});
 		lib.skill._slyh = factionOptimizeSkill._slyh;
+	}
+
+	// 双势力武将（文鸯、界严颜等）改用手杀选国籍框
+	if (lib.skill._doublegroup_choice && factionOptimizeSkill._doublegroup_choice) {
+		Object.assign(lib.skill._doublegroup_choice, factionOptimizeSkill._doublegroup_choice);
 	}
 
 	// 初始化重铸模块

@@ -3798,3 +3798,90 @@
 	letter-spacing: -0.08em !important;
 	text-shadow: none !important;
 }
+/* --- 官方势力选择（image/ui/group） ---
+ * 当前显示尺寸（可在 .dui-group-select-dialog 上改变量）：
+ *   势力图 --dui-group-btn-w/h：133×138（原素材 157×162，约 85%）
+ *   黄圈   --dui-group-ring-w/h：146×138（原素材 172×162）
+ */
+.dui-group-select-dialog {
+	--dui-group-btn-w: 133px;
+	--dui-group-btn-h: 138px;
+	--dui-group-ring-w: 146px;
+	--dui-group-ring-h: 138px;
+}
+
+.button.dui-group-select {
+	position: relative;
+	display: inline-block;
+	width: var(--dui-group-btn-w, 133px);
+	height: var(--dui-group-btn-h, 138px);
+	margin: 10px 8px;
+	background-color: transparent !important;
+	background-size: 100% 100% !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	box-shadow: none !important;
+	border: none !important;
+	border-radius: 0 !important;
+	overflow: visible !important;
+}
+
+.button.dui-group-select::before,
+.button.dui-group-select::after,
+.button.dui-group-select.selected::before,
+.button.dui-group-select.selected::after,
+.button.dui-group-select.selectable::before,
+.button.dui-group-select.glow::before {
+	content: none !important;
+	display: none !important;
+	opacity: 0 !important;
+	box-shadow: none !important;
+}
+
+.button.dui-group-select > .dui-group-select-border {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: var(--dui-group-ring-w, 146px);
+	height: var(--dui-group-ring-h, 138px);
+	transform: translate(-50%, -50%);
+	background: url("../../image/ui/group/group_xuanze.png") center / 100% 100% no-repeat;
+	opacity: 0;
+	pointer-events: none;
+	z-index: 1;
+	transition: opacity 0.2s linear;
+}
+
+.button.dui-group-select.selected > .dui-group-select-border {
+	opacity: 1;
+}
+
+/* 势力选择：套手杀外框时，按钮区居中排布 */
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog > .content-container > .content > .buttons {
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+	flex-wrap: nowrap !important;
+	gap: 12px !important;
+	width: 96% !important;
+	margin: 0 auto !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog .button.dui-group-select {
+	margin: 4px 6px;
+}
+
+/* 势力选择只要确定，隐藏取消/重选；确定按钮始终彩色可点（未选时由 JS 忽略点击） */
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog .dialog-confirm-button-cancel,
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog .dialog-confirm-button-reset {
+	display: none !important;
+}
+
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog .dialog-confirm > .dialog-confirm-button-ok,
+#arena.decadeUI > .dialog.decade-shousha-vcard.dui-group-select-dialog .dialog-confirm > .dialog-confirm-button-ok.unclickable {
+	pointer-events: auto !important;
+	filter: none !important;
+	-webkit-filter: none !important;
+	opacity: 1 !important;
+	display: block !important;
+}

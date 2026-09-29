@@ -338,6 +338,27 @@ function getShoushaConfirmBar(event) {
 function clickShoushaConfirm(ok, event) {
 	const confirm = getShoushaConfirmBar(event);
 	if (!confirm) return;
+	const dialog =
+		(event?.dialog && typeof event.dialog === "object" && event.dialog.classList && event.dialog) ||
+		ui.dialog ||
+		document.querySelector(".dialog.decade-shousha-vcard");
+	// 势力选择框自己管确定按钮，不要再打灰阶
+	if (dialog?.classList?.contains("dui-group-select-dialog")) {
+		confirm.classList.remove("decade-shousha-no-ok", "decade-shousha-confirm-hidden");
+		confirm.ok?.classList.remove("decade-shousha-hidden-ok", "unclickable");
+		confirm.ok?.classList.add("decade-no-cancel");
+		if (confirm.ok) confirm.ok.style.removeProperty("display");
+		if (confirm.cancel) {
+			confirm.cancel.hide?.();
+			confirm.cancel.style?.setProperty?.("display", "none", "important");
+		}
+		confirm.style.removeProperty("display");
+		hideShoushaBottomConfirm();
+		try {
+			syncShoushaFooterLayout(dialog);
+		} catch (e) {}
+		return;
+	}
 	const noOk =
 		confirm.classList.contains("decade-shousha-no-ok") ||
 		confirm.ok?.classList?.contains("decade-shousha-hidden-ok");
@@ -366,10 +387,6 @@ function clickShoushaConfirm(ok, event) {
 			confirm.reset.classList.remove("glow");
 		}
 	}
-	const dialog =
-		(event?.dialog && typeof event.dialog === "object" && event.dialog.classList && event.dialog) ||
-		ui.dialog ||
-		document.querySelector(".dialog.decade-shousha-vcard");
 	if (dialog?.classList?.contains("decade-shousha-multi")) {
 		scheduleHideShoushaClearControls();
 	}
@@ -614,6 +631,15 @@ function resolveKanpoSelectCount(evt, skillNames, player) {
  */
 function resolveShoushaHint(dialog, evt) {
 	evt = evt || _status.event;
+	if (dialog?.classList?.contains("dui-group-select-dialog")) {
+		const hint = dialog.dataset?.duiGroupHint;
+		if (hint) return hint;
+		const player = evt?.player || _status.event?.player;
+		const charGroup = get.character(player?.name)?.group || get.character(player?.name1)?.group;
+		const isShen = player?.group === "shen" || charGroup === "shen";
+		return `${isShen ? "神武将，" : ""}请选择你要变成的势力`;
+	}
+
 	const skillNames = collectEventSkillNames(evt);
 	const player = evt?.player || _status.event?.player;
 	const isKanpo = hitSkillListAny(skillNames, KANPO_HINT_SKILLS);
@@ -645,7 +671,9 @@ export function syncShoushaFooterLayout(dialog) {
 	}
 
 	const needOk =
-		dialog.classList.contains("decade-shousha-multi") || dialog.classList.contains("decade-shousha-no-nature");
+		dialog.classList.contains("decade-shousha-multi") ||
+		dialog.classList.contains("decade-shousha-no-nature") ||
+		dialog.classList.contains("dui-group-select-dialog");
 	if (confirm) {
 		if (needOk) {
 			confirm.classList.remove("decade-shousha-no-ok");
@@ -1000,8 +1028,8 @@ function createShoushaConfirm(dialog, evt) {
 			});
 		}
 		const needReset =
-			dialog.classList.contains("decade-shousha-multi") ||
-			dialog.classList.contains("decade-shousha-no-nature");
+			(dialog.classList.contains("decade-shousha-multi") || dialog.classList.contains("decade-shousha-no-nature")) &&
+			!dialog.classList.contains("dui-group-select-dialog");
 		if (needReset && !confirm.reset) {
 			const ext = getExtensionName();
 			confirm.reset = ui.create.div(".dialog-confirm-button-reset.disabled", confirm, e => {
@@ -1027,6 +1055,13 @@ function createShoushaConfirm(dialog, evt) {
 			confirm.ok?.classList.remove("decade-shousha-hidden-ok");
 			if (confirm.ok) confirm.ok.style.removeProperty("display");
 			scheduleHideShoushaClearControls();
+		} else if (dialog.classList.contains("dui-group-select-dialog")) {
+			// 势力选择：只要确定，不要取消/重选；不要灰阶 unclickable（由点击逻辑自行校验）
+			confirm.classList.remove("decade-shousha-no-ok");
+			confirm.ok?.classList.remove("decade-shousha-hidden-ok", "unclickable");
+			confirm.ok?.classList.add("decade-no-cancel");
+			if (confirm.ok) confirm.ok.style.removeProperty("display");
+			if (confirm.cancel) confirm.cancel.style.setProperty("display", "none", "important");
 		} else {
 			// 单选转化：不要确定，点牌名即选
 			confirm.classList.add("decade-shousha-no-ok");

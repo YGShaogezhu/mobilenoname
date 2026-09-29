@@ -78,7 +78,7 @@ export const wujiangbeijing = {
 export const shiliyouhua = {
 	name: "官方势力",
 	init: true,
-	intro: "开启后，非魏蜀吴群晋势力的角色将会重新选择势力",
+	intro: "开启后，非魏蜀吴群势力的角色将会重新选择势力",
 };
 
 /**
