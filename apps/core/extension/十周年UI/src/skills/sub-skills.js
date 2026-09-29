@@ -186,7 +186,14 @@ async function chooseFactionWithShoushaUI(player, groups, options = {}) {
 					ui.selected.buttons.length = 0;
 					button.classList.add("selected");
 					ui.selected.buttons.add(button);
-					game.check();
+					// 挡住引擎 autoConfirm：选势力必须再点确定
+					const prevTouch = _status.touchnocheck;
+					_status.touchnocheck = true;
+					try {
+						game.check();
+					} finally {
+						_status.touchnocheck = prevTouch;
+					}
 				},
 			},
 		});

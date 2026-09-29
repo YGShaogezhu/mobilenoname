@@ -140,9 +140,48 @@ function isShoushaSingleClickConvertDialog(dialog, evt) {
 		(typeof dialog === "number" ? get.idDialog?.(dialog) : null) ||
 		document.querySelector(".dialog.decade-shousha-vcard");
 	if (!dlg?.classList?.contains("decade-shousha-vcard")) return false;
+	// 势力选择需要点确定，不能点势力就直接确认
+	if (isDuiGroupSelectDialog(dlg)) return false;
 	if (dlg.classList.contains("decade-shousha-multi") || evt?._decade_shoushaMulti) return false;
 	const select = get.select(evt?.selectButton ?? 1);
 	return select[0] === 1 && select[1] === 1;
+}
+
+/**
+ * 是否为势力选择对话框
+ * @param {HTMLElement|number|null|undefined} dialog
+ * @returns {boolean}
+ */
+function isDuiGroupSelectDialog(dialog) {
+	const dlg =
+		(dialog && typeof dialog === "object" && dialog.classList && dialog) ||
+		(typeof dialog === "number" ? get.idDialog?.(dialog) : null);
+	return Boolean(dlg?.classList?.contains("dui-group-select-dialog"));
+}
+
+/**
+ * 势力选择禁止引擎 autoConfirm（单选 + 自动确认会在点势力后直接 ok）
+ * @returns {Function[]}
+ */
+function applyGroupSelectNoAutoConfirm() {
+	const hooks = lib.hooks?.checkEnd;
+	if (!Array.isArray(hooks)) return [];
+
+	const hook = function decadeUI_groupSelectNoAuto(event, config) {
+		if (!isDuiGroupSelectDialog(event?.dialog)) return;
+		if (!config || typeof config !== "object") return;
+		config.auto = false;
+		config.autoConfirm = false;
+		config.auto_confirm = false;
+	};
+
+	hooks.unshift(hook);
+	return [
+		() => {
+			const i = hooks.indexOf(hook);
+			if (i >= 0) hooks.splice(i, 1);
+		},
+	];
 }
 
 /**
@@ -1937,6 +1976,7 @@ export function applyTempCardOverrides() {
 	try {
 		if (getConfig()) {
 			restoreFns.push(...applyShoushaDialogOverrides());
+			restoreFns.push(...applyGroupSelectNoAutoConfirm());
 			restoreFns.push(...applyShoushaSingleClickConvert());
 			registerChooseButtonBeginHook();
 			registerChooseButtonTempCardHook();
