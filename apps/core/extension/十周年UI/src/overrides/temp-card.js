@@ -501,7 +501,7 @@ function isShoushaConfirmDialogOpen(ignoreDialog) {
 	return false;
 }
 
-const SHOUSHA_FOOTER_CONFIRM_H = 60;
+const SHOUSHA_FOOTER_CONFIRM_H = 73;
 const SHOUSHA_FOOTER_PROGRESS_H = 28;
 const SHOUSHA_FOOTER_HINT_H = 28;
 const SHOUSHA_FOOTER_GAP = 6;

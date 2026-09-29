@@ -18,8 +18,8 @@ const PCD_FRAME_H_SUIT = 547;
 const PCD_FRAME_H_1ROW = 281;
 const PCD_FRAME_H_COLLAPSED = 125;
 
-/** 底部栈：确认按钮 / 进度条占位（有则加高，无则 0） */
-const PCD_FOOTER_CONFIRM_H = 54;
+/** 底部栈：确认按钮 / 进度条占位（有则加高，无则 0；确定约 138×54） */
+const PCD_FOOTER_CONFIRM_H = 58;
 const PCD_FOOTER_PROGRESS_H = 20;
 const PCD_FOOTER_STACK_GAP = 6;
 const PROGRESS_BAR_ID = "jindutiaopl";
@@ -314,19 +314,21 @@ function updatePcdConfirmBar(dialog, confirm) {
 	const btnOk = bar.querySelector(".dui-pcd-btn-ok");
 	const btnCancel = bar.querySelector(".dui-pcd-btn-cancel");
 	const { str, ok, cancel } = resolveConfirmButtons(confirm);
-	// str 可能仍是 "c"，但 game.check 会直接去掉 ok 的 disabled
-	const showOk = str.includes("o") || (ok && !ok.classList.contains("disabled"));
-	const showCancel = str.includes("c") || !!cancel;
+	// 有对应节点就显示；不满足条件用灰色 disabled，不再因未选中而隐藏（清正选花色等同理）
+	const showOk = !!ok;
+	const showCancel = !!cancel;
+	const okDisabled = !showOk || ok.classList.contains("disabled") || !str.includes("o");
+	const cancelDisabled = !showCancel || cancel.classList.contains("disabled") || !str.includes("c");
 
 	if (btnOk) {
 		btnOk.style.removeProperty("display");
 		btnOk.classList.toggle("hidden", !showOk);
-		btnOk.classList.toggle("disabled", ok?.classList.contains("disabled") ?? true);
+		btnOk.classList.toggle("disabled", okDisabled);
 	}
 	if (btnCancel) {
 		btnCancel.style.removeProperty("display");
 		btnCancel.classList.toggle("hidden", !showCancel);
-		btnCancel.classList.toggle("disabled", cancel?.classList.contains("disabled") ?? true);
+		btnCancel.classList.toggle("disabled", cancelDisabled);
 	}
 	bar.style.display = showOk || showCancel ? "grid" : "none";
 	dialog.classList.toggle("dui-pcd-has-confirm", showOk || showCancel);

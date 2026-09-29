@@ -1681,15 +1681,11 @@
 	left: auto !important;
 	bottom: auto !important;
 	transform: none !important;
-	display: grid !important;
-	grid-auto-flow: column;
-	grid-auto-columns: max-content;
-	align-items: end;
-	justify-content: center;
-	column-gap: 24px;
-	width: max-content;
+	display: block !important;
+	width: 100% !important;
 	min-width: 0;
-	height: auto;
+	height: var(--dui-pcd-footer-confirm, 58px);
+	min-height: var(--dui-pcd-footer-confirm, 58px);
 	pointer-events: none;
 	box-sizing: border-box;
 	flex: 0 0 auto;
@@ -1713,7 +1709,7 @@
 }
 
 #arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn {
-	position: relative !important;
+	position: absolute !important;
 	display: block !important;
 	flex: none !important;
 	float: none !important;
@@ -1729,17 +1725,25 @@
 	box-sizing: border-box;
 	overflow: hidden;
 	transition: filter 0.12s ease;
+	top: 50% !important;
 }
 
+/* 原素材 162×63，框内缩至约 85%（138×54），确定居中 */
 #arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.dui-pcd-btn-ok {
-	width: 133px !important;
-	height: 50px !important;
-	min-width: 133px !important;
-	max-width: 133px !important;
+	left: 50% !important;
+	right: auto !important;
+	transform: translate(-50%, -50%);
+	width: 138px !important;
+	height: 54px !important;
+	min-width: 138px !important;
+	max-width: 138px !important;
 	background-image: url("../../image/ui/dialog/confirmButton.png");
 }
 
 #arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.dui-pcd-btn-cancel {
+	left: auto !important;
+	right: max(18%, 48px) !important;
+	transform: translateY(-50%);
 	width: 143px !important;
 	height: 50px !important;
 	min-width: 143px !important;
@@ -1757,7 +1761,7 @@
 
 #arena.decadeUI > .dialog.dui-player-card-dialog .dui-pcd-confirm-bar > .dui-pcd-confirm-btn.disabled {
 	filter: grayscale(100%);
-	opacity: 0.55;
+	opacity: 0.6;
 	pointer-events: none;
 	cursor: default;
 }
@@ -3116,11 +3120,12 @@
 :root {
 	--dui-shousha-vcard-w: 10vw;
 	--dui-shousha-vcard-h: 5vw;
-	--dui-shousha-confirm-bar-h: 60px;
+	--dui-shousha-confirm-bar-h: 73px;
 	/* 由 syncShoushaFooterLayout 按实际子项写入；默认 0 不预留空带 */
 	--dui-shousha-footer-h: 0px;
-	--dui-shousha-confirm-w: 133px;
-	--dui-shousha-confirm-h: 50px;
+	/* confirmButton.png 原素材 162×63 */
+	--dui-shousha-confirm-w: 162px;
+	--dui-shousha-confirm-h: 63px;
 	--dui-shousha-reset-w: calc(var(--dui-shousha-confirm-h) * 184 / 60);
 	--dui-shousha-reset-h: var(--dui-shousha-confirm-h);
 	--dui-shousha-col-basic: calc(2 * var(--dui-shousha-vcard-w) + var(--dui-shousha-trick-gap));
