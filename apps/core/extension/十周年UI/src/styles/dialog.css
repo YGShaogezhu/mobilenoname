@@ -12,12 +12,6 @@
 	bottom: calc(23% + 86px);
 }
 
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog {
-	bottom: calc(23% + 86px);
-	font-family: "shousha" !important;
-	color: rgb(255, 255, 150);
-}
-
 /* Boss列表 */
 #bosslist > .player > .identity {
 	position: absolute;
@@ -27,73 +21,6 @@
 
 #bosslist > .player > .identity > div {
 	text-align: left;
-}
-
-/** 选项节点样式 */
-
-/* 样式A: on/othersOff/onlineUI */
-#arena.decadeUI[data-loading-style="on"] > .dialog .tdnode,
-#arena.decadeUI[data-loading-style="othersOff"] > .dialog .tdnode,
-#arena.decadeUI[data-loading-style="onlineUI"] > .dialog .tdnode {
-	--h: 30px;
-	--w: calc(var(--h) * 77 / 44);
-	width: auto;
-	height: auto;
-	min-width: var(--w);
-	min-height: var(--h);
-	padding: 0 !important;
-	border-radius: 0 !important;
-	background-image: url("../../image/ui/tnode/tnode-A1.png");
-	background-size: 100% 100%;
-	line-height: var(--h);
-	text-align: center;
-}
-
-#arena.decadeUI[data-loading-style="on"] > .dialog .tdnode.bluebg,
-#arena.decadeUI[data-loading-style="othersOff"] > .dialog .tdnode.bluebg,
-#arena.decadeUI[data-loading-style="onlineUI"] > .dialog .tdnode.bluebg {
-	background-image: url("../../image/ui/tnode/tnode-A2.png") !important;
-}
-
-/* 样式B: On */
-#arena.decadeUI[data-loading-style="On"] > .dialog .tdnode {
-	--h: 35px;
-	--w: calc(var(--h) * 100 / 70);
-	width: auto;
-	height: auto;
-	min-width: var(--w);
-	min-height: var(--h);
-	padding: 0 !important;
-	border-radius: 3px !important;
-	background-image: url("../../image/ui/tnode/tnode-B1.png");
-	background-size: 110% 115% !important;
-	background-position: center;
-	line-height: var(--h);
-	text-align: center;
-}
-
-#arena.decadeUI[data-loading-style="On"] > .dialog .tdnode.bluebg {
-	background-image: url("../../image/ui/tnode/tnode-B3.png") !important;
-}
-
-/* 样式C: othersOn */
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog .tdnode {
-	--h: 30px;
-	--w: calc(var(--h) * 77 / 44);
-	width: auto;
-	height: auto;
-	min-width: var(--w);
-	min-height: var(--h);
-	padding: 0 !important;
-	border-radius: 0 !important;
-	background-image: url("../../image/ui/tnode/tnode-C1.png");
-	background-size: 100% 100%;
-	line-height: var(--h);
-	text-align: center;
-}
-
-#arena.decadeUI[data-loading-style="othersOn"] > .dialog .tdnode.bluebg {
-	background-image: url("../../image/ui/tnode/tnode-C2.png") !important;
 }
 
 /** 局内选牌/选项小窗统一底图（五谷、技能选牌等；顺拆框单独处理，排除 dui-player-card-dialog） */

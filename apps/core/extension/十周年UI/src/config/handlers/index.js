@@ -11,4 +11,4 @@ export { onExtensionToggleClick, onExtensionToggleUpdate, onNewDecadeStyleUpdate
 export { onTranslateClick, onCardGhostEffectClick, onAutoSelectClick, onAutoSelectUpdate, onHandTipHeightBlur, onHandTipHeightUpdate, onCardScaleBlur, onDiscardScaleBlur, onCardPrettifyClick, onChupaizhishiUpdate } from "./card-handlers.js";
 
 // 部件管理处理函数
-export { onJindutiaoYangshiUpdate, onJindutiaoSetBlur, onJindutiaoSetUpdate, onJDTSYangshiUpdate, onGTBBYangshiClick, onPlayerMarkStyleUpdate, onLoadingStyleUpdate, onGainSkillsVisibleUpdate } from "./component-handlers.js";
+export { onJindutiaoYangshiUpdate, onJindutiaoSetBlur, onJindutiaoSetUpdate, onJDTSYangshiUpdate, onGTBBYangshiClick, onPlayerMarkStyleUpdate, onGainSkillsVisibleUpdate } from "./component-handlers.js";

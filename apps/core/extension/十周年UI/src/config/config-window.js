@@ -313,7 +313,6 @@ function getConfigsByTab(tabId) {
 			{ key: "GTBBYangshi", name: "狗托播报", type: "select" },
 			{ key: "GTBBTime", name: "时间间隔", type: "select" },
 			{ key: "playerMarkStyle", name: "标记样式", type: "select" },
-			{ key: "loadingStyle", name: "光标+loading框", type: "select" },
 			{ key: "gainSkillsVisible", name: "获得技能显示", type: "select" },
 			{ isTitle: true, name: "插件功能" },
 			{ key: "characterPlugin", name: "武将详情插件", type: "toggle" },

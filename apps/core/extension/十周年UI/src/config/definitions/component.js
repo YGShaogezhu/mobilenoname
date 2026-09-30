@@ -3,9 +3,8 @@
  * @description 纯配置数据，不包含业务逻辑
  * @module config/definitions/component
  */
-import { lib } from "noname";
 import { createCollapseTitle, createCollapseEnd } from "../utils.js";
-import { onJindutiaoYangshiUpdate, onJindutiaoSetBlur, onJindutiaoSetUpdate, onJDTSYangshiUpdate, onGTBBYangshiClick, onPlayerMarkStyleUpdate, onLoadingStyleUpdate, onGainSkillsVisibleUpdate } from "../handlers/component-handlers.js";
+import { onJindutiaoYangshiUpdate, onJindutiaoSetBlur, onJindutiaoSetUpdate, onJDTSYangshiUpdate, onGTBBYangshiClick, onPlayerMarkStyleUpdate, onGainSkillsVisibleUpdate } from "../handlers/component-handlers.js";
 
 /**
  * 部件管理折叠标题
@@ -116,36 +115,6 @@ export const playerMarkStyle = {
 };
 
 /**
- * 生成loading框选项
- * @returns {Object} loading框选项映射
- */
-function generateLoadingStyleItems() {
-	const basePath = `${lib.assetURL}extension/十周年UI/image/ui/dialog`;
-	const createPreview = filename => `<div style="width:60px;height:40px;position:relative;background-image: url(${basePath}/${filename});background-size: 100% 100%;"></div>`;
-
-	return {
-		off: "关闭",
-		on: createPreview("dialog2.png"),
-		On: createPreview("dialog1.png"),
-		othersOn: createPreview("dialog3.png"),
-		othersOff: createPreview("dialog4.png"),
-		onlineUI: createPreview("dialog5.png"),
-	};
-}
-
-/**
- * 光标+loading框配置
- * @type {Object}
- */
-export const loadingStyle = {
-	name: "更换光标+loading框",
-	intro: "可以更换局内选项框以及光标",
-	init: "off",
-	item: generateLoadingStyleItems(),
-	update: onLoadingStyleUpdate,
-};
-
-/**
  * 获得技能显示配置
  * @type {Object}
  */
@@ -185,7 +154,6 @@ export const componentConfigs = {
 	GTBBYangshi,
 	GTBBTime,
 	playerMarkStyle,
-	loadingStyle,
 	gainSkillsVisible,
 	characterPlugin,
 	component_title_end,

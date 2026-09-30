@@ -158,15 +158,6 @@ export function onPlayerMarkStyleUpdate() {
 }
 
 /**
- * 光标+loading框更新处理
- */
-export function onLoadingStyleUpdate() {
-	if (window.decadeUI) {
-		ui.arena.dataset.loadingStyle = lib.config.extension_十周年UI_loadingStyle;
-	}
-}
-
-/**
  * 获得技能显示更新处理
  */
 export function onGainSkillsVisibleUpdate() {
